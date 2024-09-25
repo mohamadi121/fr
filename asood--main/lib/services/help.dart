@@ -1,0 +1,1 @@
+///in this folder base of service is like get and post method and local services like shareprefrences or hive will be added 
