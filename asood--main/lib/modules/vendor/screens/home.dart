@@ -72,77 +72,91 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      appBar: DefaultAppBar(context: context),
-      body: Center(
-        child: Container(
-          height: Dimensions.height,
-          width: Dimensions.width,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+    return Container(
+      color: Colora.primaryColor,
+      child: SafeArea(
+        child: Scaffold(
+          extendBody: true,
+          // appBar: DefaultAppBar(context: context),
+          body: Stack(
             children: [
-              // Main column with carousel and grids
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    // margin: const EdgeInsets.all(8.0),
-                    padding: const EdgeInsets.only(top: Dimensions.seven),
-                    decoration: BoxDecoration(
-                      /*  border: Border.all(
-                        color: Colors.black,
-                        width: 1.0,
-                      ), */
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    // width: MediaQuery.of(context).size.width * 0.90,
-                    child: const Column(
-                      children: [
-                        // Dotted Carousel with 20% height
-                        DashboardCarouselWidget(),
-                        /*    const SizedBox(
-                          height: 6,
-                        ), */
 
-                        // Grid with 25% height, 2 rows, and 3 columns
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: Dimensions.khorisontal),
-                          child: DashboardServicesWidget(),
-                        ),
+              //main items
+              Container(
+                height: Dimensions.height,
+                width: Dimensions.width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Main column with carousel and grids
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Container(
+                          // margin: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.only(top: Dimensions.seven),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          // width: MediaQuery.of(context).size.width * 0.90,
+                          child: Column(
+                            children: [
 
-                        // Grid with 35% height, 3 rows, and 3 columns
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: Dimensions.khorisontal),
-                          child: DashboardAdditionalWidget(),
+                              //for appbar
+                              SizedBox(
+                                height: Dimensions.height * 0.12,
+                              ),
+
+                              // Dotted Carousel with 20% height
+                              DashboardCarouselWidget(),
+
+                              // Grid with 25% height, 2 rows, and 3 columns
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: Dimensions.khorisontal),
+                                child: DashboardServicesWidget(),
+                              ),
+
+                              // Grid with 35% height, 3 rows, and 3 columns
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: Dimensions.khorisontal),
+                                child: DashboardAdditionalWidget(),
+                              ),
+
+                              SizedBox(
+                                height: 120,
+                              )
+                            ],
+                          ),
                         ),
-                        SizedBox(
-                          height: 120,
-                        )
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
+
+
+              //appbar
+              const NewAppBar()
+
+            ],
+          ),
+          bottomNavigationBar: Stack(
+            children: [
+              CustomPaint(
+                size: const Size(400, 90),
+                painter: CurvedPainter(),
+              ),
+              // Positioned(
+              //     bottom: Dimensions.height * .029,
+              //     left: Dimensions.width * .12,
+              //     child: const Icon(
+              //       Icons.tab,
+              //       color: Colors.white,
+              //     ))
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: Stack(
-        children: [
-          CustomPaint(
-            size: const Size(400, 90),
-            painter: CurvedPainter(),
-          ),
-          Positioned(
-              bottom: Dimensions.height * .029,
-              left: Dimensions.width * .12,
-              child: const Icon(
-                Icons.tab,
-                color: Colors.white,
-              ))
-        ],
       ),
     );
   }
@@ -157,10 +171,6 @@ class DashboardAdditionalWidget extends StatelessWidget {
       margin: const EdgeInsets.all(6.0),
       padding: const EdgeInsets.all(6.0),
       decoration: BoxDecoration(
-        /*  border: Border.all(
-          color: Colors.black,
-          width: 1.0,
-        ), */
         color: Colors.white,
         boxShadow: Deco.kshadow,
         borderRadius: BorderRadius.circular(20.0),
@@ -170,54 +180,53 @@ class DashboardAdditionalWidget extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         child: Column(
           children: [
+            //title
             Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                    margin: const EdgeInsets.only(right: 20, bottom: 10),
-                    child: Text(
-                      "امکانات:",
-                      style: ATextStyle.lightBlue16
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ))),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  height: Dimensions.height * .36,
-                  width: Dimensions.width * .65,
-                  child: Expanded(
-                    child: GridView.count(
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 3,
-                      shrinkWrap: true,
-                      cacheExtent: 2,
-                      childAspectRatio: 4 / 5.5,
-                      crossAxisSpacing: 22,
-                      mainAxisSpacing: 0,
-                      children: [
-                        ...List.generate(
-                          dummyData["secondMenu"].length,
-                          (index) => FittedBox(
-                            child: ItemBoxTitle(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        dummyData["secondMenu"][index]["page"],
-                                  ),
-                                );
-                              },
-                              title: dummyData["secondMenu"][index]["title"],
-                              child: dummyData["secondMenu"][index]["image"],
+              alignment: Alignment.centerRight,
+              child: Container(
+                margin: const EdgeInsets.only(right: 20, bottom: 10),
+                child: Text(
+                  "امکانات:",
+                  style: ATextStyle.lightBlue16
+                      .copyWith(fontWeight: FontWeight.bold),
+                )
+              )
+            ),
+
+            //items
+            Container(
+              height: Dimensions.height * .36,
+              width: Dimensions.width * .65,
+              padding: EdgeInsets.only(top: Dimensions.height * 0.02),
+              child: GridView.count(
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 3,
+                shrinkWrap: true,
+                cacheExtent: 2,
+                childAspectRatio: 4 / 5.5,
+                crossAxisSpacing: 22,
+                mainAxisSpacing: 0,
+                children: [
+                  ...List.generate(
+                    dummyData["secondMenu"].length,
+                    (index) => FittedBox(
+                      child: ItemBoxTitle(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  dummyData["secondMenu"][index]["page"],
                             ),
-                          ),
-                        )
-                      ],
+                          );
+                        },
+                        title: dummyData["secondMenu"][index]["title"],
+                        child: dummyData["secondMenu"][index]["image"],
+                      ),
                     ),
-                  ),
-                ),
-              ],
+                  )
+                ],
+              ),
             ),
           ],
         ),
@@ -232,7 +241,7 @@ class DashboardServicesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         /*  border: Border.all(
@@ -248,17 +257,20 @@ class DashboardServicesWidget extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         child: Column(
           children: [
+            //title
             Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                    margin: const EdgeInsets.only(right: 20, bottom: 6),
+              alignment: Alignment.centerRight,
+              child: Container(
+                    margin: const EdgeInsets.only(right: 20, bottom: 20),
                     child: Text(
                       "کسب وکار:",
                       style: ATextStyle.lightBlue16
                           .copyWith(fontWeight: FontWeight.bold),
-                    ))),
+                    ))
+            ),
+
             Container(
-              height: Dimensions.height * .40,
+              height: Dimensions.height * .38,
               width: Dimensions.width * .75,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -268,9 +280,9 @@ class DashboardServicesWidget extends StatelessWidget {
                     crossAxisCount: 3,
                     shrinkWrap: true,
                     cacheExtent: 2,
-                    childAspectRatio: 3 / 4.7,
+                    childAspectRatio: 3 / 4,
                     crossAxisSpacing: 22,
-                    mainAxisSpacing: 8,
+                    mainAxisSpacing: 11,
                     children: [
                       ...List.generate(
                         dummyData["firstMenu"].length,
@@ -339,14 +351,19 @@ class _DashboardCarouselWidgetState extends State<DashboardCarouselWidget> {
               (index) => Container(
                 decoration: BoxDecoration(
                   border: const Border(
-                      bottom: BorderSide(
-                    width: 11.0,
+                    bottom: BorderSide(
+                    width: 10.0,
+                      color: Colora.primaryColor
                   )),
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                child: Center(
-                    child: Image.asset(
-                        'assets/images/tools-that-you-should-have.jpg')),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset(
+                    'assets/images/tools-that-you-should-have.jpg',
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
           ),

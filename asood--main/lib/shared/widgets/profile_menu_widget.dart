@@ -1,14 +1,23 @@
+import 'package:asood/shared/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'custom_textfield.dart';
 import 'custom_button.dart';
 
-class ProfileDialog extends StatelessWidget {
-  const ProfileDialog({super.key});
+class ProfileDialog1 extends StatelessWidget {
+  const ProfileDialog1({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomRight: Radius.circular(30),
+          bottomLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        )
+      ),
+      alignment: Alignment.topLeft,
       title: const Text("پروفایل"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -49,6 +58,7 @@ class ProfileDialog extends StatelessWidget {
             },
             child: const Text("عضویت"),
           ),
+
         ],
       ),
     );
@@ -62,4 +72,116 @@ void showProfileDialog(BuildContext context) {
       return const ProfileDialog();
     },
   );
+}
+
+class ProfileDialog extends StatelessWidget {
+  const ProfileDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(30),
+            bottomLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          )
+      ),
+      alignment: Alignment.topLeft,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+
+          //profile
+          Container(
+            height: Dimensions.height * 0.05,
+            margin: EdgeInsets.symmetric(
+              vertical: Dimensions.height * 0.01
+            ),
+            decoration: BoxDecoration(
+              color: Colora.primaryColor,
+              borderRadius: BorderRadius.circular(30)
+            ),
+            child: Center(
+              child: Text(
+                'پروفایل',
+                style: TextStyle(
+                  color: Colora.scaffold,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Dimensions.width * 0.035
+                ),
+              ),
+            ),
+          ),
+
+          //contact
+          Container(
+            height: Dimensions.height * 0.05,
+            margin: EdgeInsets.symmetric(
+                vertical: Dimensions.height * 0.01
+            ),
+            decoration: BoxDecoration(
+                color: Colora.primaryColor,
+                borderRadius: BorderRadius.circular(30)
+            ),
+            child: Center(
+              child: Text(
+                'تماس با ما',
+                style: TextStyle(
+                    color: Colora.scaffold,
+                    fontWeight: FontWeight.bold,
+                    fontSize: Dimensions.width * 0.035
+                ),
+              ),
+            ),
+          ),
+
+          //logout account
+          Container(
+            height: Dimensions.height * 0.05,
+            margin: EdgeInsets.symmetric(
+                vertical: Dimensions.height * 0.01
+            ),
+            decoration: BoxDecoration(
+                color: Colora.primaryColor,
+                borderRadius: BorderRadius.circular(30)
+            ),
+            child: Center(
+              child: Text(
+                'خروج از حساب کاربری',
+                style: TextStyle(
+                    color: Colora.scaffold,
+                    fontWeight: FontWeight.bold,
+                    fontSize: Dimensions.width * 0.035
+                ),
+              ),
+            ),
+          ),
+
+          //exit app
+          Container(
+            height: Dimensions.height * 0.05,
+            margin: EdgeInsets.symmetric(
+                vertical: Dimensions.height * 0.01
+            ),
+            decoration: BoxDecoration(
+                color: Colora.primaryColor,
+                borderRadius: BorderRadius.circular(30)
+            ),
+            child: Center(
+              child: Text(
+                'خروج از برنامه',
+                style: TextStyle(
+                    color: Colora.scaffold,
+                    fontWeight: FontWeight.bold,
+                    fontSize: Dimensions.width * 0.035
+                ),
+              ),
+            ),
+          ),
+
+        ],
+      ),
+    );
+  }
 }

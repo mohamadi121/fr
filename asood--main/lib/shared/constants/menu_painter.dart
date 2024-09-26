@@ -84,8 +84,10 @@ class CCurvedPainter extends CustomPainter {
     var path = Path();
 
     path.moveTo(0, size.height * 0.4);
+    // path.quadraticBezierTo(
+    //     size.width * 0.5, -35, size.width, size.height * 0.4);
     path.quadraticBezierTo(
-        size.width * 0.5, -35, size.width, size.height * 0.4);
+        size.width * 0.5, -25, size.width, size.height * 0.4);
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
 

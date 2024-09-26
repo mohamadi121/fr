@@ -21,24 +21,30 @@ class SimpleItemBox extends StatelessWidget {
       onTap: onTap,
       child: Container(
           width: 30,
+          padding: const EdgeInsets.symmetric(
+            vertical: 10,
+            horizontal: 5
+          ),
           decoration: BoxDecoration(
               color: boxColor ?? Colora.lightBlue,
               borderRadius: BorderRadius.circular(12)),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              const SizedBox(
-                height: 30,
-              ),
-              child,
-              const SizedBox(
-                height: 13,
-              ),
+              // const SizedBox(
+              //   height: 30,
+              // ),
+              // child,
+              // const SizedBox(
+              //   height: 13,
+              // ),
               Text(
                 title,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14
                 ),
               ),
             ],
