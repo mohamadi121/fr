@@ -18,7 +18,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
       emit(const SplashState(status: SplashStatus.loading));
       // String? token = await keyValueDB.getValueByKey("token");
       String? token = await SecureStorage().readSecureStorage('token');
-      if (token != null) {
+      if (token != 'ND') {
         print(token);
         emit(const SplashState(status: SplashStatus.exist));
       } else {

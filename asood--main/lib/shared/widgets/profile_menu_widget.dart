@@ -1,6 +1,10 @@
+import 'package:asood/services/Secure_Storage.dart';
 import 'package:asood/shared/constants/constants.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../../modules/auth/pages/login_screen.dart';
+import '../utils/app_router.dart';
 import 'custom_textfield.dart';
 import 'custom_button.dart';
 
@@ -137,22 +141,28 @@ class ProfileDialog extends StatelessWidget {
           ),
 
           //logout account
-          Container(
-            height: Dimensions.height * 0.05,
-            margin: EdgeInsets.symmetric(
-                vertical: Dimensions.height * 0.01
-            ),
-            decoration: BoxDecoration(
-                color: Colora.primaryColor,
-                borderRadius: BorderRadius.circular(30)
-            ),
-            child: Center(
-              child: Text(
-                'خروج از حساب کاربری',
-                style: TextStyle(
-                    color: Colora.scaffold,
-                    fontWeight: FontWeight.bold,
-                    fontSize: Dimensions.width * 0.035
+          InkWell(
+            onTap: (){
+              SecureStorage().deleteSecureStorage('token');
+              context.router.replace(LoginRoute());
+            },
+            child: Container(
+              height: Dimensions.height * 0.05,
+              margin: EdgeInsets.symmetric(
+                  vertical: Dimensions.height * 0.01
+              ),
+              decoration: BoxDecoration(
+                  color: Colora.primaryColor,
+                  borderRadius: BorderRadius.circular(30)
+              ),
+              child: Center(
+                child: Text(
+                  'خروج از حساب کاربری',
+                  style: TextStyle(
+                      color: Colora.scaffold,
+                      fontWeight: FontWeight.bold,
+                      fontSize: Dimensions.width * 0.035
+                  ),
                 ),
               ),
             ),
