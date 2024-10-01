@@ -8,6 +8,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../shared/constants/constants.dart';
+import '../../../shared/screens/settings/settings_menu_screen.dart';
+import '../../../shared/utils/app_router.dart';
 import '../../../shared/widgets/default_appbar.dart';
 import '../../../shared/widgets/item_box_with_title.dart';
 import '../../../shared/widgets/simple_itembox.dart';
@@ -52,7 +54,12 @@ Map dummyData = {
     {"title": "علاقه مندی", "image": Container()},
     {"title": "راهنما", "image": Container()},
     {"title": "پشتیبانی", "image": Container()},
-    {"title": "تنظیمات", "image": Container()}
+    //settings
+    {
+      "title": "تنظیمات",
+      "image": Container(),
+      "page":  const SettingsPageScreen()
+    }
   ]
 };
 
@@ -77,7 +84,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
       child: SafeArea(
         child: Scaffold(
           extendBody: true,
-          // appBar: DefaultAppBar(context: context),
+          // appBar: DefaultAppBar(context: context, title: 'home',),
           body: Stack(
             children: [
 
@@ -107,24 +114,24 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
                               ),
 
                               // Dotted Carousel with 20% height
-                              DashboardCarouselWidget(),
+                              const DashboardCarouselWidget(),
 
                               // Grid with 25% height, 2 rows, and 3 columns
-                              Padding(
+                              const Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: Dimensions.khorisontal),
                                 child: DashboardServicesWidget(),
                               ),
 
                               // Grid with 35% height, 3 rows, and 3 columns
-                              Padding(
+                              const Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: Dimensions.khorisontal),
                                 child: DashboardAdditionalWidget(),
                               ),
 
                               SizedBox(
-                                height: 120,
+                                height: Dimensions.height * 0.1,
                               )
                             ],
                           ),
@@ -137,14 +144,15 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
 
 
               //appbar
-              const NewAppBar()
+              const NewAppBar(title: 'home')
 
             ],
           ),
           bottomNavigationBar: Stack(
             children: [
               CustomPaint(
-                size: const Size(400, 90),
+                size: Size(Dimensions.width, Dimensions.height * 0.1),
+                // size: const Size(400, 90),
                 painter: CurvedPainter(),
               ),
               // Positioned(
@@ -161,6 +169,8 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
     );
   }
 }
+
+//------------------------------------------------------
 
 class DashboardAdditionalWidget extends StatelessWidget {
   const DashboardAdditionalWidget({super.key});
@@ -212,6 +222,7 @@ class DashboardAdditionalWidget extends StatelessWidget {
                     (index) => FittedBox(
                       child: ItemBoxTitle(
                         onTap: () {
+                          // context.router.push(dummyData["secondMenu"][index]["page"]);
                           Navigator.push(
                             context,
                             MaterialPageRoute(

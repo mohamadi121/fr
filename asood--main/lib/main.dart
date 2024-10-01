@@ -1,3 +1,4 @@
+import 'package:asood/shared/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -55,8 +56,9 @@ class Asood extends StatelessWidget {
       child: MaterialApp.router(
         builder: (context, child) {
           return MediaQuery(
-              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-              child: child as Widget);
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: child as Widget
+          );
         },
         routerConfig: _appRouter.config(),
         debugShowCheckedModeBanner: false,
@@ -80,7 +82,7 @@ class Asood extends StatelessWidget {
         }, */
         //  initialRoute: 'loginPage',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colora.primaryColor),
           useMaterial3: true,
         ),
 

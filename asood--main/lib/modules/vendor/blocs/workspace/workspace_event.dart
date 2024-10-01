@@ -31,12 +31,12 @@ class GetComments extends WorkspaceEvent {}
 
 class ContactUs extends WorkspaceEvent {}
 
-class CreatDiscount extends WorkspaceEvent {
+class CreateDiscount extends WorkspaceEvent {
   final String title;
   final String des;
   final double percentage;
   final int count;
-  const CreatDiscount({
+  const CreateDiscount({
     required this.title,
     required this.des,
     required this.percentage,

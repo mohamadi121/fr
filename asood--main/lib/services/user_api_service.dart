@@ -9,7 +9,7 @@ import 'api_status.dart';
 class UserApiService {
   ApiClient apiClient = ApiClient(appBaseUrl: '${BaseUrls.baseUrl}user/');
 
-//send code verification to user by server
+  //send code verification to user by server
   Future userAuth(String number) async {
     var body = {"mobile_number": number};
     var uri = 'pin/create/';
@@ -22,8 +22,8 @@ class UserApiService {
       return CustomApiStatus();
     }
   }
-//verify the sms code verification
 
+  //verify the sms code verification
   Future verifyUser(String number, String code) async {
     var body = {"mobile_number": number, 'pin': code};
     var uri = 'pin/verify/';
@@ -36,7 +36,7 @@ class UserApiService {
     }
   }
 
-//get user advertises
+  //get user advertises
   Future getAdvertises() async {
     var uri = 'advertise/';
     try {
@@ -70,4 +70,5 @@ class UserApiService {
       return CustomApiStatus();
     }
   }
+
 }

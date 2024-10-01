@@ -12,8 +12,8 @@ class MarketApiService {
   ApiClient apiClient =
       ApiClient(appBaseUrl: '${BaseUrls.baseUrl}market/user/');
 
-//create market base
-  Future creatMarketBase(String type, String businessId, String name,
+  //create market base
+  Future createMarketBase(String type, String businessId, String name,
       String description, int subCategory, String slogan) async {
     var body = {
       "type": type,
@@ -33,7 +33,7 @@ class MarketApiService {
     }
   }
 
-//creat contact information
+  //create contact information
   Future createMarketContact(MarketContactModel marketContact) async {
     var body = {
       "market": marketContact.market,
@@ -86,7 +86,7 @@ class MarketApiService {
     }
   }
 
-//inactive market
+  //inactive market
   Future inactiveMarket(marketId) async {
     var uri = 'inactive/$marketId';
     try {
@@ -140,7 +140,7 @@ class MarketApiService {
     }
   }
 
-//market backgournd upload
+//market background upload
   Future uploadMarketBackground(
     XFile imagesFile,
     marketId,

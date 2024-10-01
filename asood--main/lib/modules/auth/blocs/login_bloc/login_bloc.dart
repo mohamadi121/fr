@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../../../models/key_value_model.dart';
 import '../../../../repositories/user_repository.dart';
+import '../../../../services/Secure_Storage.dart';
 import '../../../../services/api_status.dart';
 import '../../../../services/isar_service.dart';
 
@@ -30,20 +31,21 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await _verifyOtp(event, emit);
     });
   }
-//send otp
+
+  //send otp
   _sendOtp(event, emit) async {
     emit(state.copyWith(
       phoneNumber: event.phone,
-      status: Loginstatus.loading,
+      status: LoginStatus.loading,
     ));
     try {
       var res = await userRepo.sendCode(event.phone);
       if (res is Success) {
-        emit(state.copyWith(status: Loginstatus.success));
+        emit(state.copyWith(status: LoginStatus.success));
       } else if (res is Failure) {
         emit(
           state.copyWith(
-            status: Loginstatus.error,
+            status: LoginStatus.error,
             error: res.errorResponse.toString(),
           ),
         );
@@ -51,20 +53,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } catch (e) {
       emit(
         state.copyWith(
-          status: Loginstatus.error,
+          status: LoginStatus.error,
           error: e.toString(),
         ),
       );
     }
   }
 
-//verify otp
-  _verifyOtp(
-    event,
-    emit,
-  ) async {
+  //verify otp
+  _verifyOtp(event,emit,) async {
     emit(state.copyWith(
-      status: Loginstatus.loading,
+      status: LoginStatus.loading,
     ));
     try {
       var res = await userRepo.verifyCode(event.phone, event.otp);
@@ -72,21 +71,23 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       
         var json = jsonDecode(res.response.toString());
 
-        KeyValue token = KeyValue(
-          key: "token",
-          value: json["data"]["token"],
-        );
-        await _isarService.create(token);
+        // KeyValue token = KeyValue(
+        //   key: "token",
+        //   value: json["data"]["token"],
+        // );
+        // await _isarService.create(token);
 
+        SecureStorage().writeSecureStorage('token', json["data"]["token"]);
+        
         emit(
           state.copyWith(
-            status: Loginstatus.success,
+            status: LoginStatus.success,
           ),
         );
       } else if (res is Failure) {
         emit(
           state.copyWith(
-            status: Loginstatus.error,
+            status: LoginStatus.error,
             error: res.errorResponse.toString(),
           ),
         );
@@ -94,10 +95,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } catch (e) {
       emit(
         state.copyWith(
-          status: Loginstatus.error,
+          status: LoginStatus.error,
           error: e.toString(),
         ),
       );
     }
   }
+
 }

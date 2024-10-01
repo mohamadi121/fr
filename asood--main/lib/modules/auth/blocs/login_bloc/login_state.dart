@@ -2,15 +2,16 @@
 
 part of 'login_bloc.dart';
 
-enum Loginstatus { initial, loading, success, error }
+enum LoginStatus { initial, loading, success, error }
 
 class LoginState extends Equatable {
   final String phoneNumber;
-  final Loginstatus status;
+  final LoginStatus status;
   final bool termStatus;
   final String error;
+
   const LoginState({
-     this.phoneNumber='',
+   this.phoneNumber='',
     required this.status,
     required this.termStatus,
     this.error = '',
@@ -18,11 +19,12 @@ class LoginState extends Equatable {
 
   factory LoginState.initial() {
     return const LoginState(
-        status: Loginstatus.initial, termStatus: false, error: '', phoneNumber: '');
+      status: LoginStatus.initial, termStatus: false, error: '', phoneNumber: ''
+    );
   }
 
   LoginState copyWith({
-    Loginstatus? status,
+    LoginStatus? status,
     bool? termStatus,
     String? error,
     String? phoneNumber,

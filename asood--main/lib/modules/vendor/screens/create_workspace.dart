@@ -1,3 +1,4 @@
+import 'package:asood/services/Secure_Storage.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,12 +31,24 @@ class _CreateWorkSpaceScreenState extends State<CreateWorkSpaceScreen>
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(_onTabChanged);
+    inProcess();
     //_activeTabIndex = _tabController.index; // Set initial active tab index
     /* BlocProvider.of<CreateWorkSpaceBloc>(context)
         .add(ChangeTabView(activeTabIndex: _activeTabIndex)); */
   }
 
-  void _onTabChanged() {
+  void inProcess() async{
+    String marketId = await SecureStorage().readSecureStorage('market_id');
+    String tabIndex = await SecureStorage().readSecureStorage('marketActiveTabIndex');
+
+    if(tabIndex != 'ND' && marketId != 'ND'){
+      _activeTabIndex = int.parse(tabIndex);
+      BlocProvider.of<CreateWorkSpaceBloc>(context)
+          .add(ChangeTabView(activeTabIndex: _activeTabIndex));
+    }
+  }
+
+  void _onTabChanged() async{
     // setState(() {
     _activeTabIndex = _tabController.index; // Update the active tab index
     BlocProvider.of<CreateWorkSpaceBloc>(context)
@@ -51,80 +64,107 @@ class _CreateWorkSpaceScreenState extends State<CreateWorkSpaceScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: DefaultAppBar(context: context),
-      body: BlocConsumer<CreateWorkSpaceBloc, CreateWorkSpaceState>(
-        listener: (context, state) {
-          _tabController.index > state.activeTabIndex
-              ? _tabController.index = state.activeTabIndex
-              : null;
-          if (state.status == CWSStatus.success) {
-            _tabController.index = state.activeTabIndex;
-          } else if (state.status == CWSStatus.failure) {
-            showSnackBar(context, "مشکلی پیش آمده مجددا تلاش کنید");
-          }
-        },
-        builder: (context, state) {
-          return SafeArea(
-            child: SingleChildScrollView(
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 15, horizontal: Dimensions.khorisontal),
-                child: Column(
+    return Container(
+      color: Colora.primaryColor,
+      child: SafeArea(
+        child: Scaffold(
+          // resizeToAvoidBottomInset: false,
+          // appBar: DefaultAppBar(context: context),
+          body: BlocConsumer<CreateWorkSpaceBloc, CreateWorkSpaceState>(
+            listener: (context, state) {
+              _tabController.index = state.activeTabIndex;
+              _tabController.index > state.activeTabIndex
+                  ? _tabController.index = state.activeTabIndex
+                  : null;
+              if (state.status == CWSStatus.success) {
+                _tabController.index = state.activeTabIndex;
+              } else if (state.status == CWSStatus.failure) {
+                showSnackBar(context, "مشکلی پیش آمده مجددا تلاش کنید");
+              }
+            },
+            builder: (context, state) {
+              return SingleChildScrollView(
+                child: Stack(
                   children: [
+                
                     Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
+                      margin: EdgeInsets.only(
+                        top: Dimensions.height * 0.01
                       ),
-                      child: TabBar(
-                        controller: _tabController,
-                        indicator: null,
-                        indicatorPadding: EdgeInsets.zero,
-                        indicatorSize: TabBarIndicatorSize.label,
-
-                        padding: EdgeInsets.zero,
-                        dividerHeight: 0,
-                        isScrollable: false,
-
-                        indicatorColor:
-                            Colors.transparent, // Remove indicator color
-                        tabs: [
-                          buildTab(state, 'مشخصات پایه', 0),
-                          buildTab(state, ' ارتباطی', 1),
-                          buildTab(state, 'مشخصات مکانی', 2),
+                      // padding: const EdgeInsets.symmetric(
+                      //   vertical: 15, horizontal: Dimensions.khorisontal
+                      // ),
+                      child: Column(
+                        children: [
+                
+                          // for appbar
+                          SizedBox(
+                            height: Dimensions.height * 0.1,
+                          ),
+                
+                          // tab bar
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: IgnorePointer(
+                              ignoring:true,
+                              child: TabBar(
+                                controller: _tabController,
+                                indicator: null,
+                                indicatorPadding: EdgeInsets.zero,
+                                indicatorSize: TabBarIndicatorSize.label,
+                
+                
+                                padding: EdgeInsets.zero,
+                                dividerHeight: 0,
+                                isScrollable: false,
+                
+                                indicatorColor:
+                                    Colors.transparent, // Remove indicator color
+                                tabs: [
+                                  buildTab(state, 'مشخصات پایه', 0),
+                                  buildTab(state, 'مشخصات ارتباطی', 1),
+                                  buildTab(state, 'مشخصات مکانی', 2),
+                                ],
+                              ),
+                            ),
+                          ),
+                
+                          SizedBox(
+                            height: Dimensions.height * .795,
+                            child: TabBarView(
+                              controller: _tabController,
+                              physics: const NeverScrollableScrollPhysics(),
+                              children: [
+                                BasicInfo(
+                                  bloc:
+                                      BlocProvider.of<CreateWorkSpaceBloc>(context),
+                                ),
+                                ContactsInfo(
+                                  bloc:
+                                      BlocProvider.of<CreateWorkSpaceBloc>(context),
+                                ),
+                                LocationInfo(
+                                  bloc:
+                                      BlocProvider.of<CreateWorkSpaceBloc>(context),
+                                )
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: SizedBox(
-                        height: Dimensions.height * .70,
-                        child: TabBarView(
-                          controller: _tabController,
-                          children: [
-                            BasicInfo(
-                              bloc:
-                                  BlocProvider.of<CreateWorkSpaceBloc>(context),
-                            ),
-                            ContactsInfo(
-                              bloc:
-                                  BlocProvider.of<CreateWorkSpaceBloc>(context),
-                            ),
-                            LocationInfo(
-                              bloc:
-                                  BlocProvider.of<CreateWorkSpaceBloc>(context),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                
+                    //appbar
+                    NewAppBar(title: 'ثبت دفتر کار')
+                
                   ],
                 ),
-              ),
-            ),
-          );
-        },
+              );
+            },
+          ),
+        ),
       ),
     );
   }
@@ -133,23 +173,28 @@ class _CreateWorkSpaceScreenState extends State<CreateWorkSpaceScreen>
     bool isActive = state.activeTabIndex == tabIndex; // Check if tab is active
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      margin: const EdgeInsets.symmetric(vertical: 10.0),
       width: Dimensions.width,
-      // margin: EdgeInsets.only(right: 10.0),
       decoration: BoxDecoration(
-          color: isActive
-              ? Colora.lightBlue
-              : Colors.white, // White when active, purple otherwise
-          borderRadius: BorderRadius.circular(50), // Border radius for each tab
-          border: Border.all(color: Colora.lightBlue) // No border otherwise
-          ),
+        color: isActive
+          ? Colora.primaryColor
+          : Colors.white, // White when active, purple otherwise
+        borderRadius: BorderRadius.circular(50), // Border radius for each tab
+        border: Border.all(color: Colora.primaryColor, width: 2) // No border otherwise
+      ),
       child: Align(
         alignment: Alignment.center,
         child: FittedBox(
-          child: Text(label,
-              style: TextStyle(color: isActive ? Colors.white : Colors.black)),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: isActive ? Colors.white : Colors.black
+            )
+          ),
         ),
       ),
     );
+
   }
 }

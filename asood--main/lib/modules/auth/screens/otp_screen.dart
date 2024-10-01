@@ -26,7 +26,7 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     if (BlocProvider.of<LoginBloc>(context).state.status ==
-        Loginstatus.success) {
+        LoginStatus.success) {
       phoneNumber = BlocProvider.of<LoginBloc>(context).state.phoneNumber;
     }
     return Container(
@@ -43,19 +43,33 @@ class _OtpScreenState extends State<OtpScreen> {
                   Center(
                     child: BlocConsumer<LoginBloc, LoginState>(
                       listener: (context, state) {
-                        if (state.status == Loginstatus.success) {
+                        if (state.status == LoginStatus.success) {
                           context.router.replace(VendorHomeRoute(title: ''));
-                          /*      Navigator.pushReplacementNamed(
-                              context, VendorHomeScreen.routeName); */
-                        } else if (state.status == Loginstatus.error) {
-                          Fluttertoast.showToast(
+                        } else if (state.status == LoginStatus.error) {
+
+                          if(state.error == 'Pin not valid'){
+                            Fluttertoast.showToast(
+                                msg: 'کد تایید اشتباه است',
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0
+                            );
+                          }
+                          else{
+                            Fluttertoast.showToast(
                               msg: state.error,
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.BOTTOM,
                               timeInSecForIosWeb: 1,
                               backgroundColor: Colors.red,
                               textColor: Colors.white,
-                              fontSize: 16.0);
+                              fontSize: 16.0
+                            );
+                          }
+
                         }
                       },
                       builder: (context, state) {
@@ -122,7 +136,6 @@ class _OtpScreenState extends State<OtpScreen> {
                                   cursorColor: Colora.scaffold,
                                   textStyle: const TextStyle(color: Colora.scaffold),
                                   showFieldAsBox: false,
-        
                                   //runs when a code is typed in
         
                                   //runs when every textfield is filled
@@ -144,29 +157,47 @@ class _OtpScreenState extends State<OtpScreen> {
                             const SizedBox(height: 20),
         
                             ElevatedButton(
-                                style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            Colora.primaryColor)),
-                                onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) {
-                                      return const VendorHomeScreen(title: 'dcd');
-                                    },
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colora.primaryColor)),
+                              onPressed: () {
+                                if(code.isEmpty){
+                                  Fluttertoast.showToast(
+                                      msg: 'کد تایید را وارد کنید',
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0
+                                  );
+                                }
+                                else{
+                                  context.read<LoginBloc>().add(VerifyOtp(
+                                    phone: phoneNumber,
+                                    otp: code,
                                   ));
-                                },
-                                child: (state.status == Loginstatus.loading)
-                                    ? const SizedBox(
-                                        width: 20,
-                                        height: 20,
-                                        child: CircularProgressIndicator(
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                    : const Text(
+                                }
+                                // Navigator.push(context, MaterialPageRoute(
+                                //   builder: (context) {
+                                //     return const VendorHomeScreen(title: 'dcd');
+                                //   },
+                                // ));
+                              },
+                              child: (state.status == LoginStatus.loading)
+                                  ? const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : const Text(
                                         'ورود',
                                         style: TextStyle(color: Colors.white),
-                                      )),
+                                      )
+                            ),
         
                             const Spacer(),
         

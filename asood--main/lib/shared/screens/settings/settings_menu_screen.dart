@@ -1,8 +1,12 @@
 // ignore_for_file: unused_import, avoid_print, sized_box_for_whitespace
 
+import 'dart:convert';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../../../models/key_value_model.dart';
+import '../../../services/isar_service.dart';
 import '../../constants/constants.dart';
 import '../../utils/app_router.dart';
 import '../../widgets/custom_bottom_navbar.dart';
@@ -18,7 +22,7 @@ class SettingsPageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(context: context),
+      appBar: DefaultAppBar(context: context, title: 'تنظیمات',),
       body: SafeArea(
         child: Container(
           height: Dimensions.height,
@@ -34,7 +38,7 @@ class SettingsPageScreen extends StatelessWidget {
                   CustomButton(
                     onPress: () {},
                     text: 'تنظیمات پنل',
-                    height: 40,
+                    height: Dimensions.height * 0.05,
                   ),
                   const SizedBox(height: 10),
                   CustomButton(
@@ -137,7 +141,19 @@ class SettingsPageScreen extends StatelessWidget {
                     height: 40,
                   ),
                   const SizedBox(height: 10),
-                  CustomButton(onPress: () {}, text: 'خروج'),
+                  CustomButton(
+                    onPress: () async{
+                      final IsarObjectService _isarService =
+                      IsarObjectService<KeyValue>(KeyValueSchema);
+                      print(await _isarService.getValueByKey('token'));
+                      // KeyValue token = KeyValue(
+                      //   key: "token",
+                      //   value: json["data"]["token"],
+                      // );
+                      await _isarService.delete(1);
+                    },
+                    text: 'خروج'
+                  ),
                 ],
               ),
             ),

@@ -26,19 +26,28 @@ class CustomButton extends StatelessWidget {
     return GestureDetector(
       onTap: onPress,
       child: Container(
-        height: height ?? 35,
-        width: width ?? Dimensions.width,
+        padding: EdgeInsets.only(
+          bottom: Dimensions.height * 0.007
+        ),
         decoration: BoxDecoration(
-            color: color ?? Colora.primaryColor,
-            borderRadius: BorderRadius.circular(buttonRadius)),
-        child: Center(
-          child: btnWidget ??
-              Text(
-                text ?? "",
-                style: ATextStyle.unSelectedBtn.copyWith(
-                    fontStyle: FontStyle.normal,
-                    color: textColor ?? Colors.white),
-              ),
+          color: Colora.primaryColor,
+          borderRadius: BorderRadius.circular(buttonRadius),
+        ),
+        child: Container(
+          height: height ?? 35,
+          width: width ?? Dimensions.width,
+          decoration: BoxDecoration(
+              color: color ?? Colora.lightBlue,
+              borderRadius: BorderRadius.circular(buttonRadius)),
+          child: Center(
+            child: btnWidget ??
+                Text(
+                  text ?? "",
+                  style: ATextStyle.unSelectedBtn.copyWith(
+                      fontStyle: FontStyle.normal,
+                      color: textColor ?? Colors.white),
+                ),
+          ),
         ),
       ),
     );

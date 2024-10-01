@@ -23,7 +23,7 @@ class WorkspaceBloc extends Bloc<WorkspaceEvent, WorkspaceState> {
     on<GetSpecialProducts>(_getSpecialProducts);
     on<GetDiscounts>(_getDiscounts);
     on<DeleteDiscount>(_deleteDiscount);
-    on<CreatDiscount>(_createDiscount);
+    on<CreateDiscount>(_createDiscount);
     on<ChangeColorAndFont>(_changeColorAndFont);
     on<ChangeProductTheme>(_changeProductTheme);
     on<ChangeThemeColors>(_changeThemeColors);
@@ -124,7 +124,7 @@ class WorkspaceBloc extends Bloc<WorkspaceEvent, WorkspaceState> {
     }
   }
 
-  _createDiscount(CreatDiscount event, Emitter<WorkspaceState> emit) {
+  _createDiscount(CreateDiscount event, Emitter<WorkspaceState> emit) {
     emit(state.copyWith(status: Status.loading));
     try {
       final res = Success();

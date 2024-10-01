@@ -27,8 +27,9 @@ class CreateMarket extends CreateWorkSpaceEvent {
   });
 }
 
-//secound View Event
+//second View Event
 class MarketContact extends CreateWorkSpaceEvent {
+  final int marketId;
   final String phoneNumber1;
   final String phoneNumber2;
   final String telephone;
@@ -37,11 +38,11 @@ class MarketContact extends CreateWorkSpaceEvent {
   final String websiteUrl;
   final String instagramId;
   final String telegramId;
-  final bool hasWorkTime;
-  final WorkHours workHours;
+  // final bool hasWorkTime;
+  // final WorkHours workHours;
 
   const MarketContact({
-    required this.workHours,
+    required this.marketId,
     required this.phoneNumber1,
     required this.phoneNumber2,
     required this.telephone,
@@ -50,7 +51,8 @@ class MarketContact extends CreateWorkSpaceEvent {
     required this.websiteUrl,
     required this.instagramId,
     required this.telegramId,
-    required this.hasWorkTime,
+    // required this.hasWorkTime,
+    // required this.workHours,
   });
 }
 
@@ -93,7 +95,7 @@ class ChangeHasWorkTime extends CreateWorkSpaceEvent {
   const ChangeHasWorkTime({required this.hasWorkTime});
 }
 
-//validate required textfields
+//validate required text fields
 class Validator extends CreateWorkSpaceEvent {
   final String phoneNumber1;
 
@@ -115,3 +117,55 @@ class SetDiscount extends CreateWorkSpaceEvent {
 }
 
 class PayPrice extends CreateWorkSpaceEvent {}
+
+//category
+class ChangeCategoryIndex extends CreateWorkSpaceEvent {
+  final int activeCategoryIndex;
+  const ChangeCategoryIndex({required this.activeCategoryIndex});
+}
+
+class LoadCategory extends CreateWorkSpaceEvent {}
+
+class LoadMainSubCategory extends CreateWorkSpaceEvent {
+
+  final int categoryId;
+  const LoadMainSubCategory({
+    required this.categoryId,
+  });
+
+}
+
+class ChangeSubCategoryIndex extends CreateWorkSpaceEvent {
+  final int activeSubCategoryIndex;
+  const ChangeSubCategoryIndex({required this.activeSubCategoryIndex});
+}
+
+class LoadSubCategory extends CreateWorkSpaceEvent {
+
+  final int subCategoryId;
+  const LoadSubCategory({
+    required this.subCategoryId,
+  });
+
+}
+
+//region
+class LoadCountry extends CreateWorkSpaceEvent {}
+
+class LoadProvince extends CreateWorkSpaceEvent {
+
+  final int countryId;
+  const LoadProvince({
+    required this.countryId,
+  });
+
+}
+
+class LoadCity extends CreateWorkSpaceEvent {
+
+  final int provinceId;
+  const LoadCity({
+    required this.provinceId,
+  });
+
+}

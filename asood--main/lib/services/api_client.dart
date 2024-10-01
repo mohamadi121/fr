@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:asood/models/key_value_model.dart';
+import 'package:asood/services/Secure_Storage.dart';
 import 'package:asood/services/isar_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,8 @@ class ApiClient {
   String? token;
   Map<String, String> _mainHeaders = {};
   readToken() async {
-    token = await keyValueService.getValueByKey("token");
+    // token = await keyValueService.getValueByKey("token");
+    token = await SecureStorage().readSecureStorage('token');
     updateHeader(token);
   }
 

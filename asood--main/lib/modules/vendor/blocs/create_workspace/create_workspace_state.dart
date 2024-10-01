@@ -22,7 +22,7 @@ class CreateWorkSpaceState extends Equatable {
 
   final int activeTabIndex;
 
-  //secound view
+  //second view
   final String phoneNumber1;
   final String phoneNumber2;
   final String telephone;
@@ -37,7 +37,7 @@ class CreateWorkSpaceState extends Equatable {
   final Color phoneBorder;
   final Color emailBorder;
 
-  //thired view
+  //third view
   final String country;
   final String city;
   final String state;
@@ -45,6 +45,16 @@ class CreateWorkSpaceState extends Equatable {
   final String zipCode;
   final double latitude;
   final double longitude;
+
+  final int activeCategoryIndex;
+  final List<CategoryModel> categoryList;
+  final List<MainSubCategoryModel> mainSubCategoryList;
+  final int activeSubCategoryIndex;
+  final List<CategoryModel> subCategoryList;
+
+  final List<CountryModel> countryList;
+  final List<ProvinceModel> provinceList;
+  final List<CityModel> cityList;
 
   const CreateWorkSpaceState({
     required this.phoneBorder,
@@ -76,6 +86,16 @@ class CreateWorkSpaceState extends Equatable {
     required this.zipCode,
     required this.latitude,
     required this.longitude,
+
+    required this.activeCategoryIndex,
+    required this.categoryList,
+    required this.mainSubCategoryList,
+    required this.activeSubCategoryIndex,
+    required this.subCategoryList,
+
+    required this.countryList,
+    required this.provinceList,
+    required this.cityList,
   });
 
   factory CreateWorkSpaceState.initial() {
@@ -124,6 +144,16 @@ class CreateWorkSpaceState extends Equatable {
       zipCode: '',
       latitude: 0.0,
       longitude: 0.0,
+
+      activeCategoryIndex: -1,
+      categoryList: [],
+      mainSubCategoryList: [],
+      activeSubCategoryIndex: -1,
+      subCategoryList: [],
+
+      countryList: [],
+      provinceList: [],
+      cityList: []
     );
   }
 
@@ -157,6 +187,17 @@ class CreateWorkSpaceState extends Equatable {
     String? zipCode,
     double? latitude,
     double? longitude,
+
+    int? activeCategoryIndex,
+    List<CategoryModel>? categoryList,
+    List<MainSubCategoryModel>? mainSubCategoryList,
+    int? activeSubCategoryIndex,
+    List<CategoryModel>? subCategoryList,
+
+    List<CountryModel>? countryList,
+    List<ProvinceModel>? provinceList,
+    List<CityModel>? cityList,
+
   }) {
     return CreateWorkSpaceState(
       phoneBorder: phoneBorder ?? this.phoneBorder,
@@ -188,6 +229,16 @@ class CreateWorkSpaceState extends Equatable {
       zipCode: zipCode ?? this.zipCode,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
+
+      activeCategoryIndex: activeCategoryIndex ?? this.activeCategoryIndex,
+      categoryList: categoryList ?? this.categoryList,
+      mainSubCategoryList: mainSubCategoryList ?? this.mainSubCategoryList,
+      activeSubCategoryIndex: activeSubCategoryIndex ?? this.activeSubCategoryIndex,
+      subCategoryList: subCategoryList ?? this.subCategoryList,
+
+      countryList: countryList ?? this.countryList,
+      provinceList: provinceList ?? this.provinceList,
+      cityList: cityList ?? this.cityList,
     );
   }
 
@@ -225,7 +276,18 @@ class CreateWorkSpaceState extends Equatable {
       address,
       zipCode,
       latitude,
-      longitude
+      longitude,
+
+      activeCategoryIndex,
+      categoryList,
+      mainSubCategoryList,
+      activeSubCategoryIndex,
+      subCategoryList,
+
+      countryList,
+      provinceList,
+      cityList
     ];
   }
+
 }

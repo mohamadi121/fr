@@ -27,8 +27,7 @@ class IsarObjectService<T> {
     return Future.value(Isar.getInstance());
   }
 
-//create new record of object
-
+  //create new record of object
   Future<int> create(object) async {
     final Isar isar = await _db;
     print(isar);
@@ -41,19 +40,19 @@ class IsarObjectService<T> {
     }
   }
 
-//get the record of object by id
+  //get the record of object by id
   Future<T?> get(int id) async {
     final Isar isar = await _db;
     return await isar.collection<T>().get(id);
   }
 
-//get all records
+  //get all records
   Future<List<T>> getAll() async {
     final Isar isar = await _db;
     return await isar.collection<T>().where().findAll() as List<T>;
   }
 
-//update
+  //update
   Future<void> update(int id, T updatedObject) async {
     final Isar isar = await _db;
     await isar.writeTxn(() async {
@@ -64,7 +63,7 @@ class IsarObjectService<T> {
     });
   }
 
-//delete
+  //delete
   Future<void> delete(int id) async {
     final Isar isar = await _db;
     await isar.writeTxn(() async => await isar.collection<T>().delete(id));

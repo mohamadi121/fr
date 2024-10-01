@@ -24,6 +24,7 @@ class LoginScreen extends StatelessWidget {
       color: Colora.primaryColor,
       child: SafeArea(
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           body: Stack(
             fit: StackFit.expand,
             children: <Widget>[
@@ -51,7 +52,7 @@ class LoginScreen extends StatelessWidget {
 
               BlocConsumer<LoginBloc, LoginState>(
                 listener: (context, state) {
-                  if (state.status == Loginstatus.success &&
+                  if (state.status == LoginStatus.success &&
                       state.termStatus == true) {
                     /*     Navigator.pushReplacement(
                       context,
@@ -59,10 +60,16 @@ class LoginScreen extends StatelessWidget {
                     ); */
                     context.router.replace(const OtpRoute());
                   }
-                  if (state.status == Loginstatus.error) {
+                  if (state.status == LoginStatus.error) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text("کد ارسال نشد"),
+                        backgroundColor: Colora.primaryColor,
+                        content: Text(
+                          "کد ارسال نشد",
+                          style: TextStyle(
+                            color: Colora.scaffold
+                          ),
+                        ),
                       ),
                     );
                     print(state.error);
@@ -177,27 +184,62 @@ class LoginScreen extends StatelessWidget {
                             ),
                             onPressed: () {
                               String phone = "0${controller.text}";
-                              state.termStatus == true
-                                  // ? context.read<LoginBloc>().add(SendOtp(
-                                  //       phone: phone,
-                                  //     ))
-                                  ?context.router.replace(const OtpRoute())
-                                  : ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                            "بدون پذیرفتن قوانین و مقررات امکان استفاده از آسود نمیباشد!"),
+                              if(state.termStatus == true){
+                                if(controller.text.isNotEmpty){
+                                  context.read<LoginBloc>().add(SendOtp(
+                                    phone: phone,
+                                  ));
+                                }
+                                else{
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      backgroundColor: Colora.primaryColor,
+                                      content: Text(
+                                        "لطفا شماره تلفن خود را وارد کنید",
+                                        style: TextStyle(
+                                          color: Colora.scaffold
+                                        ),
                                       ),
-                                    );
-                            },
-                            child: state.status == Loginstatus.loading
-                                ? const CircularProgressIndicator()
-                                : const Text(
-                                    "ارسال کد تایید",
-                                    style: TextStyle(
-                                        color: Colora.primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15.0),
+                                    ),
+                                  );
+                                }
+                              }
+                              else{
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    backgroundColor: Colora.primaryColor,
+                                    content: Text(
+                                      "بدون پذیرفتن قوانین و مقررات امکان استفاده از آسود نمیباشد!",
+                                      style: TextStyle(
+                                          color: Colora.scaffold
+                                      ),
+                                    ),
                                   ),
+                                );
+                              }
+                            },
+                            child: Container(
+                              width: Dimensions.width * 0.25,
+                              height: Dimensions.height * 0.04,
+                              alignment: Alignment.center,
+                              child: state.status == LoginStatus.loading
+                                ? Transform.scale(
+                                  scale: 0.6,
+                                  child: const CircularProgressIndicator(
+                                    color: Colora.primaryColor,
+                                  ),
+                                )
+                                : const Center(
+                                  child: Text(
+                                        "ارسال کد تایید",
+                                        style: TextStyle(
+                                          color: Colora.primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15.0
+                                        ),
+                                      ),
+                                ),
+                            ),
                           ),
                         ],
                       ),

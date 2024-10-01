@@ -4,7 +4,6 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 import '../../../constants/constants.dart';
 import '../../../widgets/colorpicker.dart';
-// import '../../../shared/widgets/custom_bottom_navigation_bar_widget.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/default_appbar.dart';
 import '../../../widgets/simple_bot_navbar.dart';

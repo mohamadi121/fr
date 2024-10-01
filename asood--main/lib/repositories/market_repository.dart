@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../models/market_base.dart';
 import '../models/market_contact_model.dart';
+import '../services/Secure_Storage.dart';
 import '../services/api_status.dart';
 import '../services/isar_service.dart';
 import '../services/market_api_service.dart';
@@ -19,25 +20,29 @@ class MarketRepository {
     print(isar);
   }
 
-//write all codes depends on market api service for repository here
-  Future<dynamic> createMarketContact(MarketContactModel marketContact) async {
-    return await marketApiService.createMarketContact(marketContact);
-  }
-
-  Future<dynamic> creatMarketBase(String type, String businessId, String name,
+  Future<dynamic> createMarketBase(String type, String businessId, String name,
       String description, int subCategory, String slogan) async {
-    var res = await marketApiService.creatMarketBase(
+    var res = await marketApiService.createMarketBase(
         type, businessId, name, description, subCategory, slogan);
     //save the market base model to isar if its success
     if (res is Success) {
       final json = jsonDecode(res.response.toString());
       final marketBase = MarketBaseModel.fromJson(json);
       await isar.create(marketBase);
+      SecureStorage().writeSecureStorage('market_id', json['data']['market'].toString());
+      SecureStorage().writeSecureStorage('marketActiveTabIndex', '1');
     }
     return res;
   }
 
-  Future<dynamic> creatMarketLocation(MarketLocation marketLocation) async {
+  //write all codes depends on market api service for repository here
+  Future<dynamic> createMarketContact(MarketContactModel marketContact) async {
+    SecureStorage().deleteSecureStorage('marketActiveTabIndex');
+    SecureStorage().writeSecureStorage('marketActiveTabIndex', '2');
+    return await marketApiService.createMarketContact(marketContact);
+  }
+
+  Future<dynamic> createMarketLocation(MarketLocation marketLocation) async {
     return await marketApiService.createMarketLocation(marketLocation);
   }
 

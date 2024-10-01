@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../services/Secure_Storage.dart';
 import '../blocs/create_workspace/create_workspace_bloc.dart';
 import '../../../shared/constants/constants.dart';
 import '../../../shared/utils/snack_bar_util.dart';
@@ -29,6 +30,10 @@ class _BasicInfoState extends State<BasicInfo> {
   final TextEditingController slogan = TextEditingController();
   final TextEditingController idCode = TextEditingController();
 
+  bool isInProcess = false;
+
+  late CreateWorkSpaceBloc catBloc;
+
   @override
   void initState() {
     super.initState();
@@ -37,31 +42,274 @@ class _BasicInfoState extends State<BasicInfo> {
     description.text = widget.bloc.state.description;
     slogan.text = widget.bloc.state.slogan;
     selectedValue = widget.bloc.state.marketType;
+    inProcess();
     //idCode.text =  widget.bloc.state.idCode;
+    catBloc = BlocProvider.of<CreateWorkSpaceBloc>(context);
+    catBloc.add(LoadCategory());
+  }
+
+  void inProcess() async{
+    String tabIndex = await SecureStorage().readSecureStorage('market_id');
+    String marketId = await SecureStorage().readSecureStorage('marketActiveTabIndex');
+
+    if(tabIndex != 'ND' && marketId != 'ND'){
+      isInProcess = true;
+    }
+    else{
+      isInProcess = false;
+      print('object');
+    }
+  }
+
+
+  void category(){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 0.0,
+              vertical: 0
+            ),
+            insetPadding: const EdgeInsets.all(10),
+            backgroundColor: Colora.scaffold,
+            content: BlocBuilder<CreateWorkSpaceBloc, CreateWorkSpaceState>(
+              builder: (context, state) {
+                return SizedBox(
+                  width: Dimensions.width * 0.9,
+                  height: Dimensions.height * 0.6,
+                  child: Row(
+                    children: [
+
+                      //main category
+                      Container(
+                        width: Dimensions.width * 0.35,
+                        height: Dimensions.height * 0.6,
+                        decoration: const BoxDecoration(
+                            color: Colora.scaffold_,
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(20.0),
+                                bottomRight: Radius.circular(20.0)
+                            )
+                        ),
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(20),
+                              bottomRight: Radius.circular(20)
+                          ),
+                          child: ListView.builder(
+                            itemCount: state.categoryList.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                height: Dimensions.height * 0.08,
+                                decoration: BoxDecoration(
+                                  color: state.activeCategoryIndex == index
+                                      ?Colora.primaryColor
+                                      :Colors.transparent,
+                                  border: Border(
+                                      bottom: BorderSide(color: Colora.primaryColor.withOpacity(0.1))
+                                  ),
+                                ),
+                                child: MaterialButton(
+                                  onPressed: (){
+                                    catBloc.add(LoadMainSubCategory(categoryId: state.categoryList[index].id!));
+                                    catBloc.add(ChangeCategoryIndex(activeCategoryIndex: index));
+                                    // setState(() {
+                                    //   countryName = state.countryList[index].name!;
+                                    // });
+                                    //
+                                    // countryId = state.countryList[index].id!;
+                                    // Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    state.categoryList[index].title.toString(),
+                                    textAlign: TextAlign.center,
+                                    maxLines: 3,
+                                    style: TextStyle(
+                                        color: state.activeCategoryIndex == index
+                                            ?Colora.scaffold
+                                            :Colora.primaryColor,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+
+                      // sub 1 category
+                      SizedBox(
+                        width: Dimensions.width * 0.55,
+                        height: Dimensions.height * 0.6,
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              bottomLeft: Radius.circular(20)
+                          ),
+                          child: ListView.builder(
+                            itemCount: state.mainSubCategoryList.length,
+                            itemBuilder: (context, index){
+                              return Column(
+                                children: [
+                                  //button
+                                  InkWell(
+                                    child: Container(
+                                      width: Dimensions.width * 0.55,
+                                      height: Dimensions.height * 0.08,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: Dimensions.width * 0.05
+                                      ),
+                                      decoration: BoxDecoration(
+                                          color: Colora.backgroundSwitch.withOpacity(0.8),
+                                          border: Border(
+                                              bottom: BorderSide(color: Colora.scaffold.withOpacity(0.2))
+                                          )
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            state.mainSubCategoryList[index].title!,
+                                            style: TextStyle(
+                                                color: Colora.scaffold,
+                                                fontSize: Dimensions.width * 0.035
+                                            ),
+                                          ),
+                                          Icon(
+                                            state.activeSubCategoryIndex == state.mainSubCategoryList[index].id!
+                                                ?Icons.arrow_drop_up_rounded
+                                                :Icons.arrow_drop_down_rounded,
+                                            color: Colora.scaffold,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      if(state.activeSubCategoryIndex != state.mainSubCategoryList[index].id!){
+                                        catBloc.add(ChangeSubCategoryIndex(activeSubCategoryIndex: state.mainSubCategoryList[index].id!));
+                                        catBloc.add(LoadSubCategory(subCategoryId: state.mainSubCategoryList[index].id!));
+                                      }
+                                      else{
+                                        catBloc.add(const ChangeSubCategoryIndex(activeSubCategoryIndex: -1));
+                                      }
+                                    },
+                                  ),
+
+                                  //sub category
+                                  if(state.activeSubCategoryIndex == state.mainSubCategoryList[index].id!)...[
+                                    ...List.generate(state.subCategoryList.length, (index) {
+                                      return InkWell(
+                                        child: Container(
+                                          width: Dimensions.width * 0.55,
+                                          height: Dimensions.height * 0.08,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: Dimensions.width * 0.05
+                                          ),
+                                          decoration: BoxDecoration(
+                                              color: Colora.backgroundSwitch.withOpacity(0.2),
+                                              border: Border(
+                                                  bottom: BorderSide(color: Colora.scaffold.withOpacity(0.2))
+                                              )
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              state.subCategoryList[index].title!,
+                                              style: TextStyle(
+                                                color: Colora.primaryColor,
+                                                fontSize: Dimensions.width * 0.035
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          // if(state.activeSubCategoryIndex != state.mainSubCategoryList[index].id!){
+                                          //   catBloc.add(ChangeSubCategoryIndex(activeSubCategoryIndex: state.mainSubCategoryList[index].id!));
+                                          //   catBloc.add(LoadSubCategory(subCategoryId: state.mainSubCategoryList[index].id!));
+                                          // }
+                                          // else{
+                                          //   catBloc.add(const ChangeSubCategoryIndex(activeSubCategoryIndex: -1));
+                                          // }
+                                        },
+                                      );
+                                    }),
+                                    // Expanded(
+                                    //   child: SizedBox(
+                                    //     width: Dimensions.width * 0.55,
+                                    //     child:
+                                    //     // ListView.builder(
+                                    //     //   shrinkWrap: true,
+                                    //     //   itemCount: state.mainSubCategoryList.length,
+                                    //     //   itemBuilder: (context, index) {
+                                    //     //     return Container(
+                                    //     //       width: Dimensions.width * 0.55,
+                                    //     //       height: 100,
+                                    //     //       color: Colors.red,
+                                    //     //     );
+                                    //     //   },
+                                    //     // ),
+                                    //   ),
+                                    // )
+                                  ]
+
+                                ],
+                              );
+                            }
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              }
+            )
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<CreateWorkSpaceBloc>(context);
 
-    return SizedBox(
-      height: Dimensions.height,
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Dimensions.khorisontal,
+      ),
       child: SingleChildScrollView(
         child: Column(
           children: [
+
+            //image
             Container(
-              child: Image.asset(
-                'assets/images/tools-that-you-should-have.jpg',
-                fit: BoxFit.cover,
-              ),
-              height: 200,
+              height: Dimensions.height * 0.25,
               width: Dimensions.width,
+              padding: EdgeInsets.only(
+                bottom: Dimensions.height * 0.01,
+              ),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20), color: Colors.blue),
+                borderRadius: BorderRadius.circular(20),
+                color: Colora.primaryColor
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.asset(
+                  'assets/images/tools-that-you-should-have.jpg',
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
+
             const SizedBox(
               height: 8,
             ),
+
+            //text fields
             Container(
               width: Dimensions.width,
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
@@ -73,6 +321,7 @@ class _BasicInfoState extends State<BasicInfo> {
                 children: [
                   const SimpleTitle(title: 'انتخاب قالب'),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       radioButton(
                         title: "فروشگاهی",
@@ -130,11 +379,11 @@ class _BasicInfoState extends State<BasicInfo> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: CustomButton(
-                      onPress: () {},
+                      onPress: () => category(),
                       text: "انتخاب شغل",
                       color: Colors.white,
                       textColor: Colora.primaryColor,
-                      height: 40,
+                      height: Dimensions.height * 0.05,
                     ),
                   ),
                   const SizedBox(
@@ -144,7 +393,60 @@ class _BasicInfoState extends State<BasicInfo> {
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: CustomButton(
+                      child: isInProcess
+                        ?CustomButton(
+                          onPress: () async{
+                            // await SecureStorage().deleteSecureStorage('market_id');
+                            // await SecureStorage().deleteSecureStorage('marketActiveTabIndex');
+                            if (businessId.text.isNotEmpty &&
+                                name.text.isNotEmpty &&
+                                description.text.isNotEmpty &&
+                                slogan.text.isNotEmpty &&
+                                idCode.text.isNotEmpty) {
+                              bloc.add(const ChangeCategoryIndex(activeCategoryIndex: -1));
+                              // bloc.add(CreateMarket(
+                              //   businessId: businessId.text,
+                              //   name: name.text,
+                              //   description: description.text,
+                              //   slogan: slogan.text,
+                              //   marketType: selectedValue,
+                              //   subCategory: 1,
+                              // ));
+                              // bloc.add(const ChangeTabView(activeTabIndex: 1));
+                            }
+                            else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colora.borderAvatar,
+                                  content: Text(
+                                    "لطفا تمامی فیلد های لازم را پر نمایید.",
+                                    style: TextStyle(
+                                        color: Colora.scaffold
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          text: BlocProvider.of<CreateWorkSpaceBloc>(context).state.status == CWSStatus.loading
+                            ? null
+                            : "ویرایش",
+                          color: Colors.white,
+                          textColor: Colora.primaryColor,
+                          height: 40,
+                          width: 100,
+                          btnWidget:
+                          BlocProvider.of<CreateWorkSpaceBloc>(context).state.status == CWSStatus.loading
+                            ? const Center(
+                              child: SizedBox(
+                                height: 25,
+                                width: 25,
+                                child: CircularProgressIndicator(),
+                              ),
+                            )
+                            : null
+                        )
+                        :CustomButton(
                           onPress: () {
                             if (businessId.text.isNotEmpty &&
                                 name.text.isNotEmpty &&
@@ -159,35 +461,40 @@ class _BasicInfoState extends State<BasicInfo> {
                                 marketType: selectedValue,
                                 subCategory: 1,
                               ));
-                              bloc.add(const ChangeTabView(activeTabIndex: 1));
-                            } else {
-                              showSnackBar(context,
-                                  "لطفا تمامی فیلد های لازم را پر نمایید.");
+
+                              bloc.add(const ChangeCategoryIndex(activeCategoryIndex: -1));
+                            }
+                            else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colora.borderAvatar,
+                                  content: Text(
+                                    "لطفا تمامی فیلد های لازم را پر نمایید.",
+                                    style: TextStyle(
+                                        color: Colora.scaffold
+                                    ),
+                                  ),
+                                ),
+                              );
                             }
                           },
-                          text: BlocProvider.of<CreateWorkSpaceBloc>(context)
-                                      .state
-                                      .status ==
-                                  CWSStatus.loading
-                              ? null
-                              : "بعدی",
+                          text: BlocProvider.of<CreateWorkSpaceBloc>(context).state.status ==CWSStatus.loading
+                            ? null
+                            : "بعدی",
                           color: Colors.white,
                           textColor: Colora.primaryColor,
                           height: 40,
                           width: 100,
-                          btnWidget:
-                              BlocProvider.of<CreateWorkSpaceBloc>(context)
-                                          .state
-                                          .status ==
-                                      CWSStatus.loading
-                                  ? const Center(
-                                      child: SizedBox(
-                                        height: 25,
-                                        width: 25,
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    )
-                                  : null),
+                          btnWidget: BlocProvider.of<CreateWorkSpaceBloc>(context).state.status ==CWSStatus.loading
+                            ? const Center(
+                                child: SizedBox(
+                                  height: 25,
+                                  width: 25,
+                                  child: CircularProgressIndicator(),
+                                ),
+                              )
+                            : null
+                      ),
                     ),
                   ),
                 ],
