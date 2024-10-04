@@ -144,6 +144,7 @@ class ProfileDialog extends StatelessWidget {
           InkWell(
             onTap: (){
               SecureStorage().deleteSecureStorage('token');
+
               context.router.replace(LoginRoute());
             },
             child: Container(

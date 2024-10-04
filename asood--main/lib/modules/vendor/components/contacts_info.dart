@@ -67,19 +67,31 @@ class _ContactsInfoState extends State<ContactsInfo> {
             children: [
               const SizedBox(height: 7),
               CustomTextField(
-                  isRequired: true,
-                  controller: phone1Controller,
-                  borderColor: widget.bloc.state.phoneBorder,
-                  text: "تلفن همراه"),
-              const SizedBox(height: 7),
-              CustomTextField(controller: phone2Controller, text: "تلفن همراه"),
+                isRequired: true,
+                controller: phone1Controller,
+                borderColor: widget.bloc.state.phoneBorder,
+                keyboardType: TextInputType.phone,
+                text: "تلفن همراه"
+              ),
               const SizedBox(height: 7),
               CustomTextField(
-                  isRequired: true,
-                  controller: phoneNumberController,
-                  text: "تلفن ثابت"),
+                controller: phone2Controller,
+                text: "تلفن همراه",
+                keyboardType: TextInputType.phone,
+              ),
               const SizedBox(height: 7),
-              CustomTextField(controller: faxController, text: "فکس"),
+              CustomTextField(
+                isRequired: true,
+                controller: phoneNumberController,
+                text: "تلفن ثابت",
+                keyboardType: TextInputType.phone,
+              ),
+              const SizedBox(height: 7),
+              CustomTextField(
+                controller: faxController,
+                text: "فکس",
+                keyboardType: TextInputType.phone,
+              ),
               const SizedBox(height: 7),
               CustomTextField(
                   borderColor: widget.bloc.state.emailBorder,
@@ -93,8 +105,11 @@ class _ContactsInfoState extends State<ContactsInfo> {
               const SizedBox(height: 7),
               CustomTextField(controller: instaController, text: "اینستاگرام"),
               const SizedBox(height: 7),
+
+              //time
               const Text(
                 "وارد کردن ساعت کاری باعث نمایش باز یا بسته بودن محل کار شما و جلب مشتری می شود.",
+                textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white),
               ),
               CustomSwitch(
@@ -107,7 +122,9 @@ class _ContactsInfoState extends State<ContactsInfo> {
                 margin: const EdgeInsets.all(10),
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20), color: Colors.white),
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.white
+                ),
                 child: FittedBox(
                   alignment: Alignment.centerRight,
                   child: Column(children: [
@@ -123,8 +140,9 @@ class _ContactsInfoState extends State<ContactsInfo> {
                                   width: 200,
                                   height: 40,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colora.primaryColor),
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colora.primaryColor
+                                  ),
                                   child: Center(
                                     child: Row(
                                       children: [
@@ -134,8 +152,8 @@ class _ContactsInfoState extends State<ContactsInfo> {
                                             color: Colora.primaryColor,
                                             controller: satFController,
                                             text: 'از ساعت',
-                                            hintStyle: const TextStyle(
-                                                color: Colors.white),
+                                            keyboardType: TextInputType.number,
+                                            hintStyle: const TextStyle(color: Colors.white),
                                           ),
                                         ),
                                         const Text(
@@ -148,6 +166,7 @@ class _ContactsInfoState extends State<ContactsInfo> {
                                             color: Colora.primaryColor,
                                             controller: satTController,
                                             text: 'تا ساعت',
+                                            keyboardType: TextInputType.number,
                                             hintStyle: const TextStyle(
                                                 color: Colors.white),
                                           ),
@@ -186,6 +205,7 @@ class _ContactsInfoState extends State<ContactsInfo> {
                                             color: Colora.primaryColor,
                                             controller: sunFController,
                                             text: 'از ساعت',
+                                            keyboardType: TextInputType.number,
                                             hintStyle: const TextStyle(
                                                 color: Colors.white),
                                           ),
@@ -200,6 +220,7 @@ class _ContactsInfoState extends State<ContactsInfo> {
                                             color: Colora.primaryColor,
                                             controller: sunTController,
                                             text: 'تا ساعت',
+                                            keyboardType: TextInputType.number,
                                             hintStyle: const TextStyle(
                                                 color: Colors.white),
                                           ),
@@ -236,6 +257,7 @@ class _ContactsInfoState extends State<ContactsInfo> {
                                         color: Colora.primaryColor,
                                         controller: monFController,
                                         text: 'از ساعت',
+                                        keyboardType: TextInputType.number,
                                         hintStyle:
                                             const TextStyle(color: Colors.white),
                                       ),
@@ -250,6 +272,7 @@ class _ContactsInfoState extends State<ContactsInfo> {
                                         color: Colora.primaryColor,
                                         controller: monTController,
                                         text: 'تا ساعت',
+                                        keyboardType: TextInputType.number,
                                         hintStyle:
                                             const TextStyle(color: Colors.white),
                                       ),
@@ -284,6 +307,7 @@ class _ContactsInfoState extends State<ContactsInfo> {
                                         color: Colora.primaryColor,
                                         controller: tueFController,
                                         text: 'از ساعت',
+                                        keyboardType: TextInputType.number,
                                         hintStyle:
                                             const TextStyle(color: Colors.white),
                                       ),
@@ -298,6 +322,7 @@ class _ContactsInfoState extends State<ContactsInfo> {
                                         color: Colora.primaryColor,
                                         controller: tueTController,
                                         text: 'تا ساعت',
+                                        keyboardType: TextInputType.number,
                                         hintStyle:
                                             const TextStyle(color: Colors.white),
                                       ),
@@ -332,6 +357,7 @@ class _ContactsInfoState extends State<ContactsInfo> {
                                         color: Colora.primaryColor,
                                         controller: wedFController,
                                         text: 'از ساعت',
+                                        keyboardType: TextInputType.number,
                                         hintStyle:
                                             const TextStyle(color: Colors.white),
                                       ),
@@ -346,6 +372,7 @@ class _ContactsInfoState extends State<ContactsInfo> {
                                         color: Colora.primaryColor,
                                         controller: wedTController,
                                         text: 'تا ساعت',
+                                        keyboardType: TextInputType.number,
                                         hintStyle:
                                             const TextStyle(color: Colors.white),
                                       ),
@@ -380,6 +407,7 @@ class _ContactsInfoState extends State<ContactsInfo> {
                                         color: Colora.primaryColor,
                                         controller: thuFController,
                                         text: 'از ساعت',
+                                        keyboardType: TextInputType.number,
                                         hintStyle:
                                             const TextStyle(color: Colors.white),
                                       ),
@@ -394,6 +422,7 @@ class _ContactsInfoState extends State<ContactsInfo> {
                                         color: Colora.primaryColor,
                                         controller: thuTController,
                                         text: 'تا ساعت',
+                                        keyboardType: TextInputType.number,
                                         hintStyle:
                                             const TextStyle(color: Colors.white),
                                       ),
@@ -428,6 +457,7 @@ class _ContactsInfoState extends State<ContactsInfo> {
                                         color: Colora.primaryColor,
                                         controller: friFController,
                                         text: 'از ساعت',
+                                        keyboardType: TextInputType.number,
                                         hintStyle:
                                             const TextStyle(color: Colors.white),
                                       ),
@@ -442,6 +472,7 @@ class _ContactsInfoState extends State<ContactsInfo> {
                                         color: Colora.primaryColor,
                                         controller: friTController,
                                         text: 'تا ساعت',
+                                        keyboardType: TextInputType.number,
                                         hintStyle:
                                             const TextStyle(color: Colors.white),
                                       ),
@@ -458,6 +489,8 @@ class _ContactsInfoState extends State<ContactsInfo> {
               const SizedBox(
                 height: 7,
               ),
+
+              //button
               Align(
                 alignment: Alignment.centerRight,
                 child: Padding(
@@ -481,9 +514,12 @@ class _ContactsInfoState extends State<ContactsInfo> {
                       CustomButton(
                         width: 100,
                         onPress: () async{
-                          widget.bloc.add(Validator(
+                          widget.bloc.add(
+                            Validator(
                               phoneNumber1: phone1Controller.text,
-                              email: emailController.text));
+                              email: emailController.text
+                            )
+                          );
                           String marketId = await SecureStorage().readSecureStorage('market_id');
                           if (phone1Controller.text.isNotEmpty &&
                               phoneNumberController.text.isNotEmpty &&

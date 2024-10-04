@@ -1,5 +1,6 @@
 // ignore_for_file: sized_box_for_whitespace, unused_import, unnecessary_import
 
+import 'package:asood/modules/vendor/screens/stores.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,7 +28,11 @@ Map dummyData = {
       "image": Container(),
     },
     {"title": "کارت ویزیت", "image": Container()},
-    {"title": "استعلام بها", "image": Container()},
+    {
+      "title": "استعلام بها",
+      "image": Container(),
+      "page": const StoresScreen(),
+    },
     {
       "title": "ثبت آگهی",
       "image": Container(),
@@ -185,7 +190,7 @@ class DashboardAdditionalWidget extends StatelessWidget {
         boxShadow: Deco.kshadow,
         borderRadius: BorderRadius.circular(20.0),
       ),
-      height: Dimensions.height * 0.45,
+      height: Dimensions.height * 0.43,
       child: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
         child: Column(
@@ -205,7 +210,7 @@ class DashboardAdditionalWidget extends StatelessWidget {
 
             //items
             Container(
-              height: Dimensions.height * .36,
+              height: Dimensions.height * .43,
               width: Dimensions.width * .65,
               padding: EdgeInsets.only(top: Dimensions.height * 0.02),
               child: GridView.count(
@@ -213,9 +218,9 @@ class DashboardAdditionalWidget extends StatelessWidget {
                 crossAxisCount: 3,
                 shrinkWrap: true,
                 cacheExtent: 2,
-                childAspectRatio: 4 / 5.5,
-                crossAxisSpacing: 22,
-                mainAxisSpacing: 0,
+                childAspectRatio: 1,
+                crossAxisSpacing: 0,
+                mainAxisSpacing: 10,
                 children: [
                   ...List.generate(
                     dummyData["secondMenu"].length,
@@ -263,7 +268,7 @@ class DashboardServicesWidget extends StatelessWidget {
         boxShadow: Deco.kshadow,
         borderRadius: BorderRadius.circular(20.0),
       ),
-      height: MediaQuery.of(context).size.height * 0.40,
+      height: MediaQuery.of(context).size.height * 0.38,
       child: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
         child: Column(
@@ -272,17 +277,17 @@ class DashboardServicesWidget extends StatelessWidget {
             Align(
               alignment: Alignment.centerRight,
               child: Container(
-                    margin: const EdgeInsets.only(right: 20, bottom: 20),
-                    child: Text(
-                      "کسب وکار:",
-                      style: ATextStyle.lightBlue16
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ))
+                  margin: const EdgeInsets.only(right: 20, bottom: 20),
+                  child: Text(
+                    "کسب وکار:",
+                    style: ATextStyle.lightBlue16
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ))
             ),
 
             Container(
               height: Dimensions.height * .38,
-              width: Dimensions.width * .75,
+              width: Dimensions.width * .7,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -292,7 +297,7 @@ class DashboardServicesWidget extends StatelessWidget {
                     shrinkWrap: true,
                     cacheExtent: 2,
                     childAspectRatio: 3 / 4,
-                    crossAxisSpacing: 22,
+                    crossAxisSpacing: 12,
                     mainAxisSpacing: 11,
                     children: [
                       ...List.generate(

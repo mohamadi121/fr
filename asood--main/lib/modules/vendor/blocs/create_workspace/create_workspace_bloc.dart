@@ -11,8 +11,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../blocs/map_bloc/map_bloc.dart';
 import '../../../../models/market_contact_model.dart';
+import '../../../../models/market_location_model.dart';
 import '../../../../models/work_hours_model.dart';
 import '../../../../repositories/market_repository.dart';
+import '../../../../services/Secure_Storage.dart';
 import '../../../../services/api_status.dart';
 
 import '../../../../shared/constants/constants.dart';
@@ -68,7 +70,6 @@ class CreateWorkSpaceBloc
               activeTabIndex: 1,
               marketType: "shop",
               status: CWSStatus.success));
-          // add(const ChangeTabView(activeTabIndex: 1));
         } else {
           emit(state.copyWith(
               status: CWSStatus.failure, error: res.error.toString()));
@@ -97,6 +98,8 @@ class CreateWorkSpaceBloc
 
     on<MarketContact>(_setMarketContact);
 
+    on<MarketLocation>(_setMarketLocation);
+
     on<CalPrice>(_calPrice);
 
     on<SetDiscount>(_setDiscount);
@@ -120,6 +123,7 @@ class CreateWorkSpaceBloc
     on<LoadCity>(_getCities);
   }
 
+  //market contact
   _setMarketContact(MarketContact event, Emitter<CreateWorkSpaceState> emit) async {
     emit(state.copyWith(
         phoneNumber1: event.phoneNumber1,
@@ -150,6 +154,41 @@ class CreateWorkSpaceBloc
         var json = jsonDecode(res.response.toString());
         emit(state.copyWith(status: CWSStatus.success));
         add(const ChangeTabView(activeTabIndex: 2));
+      } else {
+        emit(state.copyWith(
+            status: CWSStatus.failure, error: res.error.toString()));
+      }
+    } catch (e) {}
+  }
+
+  //market location
+  _setMarketLocation(MarketLocation event, Emitter<CreateWorkSpaceState> emit) async {
+    emit(
+      state.copyWith(
+        status: CWSStatus.loading,
+        city: event.city,
+        address: event.workAddress,
+        zipCode: event.postalCode,
+        latitude: event.latitude,
+        longitude: event.longitude,
+      )
+    );
+    MarketLocationModel marketLocation = MarketLocationModel(
+      market: event.marketId,
+      address: event.workAddress,
+      city: event.city,
+      zipCode: event.postalCode,
+      latitude: event.latitude,
+      longitude: event.longitude
+    );
+
+    try {
+      var res = await marketRepo.createMarketLocation(
+        marketLocation,
+      );
+      if (res is Success) {
+        var json = jsonDecode(res.response.toString());
+        emit(state.copyWith(status: CWSStatus.success));
       } else {
         emit(state.copyWith(
             status: CWSStatus.failure, error: res.error.toString()));

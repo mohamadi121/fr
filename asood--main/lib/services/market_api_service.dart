@@ -1,5 +1,6 @@
 // import 'dart:convert';
 
+import 'package:asood/models/market_location_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
@@ -55,8 +56,8 @@ class MarketApiService {
     }
   }
 
-//create market location
-  Future createMarketLocation(MarketLocation marketLocation) async {
+  //create market location
+  Future createMarketLocation(MarketLocationModel marketLocation) async {
     var body = {
       "market": marketLocation.market,
       "city": marketLocation.city,

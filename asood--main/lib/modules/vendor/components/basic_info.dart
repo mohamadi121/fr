@@ -30,6 +30,9 @@ class _BasicInfoState extends State<BasicInfo> {
   final TextEditingController slogan = TextEditingController();
   final TextEditingController idCode = TextEditingController();
 
+  int selectedCategoryId = 0;
+  String selectedCategoryName = 'انتخاب شغل';
+
   bool isInProcess = false;
 
   late CreateWorkSpaceBloc catBloc;
@@ -63,6 +66,8 @@ class _BasicInfoState extends State<BasicInfo> {
 
 
   void category(){
+
+    FocusManager.instance.primaryFocus?.unfocus();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -143,7 +148,7 @@ class _BasicInfoState extends State<BasicInfo> {
                         ),
                       ),
 
-                      // sub 1 category
+                      // main sub category
                       SizedBox(
                         width: Dimensions.width * 0.55,
                         height: Dimensions.height * 0.6,
@@ -209,13 +214,13 @@ class _BasicInfoState extends State<BasicInfo> {
                                           width: Dimensions.width * 0.55,
                                           height: Dimensions.height * 0.08,
                                           padding: EdgeInsets.symmetric(
-                                              horizontal: Dimensions.width * 0.05
+                                            horizontal: Dimensions.width * 0.05
                                           ),
                                           decoration: BoxDecoration(
-                                              color: Colora.backgroundSwitch.withOpacity(0.2),
-                                              border: Border(
-                                                  bottom: BorderSide(color: Colora.scaffold.withOpacity(0.2))
-                                              )
+                                            color: Colora.backgroundSwitch.withOpacity(0.2),
+                                            border: Border(
+                                              bottom: BorderSide(color: Colora.scaffold.withOpacity(0.2))
+                                            )
                                           ),
                                           child: Center(
                                             child: Text(
@@ -228,33 +233,16 @@ class _BasicInfoState extends State<BasicInfo> {
                                           ),
                                         ),
                                         onTap: () {
-                                          // if(state.activeSubCategoryIndex != state.mainSubCategoryList[index].id!){
-                                          //   catBloc.add(ChangeSubCategoryIndex(activeSubCategoryIndex: state.mainSubCategoryList[index].id!));
-                                          //   catBloc.add(LoadSubCategory(subCategoryId: state.mainSubCategoryList[index].id!));
-                                          // }
-                                          // else{
-                                          //   catBloc.add(const ChangeSubCategoryIndex(activeSubCategoryIndex: -1));
-                                          // }
+                                          selectedCategoryId = state.subCategoryList[index].id!;
+
+                                          setState(() {
+                                            selectedCategoryName = state.subCategoryList[index].title!;
+                                          });
+
+                                          Navigator.pop(context);
                                         },
                                       );
                                     }),
-                                    // Expanded(
-                                    //   child: SizedBox(
-                                    //     width: Dimensions.width * 0.55,
-                                    //     child:
-                                    //     // ListView.builder(
-                                    //     //   shrinkWrap: true,
-                                    //     //   itemCount: state.mainSubCategoryList.length,
-                                    //     //   itemBuilder: (context, index) {
-                                    //     //     return Container(
-                                    //     //       width: Dimensions.width * 0.55,
-                                    //     //       height: 100,
-                                    //     //       color: Colors.red,
-                                    //     //     );
-                                    //     //   },
-                                    //     // ),
-                                    //   ),
-                                    // )
                                   ]
 
                                 ],
@@ -371,7 +359,11 @@ class _BasicInfoState extends State<BasicInfo> {
                       text: "شعار تبلیغاتی"),
                   const SizedBox(height: 7),
                   CustomTextField(
-                      isRequired: true, controller: idCode, text: "کد ملی"),
+                    isRequired: true,
+                    controller: idCode,
+                    text: "کد ملی",
+                    keyboardType: TextInputType.number,
+                  ),
                   const Text(
                     "کد ملی صرفا جهت تخصیص آگهی به شما میباشد",
                     style: TextStyle(color: Colors.white),
@@ -380,10 +372,11 @@ class _BasicInfoState extends State<BasicInfo> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: CustomButton(
                       onPress: () => category(),
-                      text: "انتخاب شغل",
+                      text: selectedCategoryName,
                       color: Colors.white,
                       textColor: Colora.primaryColor,
                       height: Dimensions.height * 0.05,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(
@@ -396,8 +389,8 @@ class _BasicInfoState extends State<BasicInfo> {
                       child: isInProcess
                         ?CustomButton(
                           onPress: () async{
-                            // await SecureStorage().deleteSecureStorage('market_id');
-                            // await SecureStorage().deleteSecureStorage('marketActiveTabIndex');
+                            await SecureStorage().deleteSecureStorage('market_id');
+                            await SecureStorage().deleteSecureStorage('marketActiveTabIndex');
                             if (businessId.text.isNotEmpty &&
                                 name.text.isNotEmpty &&
                                 description.text.isNotEmpty &&
@@ -449,17 +442,19 @@ class _BasicInfoState extends State<BasicInfo> {
                         :CustomButton(
                           onPress: () {
                             if (businessId.text.isNotEmpty &&
-                                name.text.isNotEmpty &&
-                                description.text.isNotEmpty &&
-                                slogan.text.isNotEmpty &&
-                                idCode.text.isNotEmpty) {
+                              name.text.isNotEmpty &&
+                              description.text.isNotEmpty &&
+                              slogan.text.isNotEmpty &&
+                              idCode.text.isNotEmpty &&
+                              selectedCategoryId != 0
+                            ) {
                               bloc.add(CreateMarket(
                                 businessId: businessId.text,
                                 name: name.text,
                                 description: description.text,
                                 slogan: slogan.text,
                                 marketType: selectedValue,
-                                subCategory: 1,
+                                subCategory: selectedCategoryId,
                               ));
 
                               bloc.add(const ChangeCategoryIndex(activeCategoryIndex: -1));

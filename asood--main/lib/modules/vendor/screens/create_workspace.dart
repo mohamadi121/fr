@@ -157,7 +157,7 @@ class _CreateWorkSpaceScreenState extends State<CreateWorkSpaceScreen>
                     ),
                 
                     //appbar
-                    NewAppBar(title: 'ثبت دفتر کار')
+                    const NewAppBar(title: 'ثبت دفتر کار')
                 
                   ],
                 ),
@@ -173,7 +173,7 @@ class _CreateWorkSpaceScreenState extends State<CreateWorkSpaceScreen>
     bool isActive = state.activeTabIndex == tabIndex; // Check if tab is active
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 2.0),
       margin: const EdgeInsets.symmetric(vertical: 10.0),
       width: Dimensions.width,
       decoration: BoxDecoration(

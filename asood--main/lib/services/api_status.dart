@@ -36,6 +36,6 @@ ApiStatus(http.Response response) {
 CustomApiStatus() {
   return Failure(
     code: 301,
-    errorResponse: 'دسترسی خود به اینترنت را بررسی نمایید!',
+    errorResponse: 'عدم برقراری ارتباط با سرور',
   );
 }

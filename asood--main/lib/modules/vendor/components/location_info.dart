@@ -6,8 +6,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:location/location.dart';
 
+import '../../../models/location_model.dart';
+import '../../../services/Secure_Storage.dart';
 import '../../../shared/utils/snack_bar_util.dart';
+import '../../../shared/widgets/map_widget_2.dart';
 import '../blocs/create_workspace/create_workspace_bloc.dart';
 import '../../../shared/constants/constants.dart';
 import '../../../shared/widgets/custom_button.dart';
@@ -41,6 +47,8 @@ class _LocationInfoState extends State<LocationInfo> {
 
   late CreateWorkSpaceBloc bloc;
 
+  late LatLng location = const LatLng(0, 0);
+
   @override
   void initState() {
     // TODO: implement initState
@@ -58,6 +66,11 @@ class _LocationInfoState extends State<LocationInfo> {
   }
 
   void country(){
+
+    setState(() {
+      provinceName = 'استان';
+      provinceId = 0;
+    });
 
     showDialog(
       context: context,
@@ -155,6 +168,12 @@ class _LocationInfoState extends State<LocationInfo> {
   }
 
   void province(){
+
+    setState(() {
+      cityName = 'شهر';
+      cityId = 0;
+    });
+
     bloc.add(LoadProvince(countryId: countryId));
     showDialog(
       context: context,
@@ -384,9 +403,14 @@ class _LocationInfoState extends State<LocationInfo> {
 
             Container(
               width: Dimensions.width,
-              padding: const EdgeInsets.symmetric(horizontal: 5),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 5,
+                vertical: 10
+              ),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20), color: Colora.primaryColor),
+                borderRadius: BorderRadius.circular(20),
+                color: Colora.primaryColor
+              ),
               child: Column(
                 children: [
 
@@ -399,6 +423,7 @@ class _LocationInfoState extends State<LocationInfo> {
                     color: Colors.white,
                     text: countryName,
                     textColor: Colora.primaryColor,
+                    fontWeight: FontWeight.bold,
                   ),
 
                   //province
@@ -420,6 +445,7 @@ class _LocationInfoState extends State<LocationInfo> {
                     color: Colors.white,
                     text: provinceName,
                     textColor: Colora.primaryColor,
+                    fontWeight: FontWeight.bold,
                   ),
 
                   //city
@@ -441,27 +467,44 @@ class _LocationInfoState extends State<LocationInfo> {
                     color: Colors.white,
                     text: cityName,
                     textColor: Colora.primaryColor,
+                    fontWeight: FontWeight.bold,
                   ),
 
-                  // CustomTextField(controller: cityController, text: "شهر"),
+                  // address
                   CustomTextField(
-                      maxLine: 6,
-                      controller: addressController,
-                      text: "آدرس فروشگاه"),
+                    maxLine: 6,
+                    controller: addressController,
+                    text: "آدرس فروشگاه"
+                  ),
                   const SizedBox(height: 7),
+
+                  //zipcode
                   CustomTextField(controller: zipCodeController, text: "کد پستی"),
+
+                  //location picker
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 7, horizontal: 7),
                     height: 220,
                     /*     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20), color: Colors.white), */
-                    child: const Center(
-                      child: LocationPicker(), //Text("map"),
+                    child: Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: MapScreen(
+                          selectedLocation: (mapLocation) {
+                            setState(() {
+                              location = mapLocation;
+                            });
+                          },
+                        ),
+                      )
+                      // LocationPicker(),
                     ),
                   ),
                   const SizedBox(
                     height: 7,
                   ),
+
                   Align(
                     alignment: Alignment.centerRight,
                     child: Padding(
@@ -469,6 +512,8 @@ class _LocationInfoState extends State<LocationInfo> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
+
+                          //back
                           CustomButton(
                             width: 100,
                             onPress: () {
@@ -482,269 +527,306 @@ class _LocationInfoState extends State<LocationInfo> {
                           const SizedBox(
                             width: 5,
                           ),
+
+                          //submit
                           CustomButton(
                             width: 100,
-                            onPress: () {
-                              CustomDialog(
-                                context: context,
-                                title: "انتخاب درگاه",
-                                widget: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                                  height: 120,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text(
-                                          'میخواهید از درگاه آسود استفاده کنید یا درگاه شخصی؟'),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                            onPress: () async{
+                              FocusManager.instance.primaryFocus?.unfocus();
+
+                              if(cityId == 0 || addressController.text.isEmpty){
+                                showSnackBar(
+                                    context, "لطفا شهر و آدرس را پر کنید"
+                                );
+                              }
+                              else{
+                                String marketId = await SecureStorage().readSecureStorage('market_id');
+                                widget.bloc.add(
+                                    MarketLocation(
+                                      marketId: int.parse(marketId),
+                                      city: cityId,
+                                      workAddress: addressController.text,
+                                      postalCode: zipCodeController.text,
+                                      longitude: location.latitude.toString().substring(0,8),
+                                      latitude: location.longitude.toString().substring(0,8),
+                                    )
+                                );
+
+                                if(widget.bloc.state.status == CWSStatus.success){
+                                  CustomDialog(
+                                    context: context,
+                                    title: "انتخاب درگاه",
+                                    widget: Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                                      height: 120,
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          CustomButton(
-                                            onPress: () {
-                                              Navigator.of(context).pop();
-                                              CustomDialog(
-                                                  context: context,
-                                                  title: "ثبت درگاه شخصی",
-                                                  widget: Container(
-                                                    height: 130,
-                                                    child: Column(
-                                                      mainAxisAlignment:
+                                          const Text(
+                                              'میخواهید از درگاه آسود استفاده کنید یا درگاه شخصی؟'),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              CustomButton(
+                                                onPress: () {
+                                                  Navigator.of(context).pop();
+                                                  CustomDialog(
+                                                      context: context,
+                                                      title: "ثبت درگاه شخصی",
+                                                      widget: Container(
+                                                        height: 130,
+                                                        child: Column(
+                                                          mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .spaceBetween,
-                                                      children: [
-                                                        const Text(
-                                                            'کلید درگاه خود را وارد کنید'),
-                                                        SizedBox(
-                                                          height: 35,
-                                                          child: CustomTextField(
-                                                            controller:
-                                                                TextEditingController(),
-                                                            text: "کد درگاه",
-                                                            hintStyle:
-                                                                const TextStyle(
-                                                                    color:
-                                                                        Colors.white),
-                                                            color:
-                                                                Colora.primaryColor,
-                                                          ),
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
                                                           children: [
-                                                            CustomButton(
-                                                              onPress: () {},
-                                                              text: "ثبت",
-                                                              width: 120,
-                                                              color:
-                                                                  Colora.primaryColor,
-                                                              textColor: Colors.white,
-                                                            ),
-                                                            const SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            CustomButton(
-                                                              onPress: () {},
-                                                              text: "انصراف",
-                                                              width: 120,
-                                                              color:
-                                                                  Colora.primaryColor,
-                                                              textColor: Colors.white,
-                                                            ),
-                                                          ],
-                                                        )
-                                                      ],
-                                                    ),
-                                                  )).showCustomDialog();
-                                            },
-                                            text: "درگاه شخصی",
-                                            width: 90,
-                                            color: Colora.primaryColor,
-                                            textColor: Colors.white,
-                                          ),
-                                          CustomButton(
-                                            onPress: () {},
-                                            text: "بعدا",
-                                            width: 90,
-                                            color: Colora.primaryColor,
-                                            textColor: Colors.white,
-                                          ),
-                                          CustomButton(
-                                            onPress: () {
-                                              CustomDialog(
-                                                height: 405.0,
-                                                context: context,
-                                                title: "پرداخت حق اشتراک",
-                                                widget: Container(
-                                                  padding: const EdgeInsets.symmetric(
-                                                      vertical: 10, horizontal: 10),
-                                                  child: Column(
-                                                    children: [
-                                                      const Text(
-                                                          "مبلغ پرداختی را وارد کنید"),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      Container(
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
+                                                            const Text(
+                                                                'کلید درگاه خود را وارد کنید'),
                                                             SizedBox(
                                                               height: 35,
-                                                              width: 180,
                                                               child: CustomTextField(
-                                                                color: Colora
-                                                                    .primaryColor
-                                                                    .withOpacity(0.5),
                                                                 controller:
-                                                                    TextEditingController(),
-                                                                text: "کد تخفیف",
+                                                                TextEditingController(),
+                                                                text: "کد درگاه",
+                                                                hintStyle:
+                                                                const TextStyle(
+                                                                    color:
+                                                                    Colors.white),
+                                                                color:
+                                                                Colora.primaryColor,
                                                               ),
                                                             ),
-                                                            CustomButton(
-                                                              height: 35,
-                                                              width: 100,
-                                                              onPress: () {},
-                                                              text: "ثبت تخفیف",
+                                                            const SizedBox(
+                                                              height: 5,
                                                             ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                              children: [
+                                                                CustomButton(
+                                                                  onPress: () {},
+                                                                  text: "ثبت",
+                                                                  width: 120,
+                                                                  color:
+                                                                  Colora.primaryColor,
+                                                                  textColor: Colors.white,
+                                                                ),
+                                                                const SizedBox(
+                                                                  width: 5,
+                                                                ),
+                                                                CustomButton(
+                                                                  onPress: () {},
+                                                                  text: "انصراف",
+                                                                  width: 120,
+                                                                  color:
+                                                                  Colora.primaryColor,
+                                                                  textColor: Colors.white,
+                                                                ),
+                                                              ],
+                                                            )
                                                           ],
                                                         ),
-                                                      ),
-                                                      Container(
-                                                        padding: const EdgeInsets
-                                                            .symmetric(
-                                                            vertical: 10,
-                                                            horizontal: 30),
-                                                        margin: const EdgeInsets
-                                                            .symmetric(
-                                                            horizontal: 8,
-                                                            vertical: 8),
-                                                        height: 200,
-                                                        width: Dimensions.width,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
+                                                      )).showCustomDialog();
+                                                },
+                                                text: "درگاه شخصی",
+                                                width: 90,
+                                                color: Colora.primaryColor,
+                                                textColor: Colors.white,
+                                              ),
+                                              CustomButton(
+                                                onPress: () {
+                                                  Navigator.pop(context);
+                                                  context.router.pushNamed('/stores');
+
+
+                                                  widget.bloc.add(const ChangeTabView(activeTabIndex: 0));
+                                                  SecureStorage().deleteSecureStorage('market_id');
+                                                  SecureStorage().deleteSecureStorage('marketActiveTabIndex');
+
+                                                },
+                                                text: "بعدا",
+                                                width: 90,
+                                                color: Colora.primaryColor,
+                                                textColor: Colors.white,
+                                              ),
+                                              CustomButton(
+                                                onPress: () {
+                                                  CustomDialog(
+                                                    height: 405.0,
+                                                    context: context,
+                                                    title: "پرداخت حق اشتراک",
+                                                    widget: Container(
+                                                      padding: const EdgeInsets.symmetric(
+                                                          vertical: 10, horizontal: 10),
+                                                      child: Column(
+                                                        children: [
+                                                          const Text(
+                                                              "مبلغ پرداختی را وارد کنید"),
+                                                          const SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          Container(
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                              children: [
+                                                                SizedBox(
+                                                                  height: 35,
+                                                                  width: 180,
+                                                                  child: CustomTextField(
+                                                                    color: Colora
+                                                                        .primaryColor
+                                                                        .withOpacity(0.5),
+                                                                    controller:
+                                                                    TextEditingController(),
+                                                                    text: "کد تخفیف",
+                                                                  ),
+                                                                ),
+                                                                CustomButton(
+                                                                  height: 35,
+                                                                  width: 100,
+                                                                  onPress: () {},
+                                                                  text: "ثبت تخفیف",
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            padding: const EdgeInsets
+                                                                .symmetric(
+                                                                vertical: 10,
+                                                                horizontal: 30),
+                                                            margin: const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 8,
+                                                                vertical: 8),
+                                                            height: 200,
+                                                            width: Dimensions.width,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
                                                                 BorderRadius.circular(
                                                                     20),
-                                                            color: Colors.grey
-                                                                .withOpacity(0.2)),
-                                                        child: const Column(
-                                                          children: [
-                                                            Row(
-                                                              mainAxisAlignment:
+                                                                color: Colors.grey
+                                                                    .withOpacity(0.2)),
+                                                            child: const Column(
+                                                              children: [
+                                                                Row(
+                                                                  mainAxisAlignment:
                                                                   MainAxisAlignment
                                                                       .spaceBetween,
-                                                              children: [
-                                                                Text("مبلغ پرداختی:"),
-                                                                Text("تومان")
-                                                              ],
-                                                            ),
-                                                            SizedBox(height: 10),
-                                                            Row(
-                                                              mainAxisAlignment:
+                                                                  children: [
+                                                                    Text("مبلغ پرداختی:"),
+                                                                    Text("تومان")
+                                                                  ],
+                                                                ),
+                                                                SizedBox(height: 10),
+                                                                Row(
+                                                                  mainAxisAlignment:
                                                                   MainAxisAlignment
                                                                       .spaceBetween,
-                                                              children: [
-                                                                Text("مبلغ پرداختی:"),
-                                                                Text("تومان")
-                                                              ],
-                                                            ),
-                                                            SizedBox(height: 10),
-                                                            Row(
-                                                              mainAxisAlignment:
+                                                                  children: [
+                                                                    Text("مبلغ پرداختی:"),
+                                                                    Text("تومان")
+                                                                  ],
+                                                                ),
+                                                                SizedBox(height: 10),
+                                                                Row(
+                                                                  mainAxisAlignment:
                                                                   MainAxisAlignment
                                                                       .spaceBetween,
-                                                              children: [
-                                                                Text("مبلغ پرداختی:"),
-                                                                Text("تومان")
-                                                              ],
-                                                            ),
-                                                            SizedBox(height: 10),
-                                                            Row(
-                                                              mainAxisAlignment:
+                                                                  children: [
+                                                                    Text("مبلغ پرداختی:"),
+                                                                    Text("تومان")
+                                                                  ],
+                                                                ),
+                                                                SizedBox(height: 10),
+                                                                Row(
+                                                                  mainAxisAlignment:
                                                                   MainAxisAlignment
                                                                       .spaceBetween,
-                                                              children: [
-                                                                Text("مبلغ پرداختی:"),
-                                                                Text("تومان")
-                                                              ],
-                                                            ),
-                                                            SizedBox(height: 10),
-                                                            Row(
-                                                              mainAxisAlignment:
+                                                                  children: [
+                                                                    Text("مبلغ پرداختی:"),
+                                                                    Text("تومان")
+                                                                  ],
+                                                                ),
+                                                                SizedBox(height: 10),
+                                                                Row(
+                                                                  mainAxisAlignment:
                                                                   MainAxisAlignment
                                                                       .spaceBetween,
-                                                              children: [
-                                                                Text("مبلغ پرداختی:"),
-                                                                Text("تومان")
+                                                                  children: [
+                                                                    Text("مبلغ پرداختی:"),
+                                                                    Text("تومان")
+                                                                  ],
+                                                                ),
+                                                                SizedBox(height: 10),
                                                               ],
                                                             ),
-                                                            SizedBox(height: 10),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
                                                             MainAxisAlignment.center,
-                                                        children: [
-                                                          CustomButton(
-                                                            onPress: () {
-                                                              context.router.push(
-                                                                  const StoresRoute());
-                                                              /*        Navigator.push(
+                                                            children: [
+                                                              CustomButton(
+                                                                onPress: () {
+                                                                  context.router.push(
+                                                                      const StoresRoute());
+                                                                  /*        Navigator.push(
                                                                   context,
                                                                   MaterialPageRoute(
                                                                       builder:
                                                                           (context) =>
                                                                               const StoresScreen())); */
-                                                            },
-                                                            text: "پرداخت",
-                                                            width: 120,
-                                                            color:
+                                                                },
+                                                                text: "پرداخت",
+                                                                width: 120,
+                                                                color:
                                                                 Colora.primaryColor,
-                                                            textColor: Colors.white,
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          CustomButton(
-                                                            onPress: () {},
-                                                            text: "انصراف",
-                                                            width: 120,
-                                                            color:
+                                                                textColor: Colors.white,
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 5,
+                                                              ),
+                                                              CustomButton(
+                                                                onPress: () {},
+                                                                text: "انصراف",
+                                                                width: 120,
+                                                                color:
                                                                 Colora.primaryColor,
-                                                            textColor: Colors.white,
-                                                          ),
+                                                                textColor: Colors.white,
+                                                              ),
+                                                            ],
+                                                          )
                                                         ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ).showCustomDialog();
-                                            },
-                                            text: "درگاه آسود",
-                                            width: 90,
-                                            color: Colora.primaryColor,
-                                            textColor: Colors.white,
-                                          )
+                                                      ),
+                                                    ),
+                                                  ).showCustomDialog();
+                                                },
+                                                text: "درگاه آسود",
+                                                width: 90,
+                                                color: Colora.primaryColor,
+                                                textColor: Colors.white,
+                                              )
+                                            ],
+                                          ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              ).showCustomDialog();
+                                    ),
+                                  ).showCustomDialog();
+                                }
+
+                              }
+
                             },
                             text: "ثبت",
                             color: Colors.white,
                             textColor: Colora.primaryColor,
                             height: 40,
                           ),
+
                         ],
                       ),
                     ),

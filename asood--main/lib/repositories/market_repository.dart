@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:asood/models/market_location_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../models/market_base.dart';
@@ -42,7 +43,7 @@ class MarketRepository {
     return await marketApiService.createMarketContact(marketContact);
   }
 
-  Future<dynamic> createMarketLocation(MarketLocation marketLocation) async {
+  Future<dynamic> createMarketLocation(MarketLocationModel marketLocation) async {
     return await marketApiService.createMarketLocation(marketLocation);
   }
 

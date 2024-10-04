@@ -58,18 +58,20 @@ class MarketContact extends CreateWorkSpaceEvent {
 
 //third View Event
 class MarketLocation extends CreateWorkSpaceEvent {
-  final String country;
-  final String state;
-  final String city;
-  final double latitude;
-  final double longitude;
+  final int marketId;
+  // final String country;
+  // final String state;
+  final int city;
+  final String latitude;
+  final String longitude;
   final String postalCode;
-  final WorkHours workAdress;
+  final String workAddress;
 
   const MarketLocation({
-    required this.workAdress,
-    required this.country,
-    required this.state,
+    required this.marketId,
+    required this.workAddress,
+    // required this.country,
+    // required this.state,
     required this.city,
     required this.latitude,
     required this.longitude,

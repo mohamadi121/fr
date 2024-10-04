@@ -103,13 +103,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
               keyboardType: widget.keyboardType,
               focusNode: _focusNode,
               style: widget.style ??
-                  TextStyle(
-                      color: widget.color != Colora.scaffold
-                          ? Colors.white
-                          : Colora.borderTag,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                      fontFamily: 'irans'),
+              TextStyle(
+                color: widget.color != Colora.scaffold
+                    ? Colors.white
+                    : Colora.borderTag,
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+                fontFamily: 'irans'
+              ),
               maxLines: widget.maxLine,
               textAlign: widget.align,
               decoration: InputDecoration(

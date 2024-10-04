@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_const
 
+import 'package:asood/shared/constants/constants.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,7 +31,7 @@ class _StoresScreenState extends State<StoresScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(context: context),
+      // appBar: DefaultAppBar(context: context, title: 'لیست فروشگاه های من',),
       body: BlocConsumer<WorkspaceBloc, WorkspaceState>(
           listener: (context, state) {
         /*    if (state.status == Status.initial) {
@@ -40,21 +41,104 @@ class _StoresScreenState extends State<StoresScreen> {
           showSnackBar(context, "مشکلی در بارگذاری پیش آمده , مجدد تلاش کنید!");
         }
       }, builder: (context, state) {
-        return SafeArea(
-          child: state.status == Status.loading
-              ? const Center(
-                  child: const CircularProgressIndicator(),
-                )
-              : ListView.builder(
-                  itemCount: state.storesList.length,
-                  itemBuilder: (context, index) {
-                    return StoreCard(
-                      index: index,
-                      market: state.storesList[index],
-                      bloc: bloc,
-                    );
-                  },
-                ),
+        return Container(
+          color: Colora.primaryColor,
+          child: SafeArea(
+            child: Scaffold(
+              body: Stack(
+                children: [
+
+                  Padding(
+                    padding: EdgeInsets.only(top: Dimensions.height * 0.14,),
+                    child: state.status == Status.loading
+                      ? const Center(
+                        child: const CircularProgressIndicator(),
+                      )
+                      : ListView.builder(
+                        itemCount: state.storesList.length,
+                        itemBuilder: (context, index) {
+                          return StoreCard(
+                            index: index,
+                            market: state.storesList[index],
+                            bloc: bloc,
+                          );
+                        },
+                      ),
+                  ),
+
+                  const NewAppBar(title: 'لیست فروشگاه‌های من'),
+
+                  //header buttons
+                  Positioned(
+                    top: Dimensions.height * 0.08,
+                    width: Dimensions.width,
+                    height: Dimensions.height * 0.05,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+
+                        //add new shop
+                        Container(
+                          width: Dimensions.width * 0.35,
+                          height: Dimensions.height * 0.05,
+                          decoration: BoxDecoration(
+                            color: Colora.primaryColor,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.4),
+                                spreadRadius: 3,
+                                blurRadius: 5,
+                                offset: const Offset(0, 5)
+                              )
+                            ]
+                          ),
+                          alignment: AlignmentDirectional.center,
+                          child: const Text(
+                            'ثبت فروشگاه جدید',
+                            style: TextStyle(
+                              color: Colora.scaffold,
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(
+                          width: Dimensions.width * 0.05,
+                        ),
+
+                        //shop reports
+                        Container(
+                          width: Dimensions.width * 0.35,
+                          height: Dimensions.height * 0.05,
+                          decoration: BoxDecoration(
+                              color: Colora.primaryColor,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey.withOpacity(0.4),
+                                    spreadRadius: 3,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 5)
+                                )
+                              ]
+                          ),
+                          alignment: AlignmentDirectional.center,
+                          child: const Text(
+                            'گزارشات فروشگاه',
+                            style: TextStyle(
+                              color: Colora.scaffold,
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+
+                ],
+              )
+            )
+          ),
         );
       }),
     );

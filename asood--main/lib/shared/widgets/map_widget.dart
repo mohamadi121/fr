@@ -34,10 +34,10 @@ class LocationPicker extends StatelessWidget {
     final locationBloc = context.read<LocationBloc>();
     return ClipRRect(
       borderRadius: const BorderRadius.only(
-        topLeft: Radius.circular(30),
-        topRight: Radius.circular(30),
-        bottomRight: Radius.circular(30),
-        bottomLeft: Radius.circular(30),
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+        bottomRight: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
       ),
       child: Stack(
         children: [
@@ -110,39 +110,40 @@ class LocationPicker extends StatelessWidget {
               ),
             ],
           ),
-          Positioned(
-            bottom: 16,
-            left: 16,
-            child: GestureDetector(
-              onTap: () {
-                if (state.status == Status.loaded) {
-                  locationBloc.add(DetermineCurrentPosition());
-                } else {
-                  locationBloc.add(SaveLocation());
-                }
-              },
-              child: Container(
-                height: 30,
-                width: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: locationBloc.state.status == Status.loaded
-                      ? Colors.red
-                      : Colors.green,
-                ),
-                child: Center(
-                  child: Text(
-                    locationBloc.state.status == Status.loaded
-                        ? "تغییر لوکیشن"
-                        : "ذخیره لوکیشن",
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          // Positioned(
+          //   bottom: 16,
+          //   left: 16,
+          //   child: GestureDetector(
+          //     onTap: () {
+          //       if (state.status == Status.loaded) {
+          //         locationBloc.add(DetermineCurrentPosition());
+          //       } else {
+          //         locationBloc.add(SaveLocation());
+          //       }
+          //     },
+          //     child: Container(
+          //       height: 30,
+          //       width: 100,
+          //       decoration: BoxDecoration(
+          //         borderRadius: BorderRadius.circular(10),
+          //         color: locationBloc.state.status == Status.loaded
+          //             ? Colors.red
+          //             : Colors.green,
+          //       ),
+          //       child: Center(
+          //         child: Text(
+          //           locationBloc.state.status == Status.loaded
+          //               ? "تغییر لوکیشن"
+          //               : "ذخیره لوکیشن",
+          //           style: const TextStyle(color: Colors.white),
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
   }
+
 }

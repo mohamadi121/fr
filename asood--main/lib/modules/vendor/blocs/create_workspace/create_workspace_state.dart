@@ -39,12 +39,12 @@ class CreateWorkSpaceState extends Equatable {
 
   //third view
   final String country;
-  final String city;
+  final int city;
   final String state;
   final String address;
   final String zipCode;
-  final double latitude;
-  final double longitude;
+  final String latitude;
+  final String longitude;
 
   final int activeCategoryIndex;
   final List<CategoryModel> categoryList;
@@ -138,12 +138,12 @@ class CreateWorkSpaceState extends Equatable {
       marketType: 'shop',
       error: '',
       country: '',
-      city: '',
+      city: 0,
       state: '',
       address: '',
       zipCode: '',
-      latitude: 0.0,
-      longitude: 0.0,
+      latitude: '',
+      longitude: '',
 
       activeCategoryIndex: -1,
       categoryList: [],
@@ -181,12 +181,12 @@ class CreateWorkSpaceState extends Equatable {
     Color? phoneBorder,
     Color? emailBorder,
     String? country,
-    String? city,
+    int? city,
     String? state,
     String? address,
     String? zipCode,
-    double? latitude,
-    double? longitude,
+    String? latitude,
+    String? longitude,
 
     int? activeCategoryIndex,
     List<CategoryModel>? categoryList,

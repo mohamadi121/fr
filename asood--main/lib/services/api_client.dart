@@ -85,6 +85,7 @@ class ApiClient {
             headers: headers ?? _mainHeaders,
           )
           .timeout(Duration(seconds: timeoutInSeconds));
+      print(response.statusCode);
       return handleResponse(response, uri);
     } catch (e) {
       return http.Response(noInternetMessage, 1);
