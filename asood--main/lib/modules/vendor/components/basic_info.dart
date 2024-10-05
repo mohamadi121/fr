@@ -40,11 +40,11 @@ class _BasicInfoState extends State<BasicInfo> {
   @override
   void initState() {
     super.initState();
-    name.text = widget.bloc.state.name;
-    businessId.text = widget.bloc.state.businessId;
-    description.text = widget.bloc.state.description;
-    slogan.text = widget.bloc.state.slogan;
-    selectedValue = widget.bloc.state.marketType;
+    // name.text = widget.bloc.state.name;
+    // businessId.text = widget.bloc.state.businessId;
+    // description.text = widget.bloc.state.description;
+    // slogan.text = widget.bloc.state.slogan;
+    // selectedValue = widget.bloc.state.marketType;
     inProcess();
     //idCode.text =  widget.bloc.state.idCode;
     catBloc = BlocProvider.of<CreateWorkSpaceBloc>(context);

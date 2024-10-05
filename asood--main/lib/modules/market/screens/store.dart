@@ -2,6 +2,7 @@
 
 import 'package:asood/models/market_model.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 import '../../../shared/constants/constants.dart';
@@ -9,6 +10,7 @@ import '../../../shared/widgets/comment_messagebox_widget.dart';
 import '../../../shared/widgets/custom_bottom_navbar.dart';
 import '../../../shared/widgets/custom_button.dart';
 import '../../../shared/widgets/custom_textfield.dart';
+import '../../../shared/widgets/hamberger_menu.dart';
 import '../widgets/store_appbar.dart';
 
 @RoutePage()
@@ -21,174 +23,378 @@ class StoreScreen extends StatefulWidget {
 }
 
 class _StoreScreenState extends State<StoreScreen> {
+
   List<String> buttonTitles = ["محصولات", "ویژه ها", "نظرات", "ارتباط با ما"];
 
   int selectedIndex = 0;
 
+  int currentSliderIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: StoreAppBar(
-        context: context,
-        title: widget.market.name!,
-        description: widget.market.name!,
-        appbarTools: Positioned(
-          right: 0,
-          left: 0,
-          bottom: 0,
-          child: Center(
-            child: Container(
-              height: 40,
-              width: Dimensions.width * .8,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colora.primaryColor,
-              ),
-              child: Center(
-                  child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      print("pressed");
-                    },
-                    icon: const Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      print("pressed");
-                    },
-                    icon: const Icon(
-                      Icons.save,
-                      color: Colors.white,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      print("pressed");
-                    },
-                    icon: const Icon(
-                      Icons.bookmark,
-                      color: Colors.white,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      print("pressed");
-                    },
-                    icon: const Icon(
-                      Icons.share,
-                      color: Colors.white,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      print("pressed");
-                    },
-                    icon: const Icon(
-                      Icons.upload_file_outlined,
-                      color: Colors.white,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      print("pressed");
-                    },
-                    icon: const Icon(
-                      Icons.list_alt,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              )),
-            ),
-          ),
-        ),
-      ),
-      body: SafeArea(
-        child: Container(
-          height: Dimensions.height,
-          width: Dimensions.width,
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 7),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return Container(
+      color: Colora.primaryColor,
+      child: SafeArea(
+        child: Scaffold(
+          // appBar: StoreAppBar(
+          //   context: context,
+          //   title: widget.market.name!,
+          //   description: widget.market.name!,
+          //   appbarTools: Positioned(
+          //     right: 0,
+          //     left: 0,
+          //     bottom: 0,
+          //     child: Center(
+          //       child: Container(
+          //         height: 40,
+          //         width: Dimensions.width * .8,
+          //         decoration: BoxDecoration(
+          //           borderRadius: BorderRadius.circular(20),
+          //           color: Colora.primaryColor,
+          //         ),
+          //         child: Center(
+          //           child: Row(
+          //             mainAxisAlignment: MainAxisAlignment.center,
+          //             children: [
+          //           IconButton(
+          //             onPressed: () {
+          //               print("pressed");
+          //             },
+          //             icon: const Icon(
+          //               Icons.edit,
+          //               color: Colors.white,
+          //             ),
+          //           ),
+          //           IconButton(
+          //             onPressed: () {
+          //               print("pressed");
+          //             },
+          //             icon: const Icon(
+          //               Icons.save,
+          //               color: Colors.white,
+          //             ),
+          //           ),
+          //           IconButton(
+          //             onPressed: () {
+          //               print("pressed");
+          //             },
+          //             icon: const Icon(
+          //               Icons.bookmark,
+          //               color: Colors.white,
+          //             ),
+          //           ),
+          //           IconButton(
+          //             onPressed: () {
+          //               print("pressed");
+          //             },
+          //             icon: const Icon(
+          //               Icons.share,
+          //               color: Colors.white,
+          //             ),
+          //           ),
+          //           IconButton(
+          //             onPressed: () {
+          //               print("pressed");
+          //             },
+          //             icon: const Icon(
+          //               Icons.upload_file_outlined,
+          //               color: Colors.white,
+          //             ),
+          //           ),
+          //           IconButton(
+          //             onPressed: () {
+          //               print("pressed");
+          //             },
+          //             icon: const Icon(
+          //               Icons.list_alt,
+          //               color: Colors.white,
+          //             ),
+          //           ),
+          //         ],
+          //           )
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          body: Container(
+            height: Dimensions.height,
+            width: Dimensions.width,
+            child: Stack(
               children: [
-                Container(
-                  height: 250,
-                  width: Dimensions.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colora.primaryColor.withOpacity(0.5),
-                  ),
-                ),
-                const SizedBox(
-                  height: 7,
-                ),
-                Container(
-                  height: 50,
-                  width: Dimensions.width,
-                  child: Container(
-                    height: 50,
-                    child: Expanded(
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: buttonTitles.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 3.0),
-                            child: ElevatedButton(
-                              onPressed: () {
+
+                //main items
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+
+                        SizedBox(
+                          height: Dimensions.height * 0.27,
+                        ),
+
+                        //image
+                        SizedBox(
+                          width: Dimensions.width,
+                          child: CarouselSlider(
+                            options: CarouselOptions(
+                              onPageChanged: (index, reason) {
                                 setState(() {
-                                  selectedIndex = index;
+                                  currentSliderIndex = index;
                                 });
                               },
-                              style: ButtonStyle(
-                                backgroundColor: selectedIndex == index
-                                    ? MaterialStateProperty.all(
-                                        Colora.primaryColor)
-                                    : MaterialStateProperty.all(Colors.white),
-                                shadowColor: MaterialStateProperty.all(
-                                    Colors.transparent),
-                                elevation: MaterialStateProperty.all(
-                                    0), // Remove box shadow
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25.0),
-                                    side: const BorderSide(
-                                      color: Colora
-                                          .primaryColor, // Specify the border color
-                                    ),
+                              aspectRatio: 16 / 9,
+                              enlargeCenterPage: true,
+                              enableInfiniteScroll: true,
+                              disableCenter: false,
+                              // enlargeFactor: 2,
+                              pageSnapping: true,
+                              // viewportFraction: .9,
+                              autoPlay: true,
+                            ),
+                            items: List.generate(
+                              5,
+                              (index) => Container(
+                                  width: Dimensions.width,
+                                  margin: EdgeInsets.symmetric(
+                                    vertical: Dimensions.height * 0.01
                                   ),
-                                ),
-                              ),
-                              child: Text(
-                                buttonTitles[index],
-                                style: TextStyle(
-                                    color: selectedIndex == index
-                                        ? Colors.white
-                                        : Colora.primaryColor),
+                                  padding: EdgeInsets.only(
+                                    bottom: Dimensions.height * 0.01
+                                  ),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colora.primaryColor,
+                                      boxShadow: const [
+                                        BoxShadow(
+                                            color: Colors.grey,
+                                            blurRadius: 5,
+                                            spreadRadius: 1
+                                        )
+                                      ]
+                                  ),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colora.scaffold,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Image.asset(
+                                        'assets/images/logo.png'
+                                    ),
+                                  )
                               ),
                             ),
-                          );
-                        },
-                      ),
+                          ),
+                        ),
+
+                        const SizedBox(
+                          height: 7,
+                        ),
+
+                        Container(
+                          height: 50,
+                          width: Dimensions.width,
+                          padding: const EdgeInsets.symmetric(horizontal: 7,),
+                          margin: EdgeInsets.only(bottom: Dimensions.height * 0.02),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ...List.generate(
+                              buttonTitles.length,
+                                (index) => AnimatedContainer(
+                                  duration: const Duration(milliseconds: 500),
+                                  decoration: BoxDecoration(
+                                    color: selectedIndex == index
+                                      ?Colora.primaryColor
+                                      :Colora.scaffold,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      color: selectedIndex == index
+                                        ?Colora.scaffold
+                                        :Colora.primaryColor,
+                                    )
+                                  ),
+                                  child: MaterialButton(
+                                    splashColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    enableFeedback: false,
+                                    focusColor: Colors.transparent,
+                                    onPressed: (){
+                                      setState(() {
+                                        selectedIndex = index;
+                                      });
+                                    },
+                                    child: Text(
+                                      buttonTitles[index],
+                                      style: TextStyle(
+                                        color: selectedIndex == index
+                                          ? Colors.white
+                                          : Colora.primaryColor,
+                                        fontWeight: FontWeight.bold
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              )
+                            ],
+                          ),
+                          // child: Expanded(
+                          //   child: ListView.builder(
+                          //     scrollDirection: Axis.horizontal,
+                          //     shrinkWrap: true,
+                          //     physics: const NeverScrollableScrollPhysics(),
+                          //     itemCount: buttonTitles.length,
+                          //     itemBuilder: (context, index) {
+                          //       return Padding(
+                          //         padding: const EdgeInsets.symmetric(
+                          //             vertical: 5, horizontal: 3.0),
+                          //         child: ElevatedButton(
+                          //           onPressed: () {
+                          //             setState(() {
+                          //               selectedIndex = index;
+                          //             });
+                          //           },
+                          //           style: ButtonStyle(
+                          //             backgroundColor: selectedIndex == index
+                          //                 ? MaterialStateProperty.all(
+                          //                     Colora.primaryColor)
+                          //                 : MaterialStateProperty.all(Colors.white),
+                          //             shadowColor: MaterialStateProperty.all(
+                          //                 Colors.transparent),
+                          //             elevation: MaterialStateProperty.all(
+                          //                 0), // Remove box shadow
+                          //             shape: MaterialStateProperty.all(
+                          //               RoundedRectangleBorder(
+                          //                 borderRadius: BorderRadius.circular(25.0),
+                          //                 side: const BorderSide(
+                          //                   color: Colora
+                          //                       .primaryColor, // Specify the border color
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //           ),
+                          //           child: Text(
+                          //             buttonTitles[index],
+                          //             style: TextStyle(
+                          //                 color: selectedIndex == index
+                          //                     ? Colors.white
+                          //                     : Colora.primaryColor),
+                          //           ),
+                          //         ),
+                          //       );
+                          //     },
+                          //   ),
+                          // ),
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 7),
+                          child: selectPageView(selectedIndex),
+                        )
+
+                      ],
                     ),
                   ),
                 ),
-                selectPageView(selectedIndex),
+
+                //appbar
+                StoreAppbar2(
+                  title: widget.market.name!,
+                  // description: widget.market.!,
+                  image: widget.market.logoImg.toString() == 'null' ? '' : widget.market.logoImg,
+                ),
+
+                Positioned(
+                  width: Dimensions.width,
+                  height: Dimensions.height * 0.05,
+                  top: Dimensions.height * 0.215,
+                  child: Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: Dimensions.width * 0.12
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colora.primaryColor,
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.5),
+                            blurRadius: 5,
+                            spreadRadius: 2,
+                            offset: const Offset(0, 2)
+                          )
+                        ]
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              print("pressed");
+                            },
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              print("pressed");
+                            },
+                            icon: const Icon(
+                              Icons.save,
+                              color: Colors.white,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              print("pressed");
+                            },
+                            icon: const Icon(
+                              Icons.bookmark,
+                              color: Colors.white,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              print("pressed");
+                            },
+                            icon: const Icon(
+                              Icons.share,
+                              color: Colors.white,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              print("pressed");
+                            },
+                            icon: const Icon(
+                              Icons.upload_file_outlined,
+                              color: Colors.white,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              print("pressed");
+                            },
+                            icon: const Icon(
+                              Icons.list_alt,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      )
+                  ),
+                ),
+
               ],
             ),
           ),
+          bottomNavigationBar: const CustomBottomNavigationBar(),
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavigationBar(),
     );
   }
 }
@@ -259,6 +465,8 @@ selectPageView(index) {
   switch (index) {
     case 0:
       return productView();
+    case 1:
+      return specialView();
     case 2:
       return commentView();
     case 3:
@@ -272,6 +480,16 @@ productView() {
     child: Column(children: [
       Center(
         child: Text("فروش ابزار یراق"),
+      ),
+    ]),
+  );
+}
+
+specialView() {
+  return const SingleChildScrollView(
+    child: Column(children: [
+      Center(
+        child: Text("ویژه‌ها"),
       ),
     ]),
   );

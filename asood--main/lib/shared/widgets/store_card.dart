@@ -60,6 +60,120 @@ class _StoreCardState extends State<StoreCard> {
     return faStatus;
   }
 
+  void statusMessage(context){
+    showDialog(
+      context: context,
+      builder: (context) =>
+          AlertDialog(
+            content: SizedBox(
+              height: Dimensions.height * 0.18,
+              child: Column(
+                children: [
+                  //title
+                  Text(
+                    'وضعیت انتشار',
+                    style: TextStyle(
+                        color: Colora.primaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: Dimensions.width * 0.05
+                    ),
+                  ),
+
+                  const Divider(
+                    color: Colora.primaryColor,
+                  ),
+
+                  //description
+                  Text(
+                    'آیا می‌خواهید دفترکار مجازی شما منتشر شود و یا از حالت انتشار خارج شود ؟',
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                        color: Colora.primaryColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: Dimensions.width * 0.035
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: Dimensions.height * 0.03,
+                  ),
+
+                  //buttons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // publish
+                      Container(
+                        width: Dimensions.width * 0.22,
+                        padding: EdgeInsets.symmetric(
+                            vertical: Dimensions.height * 0.01
+                        ),
+                        decoration: BoxDecoration(
+                            color: Colora.primaryColor,
+                            borderRadius: BorderRadius.circular(20)
+                        ),
+                        child: Center(
+                          child: Text(
+                            'منتشر شود',
+                            style: TextStyle(
+                                color: Colora.scaffold,
+                                fontSize: Dimensions.width * 0.033
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      // later
+                      Container(
+                        width: Dimensions.width * 0.22,
+                        padding: EdgeInsets.symmetric(
+                            vertical: Dimensions.height * 0.01
+                        ),
+                        decoration: BoxDecoration(
+                            color: Colora.primaryColor,
+                            borderRadius: BorderRadius.circular(20)
+                        ),
+                        child: Center(
+                          child: Text(
+                            'بعدا',
+                            style: TextStyle(
+                                color: Colora.scaffold,
+                                fontSize: Dimensions.width * 0.033
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      // not publish
+                      Container(
+                        width: Dimensions.width * 0.22,
+                        padding: EdgeInsets.symmetric(
+                            vertical: Dimensions.height * 0.01
+                        ),
+                        decoration: BoxDecoration(
+                            color: Colora.primaryColor,
+                            borderRadius: BorderRadius.circular(20)
+                        ),
+                        child: Center(
+                          child: Text(
+                            'عدم انتشار',
+                            style: TextStyle(
+                                color: Colora.scaffold,
+                                fontSize: Dimensions.width * 0.033
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -75,7 +189,8 @@ class _StoreCardState extends State<StoreCard> {
               widget.bloc.add(SelectMarket(marketId: widget.index));
             },
             child: Container(
-              height: 110,
+
+              height: Dimensions.height * 0.12,
               width: Dimensions.width,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
@@ -86,15 +201,24 @@ class _StoreCardState extends State<StoreCard> {
               child: Row(
                 children: [
                   //image
-                  AspectRatio(
-                    aspectRatio: 1,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colora.scaffold,
-                      ),
-                      child: Image.asset(
-                        'assets/images/logo.png'
+                  SizedBox(
+                    width: Dimensions.width * 0.25,
+                    height: Dimensions.height * 0.2,
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colora.scaffold,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: widget.market.logoImg.toString() != 'null'
+                            ?Image.network(widget.market.logoImg.toString())
+                            :Image.asset(
+                            'assets/images/logo.png'
+                            ),
+                        ),
                       ),
                     ),
                   ),
@@ -194,10 +318,11 @@ class _StoreCardState extends State<StoreCard> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  //preview
                   CustomButton(
                       width: 110,
                       onPress: () {
-                        // context.router.push(StoreRoute(market: widget.market));
+                        context.router.push(StoreRoute(market: widget.market));
 
                         /*   Navigator.push(
                             context,
@@ -209,6 +334,8 @@ class _StoreCardState extends State<StoreCard> {
                           ); */
                       },
                       text: "پیش نمایش"),
+
+                  //edit
                   CustomButton(
                       width: 110,
                       onPress: () {
@@ -223,9 +350,11 @@ class _StoreCardState extends State<StoreCard> {
                           ); */
                       },
                       text: "ویرایش"),
+
+                  //share
                   CustomButton(
                       width: 110, onPress: () {}, text: "اشتراک گذاری"),
-                  // Add more menu items as needed
+
                 ],
               ),
               const SizedBox(
@@ -234,9 +363,20 @@ class _StoreCardState extends State<StoreCard> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  CustomButton(width: 110, onPress: () {}, text: "انتشار"),
+                  //publish
+                  CustomButton(
+                    width: 110,
+                    onPress: () {
+                      statusMessage(context);
+                    },
+                    text: "انتشار"
+                  ),
+
+                  // payment
                   CustomButton(
                       width: 110, onPress: () {}, text: "پرداخت اشتراک"),
+
+                  //deactivate
                   CustomButton(width: 110, onPress: () {}, text: "غیرفعال"),
                 ],
               ),
@@ -244,67 +384,7 @@ class _StoreCardState extends State<StoreCard> {
           )
           :const SizedBox.shrink(),
         ),
-        // if (isMenuVisible)
-        //   Container(
-        //     margin: const EdgeInsets.symmetric(horizontal: 10),
-        //     padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
-        //     decoration: BoxDecoration(
-        //       borderRadius: BorderRadius.circular(20),
-        //     ),
-        //     child: Column(
-        //       children: [
-        //         Row(
-        //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //           children: [
-        //             CustomButton(
-        //                 width: 110,
-        //                 onPress: () {
-        //                   context.router.push(StoreRoute(market: widget.market));
-        //
-        //                   /*   Navigator.push(
-        //                     context,
-        //                     MaterialPageRoute(
-        //                       builder: (context) => StoreScreen(
-        //                         market: widget.market,
-        //                       ),
-        //                     ),
-        //                   ); */
-        //                 },
-        //                 text: "پیش نمایش"),
-        //             CustomButton(
-        //                 width: 110,
-        //                 onPress: () {
-        //                   context.router
-        //                       .push(EditStoreRoute(market: widget.market));
-        //                   /*   Navigator.push(
-        //                     context,
-        //                     MaterialPageRoute(
-        //                       builder: (context) =>
-        //                           EditStoreScreen(market: widget.market),
-        //                     ),
-        //                   ); */
-        //                 },
-        //                 text: "ویرایش"),
-        //             CustomButton(
-        //                 width: 110, onPress: () {}, text: "اشتراک گذاری"),
-        //             // Add more menu items as needed
-        //           ],
-        //         ),
-        //         const SizedBox(
-        //           height: 5,
-        //         ),
-        //         Row(
-        //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //           children: [
-        //             CustomButton(width: 110, onPress: () {}, text: "انتشار"),
-        //             CustomButton(
-        //                 width: 110, onPress: () {}, text: "پرداخت اشتراک"),
-        //             CustomButton(width: 110, onPress: () {}, text: "غیرفعال"),
-        //           ],
-        //         ),
-        //       ],
-        //     ),
-        //   ),
+
       ],
     );
   }
