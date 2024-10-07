@@ -492,6 +492,9 @@ class _BasicInfoState extends State<BasicInfo> {
                       ),
                     ),
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                 ],
               ),
             )

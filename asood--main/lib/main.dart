@@ -1,3 +1,4 @@
+import 'package:asood/modules/vendor/blocs/vendor/vendor_bloc.dart';
 import 'package:asood/shared/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -51,6 +52,9 @@ class Asood extends StatelessWidget {
         ),
         BlocProvider<InquiryBloc>(
           create: (context) => InquiryBloc(),
+        ),
+        BlocProvider<VendorBloc>(
+          create: (context) => VendorBloc(),
         ),
       ],
       child: MaterialApp.router(

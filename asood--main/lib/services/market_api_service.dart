@@ -75,7 +75,7 @@ class MarketApiService {
     }
   }
 
-//get market List
+  //get market List
   Future getMarketList() async {
     var uri = 'list/';
     try {
@@ -113,13 +113,13 @@ class MarketApiService {
     }
   }
 
-//market logo upload
+  //market logo upload
   Future uploadMarketLogo(
     XFile imagesFile,
     marketId,
   ) async {
     List<MultipartBody> images = [MultipartBody('logo_img', imagesFile)];
-    var uri = 'logo/$marketId';
+    var uri = 'logo/$marketId/';
     var body = <String, String>{};
     try {
       http.Response res = await apiClient.postMultipartData(uri, body, images);
@@ -129,7 +129,7 @@ class MarketApiService {
     }
   }
 
-//delete logo image
+  //delete logo image
   Future deleteMarketLogo(marketId) async {
     var uri = 'logo/$marketId';
 
@@ -141,13 +141,10 @@ class MarketApiService {
     }
   }
 
-//market background upload
-  Future uploadMarketBackground(
-    XFile imagesFile,
-    marketId,
-  ) async {
+  //market background upload
+  Future uploadMarketBackground(XFile imagesFile,marketId,) async {
     List<MultipartBody> images = [MultipartBody('background_img', imagesFile)];
-    var uri = 'background/$marketId';
+    var uri = 'background/$marketId/';
     var body = <String, String>{};
     try {
       http.Response res = await apiClient.postMultipartData(uri, body, images);
@@ -157,7 +154,7 @@ class MarketApiService {
     }
   }
 
-//delete background image
+  //delete background image
   Future deleteMarketBackground(marketId) async {
     var uri = 'background/$marketId';
 
@@ -169,7 +166,7 @@ class MarketApiService {
     }
   }
 
-//get market slider by id
+  //get market slider by id
   Future getMarketSlider(marketId) async {
     var uri = 'slider/$marketId';
     try {
@@ -182,18 +179,20 @@ class MarketApiService {
     }
   }
 
-//create new slider by id
-  Future createMarketSlider(marketId, body) async {
-    var uri = 'slider/create/$marketId';
+  //create new slider by id
+  Future createMarketSlider(marketId, XFile imagesFile) async {
+    List<MultipartBody> images = [MultipartBody('slider_img', imagesFile)];
+    var uri = 'slider/$marketId/';
+    var body = <String, String>{};
     try {
-      http.Response res = await apiClient.postData(uri, body);
+      http.Response res = await apiClient.postMultipartData(uri, body, images);
       return ApiStatus(res);
     } catch (e) {
       return CustomApiStatus();
     }
   }
 
-//modify slider by slider id
+  //modify slider by slider id
   Future modifyMarketSlider(body, sliderId) async {
     var uri = 'slider/$sliderId';
     try {
@@ -204,7 +203,7 @@ class MarketApiService {
     }
   }
 
-//delete slider by id
+  //delete slider by id
   Future deleteMarketSlider(sliderId) async {
     var uri = 'slider/$sliderId';
     try {

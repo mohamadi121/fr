@@ -284,32 +284,41 @@ class NewAppBar extends StatelessWidget {
 
                     if(title == 'home')...[
 
-                      const Text(
-                        'آســود',
-                        style: TextStyle(
-                            color: Colora.scaffold,
-                            fontSize: 33,
-                            fontWeight: FontWeight.bold
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          'آســود',
+                          style: TextStyle(
+                              color: Colora.scaffold,
+                              fontSize: Dimensions.width * 0.065,
+                              fontWeight: FontWeight.bold
+                          ),
                         ),
                       ),
 
-                      const Text(
-                        'خیالی آسوده با آسود',
-                        style: TextStyle(
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          'خیالی آسوده با آسود',
+                          style: TextStyle(
                             color: Colora.scaffold,
-                            fontSize: 18,
+                            fontSize: Dimensions.width * 0.045,
                             fontWeight: FontWeight.bold
+                          ),
                         ),
                       ),
 
                     ]
                     else...[
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          color: Colora.scaffold,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          title,
+                          style: const TextStyle(
+                            color: Colora.scaffold,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold
+                          ),
                         ),
                       ),
                     ]

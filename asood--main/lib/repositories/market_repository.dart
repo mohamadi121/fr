@@ -47,15 +47,6 @@ class MarketRepository {
     return await marketApiService.createMarketLocation(marketLocation);
   }
 
-  Future<dynamic> uploadMarketBackground(
-    XFile imagesFile,
-    marketId,
-  ) async {
-    return await marketApiService.uploadMarketBackground(
-      imagesFile,
-      marketId,
-    );
-  }
 
   Future<dynamic> getMarketList() async {
     return await marketApiService.getMarketList();
@@ -69,19 +60,17 @@ class MarketRepository {
     return await marketApiService.queueMarket(marketId);
   }
 
-  Future<dynamic> deleteMarketBackground(marketId) async {
-    return await marketApiService.deleteMarketBackground(marketId);
-  }
-
-//get market sliders repository
+  //get market sliders repository
   Future<dynamic> getMarketSliders(marketId) async {
     return await marketApiService.getMarketSlider(marketId);
   }
 
-//upload market logo repository
+  //-----------------market logo--------------------
+
+  //upload market logo repository
   Future<dynamic> uploadMarketLogo(
     XFile imagesFile,
-    marketId,
+    int marketId,
   ) async {
     return await marketApiService.uploadMarketLogo(
       imagesFile,
@@ -94,9 +83,33 @@ class MarketRepository {
     return await marketApiService.deleteMarketLogo(marketId);
   }
 
+  //-----------------market background--------------------
+
+  Future<dynamic> uploadMarketBackground(
+    XFile imagesFile,
+    marketId,
+  ) async {
+    return await marketApiService.uploadMarketBackground(
+      imagesFile,
+      marketId,
+    );
+  }
+
+  //delete market background
+  Future<dynamic> deleteMarketBackground(marketId) async {
+    return await marketApiService.deleteMarketBackground(marketId);
+  }
+
+  //-----------------market slider--------------------
+
+  //getMarketSlider
+  Future<dynamic> getMarketSliderList() async {
+    return await marketApiService.getMarketList();
+  }
+
   //createMarketSlider
-  Future<dynamic> createMarketSlider(marketId, slider) async {
-    return await marketApiService.createMarketSlider(marketId, slider);
+  Future<dynamic> uploadMarketSlider(marketId, XFile imagesFile) async {
+    return await marketApiService.createMarketSlider(marketId, imagesFile);
   }
 
   //modifyMarketSlider

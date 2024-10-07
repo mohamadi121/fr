@@ -18,7 +18,7 @@ class ApiClient {
       IsarObjectService(KeyValueSchema);
   final String appBaseUrl;
 
-  static const String noInternetMessage = 'دسترسی به اینترنت را چک کنید';
+  static const String noInternetMessage = 'عدم برقراری ارتباط با سرور';
   final int timeoutInSeconds = 30;
 
   String? token;
@@ -43,7 +43,7 @@ class ApiClient {
     return header;
   }
 
-//get method handler for api
+  //get method handler for api
   Future<http.Response> getData(String uri,
       {Map<String, dynamic>? query, Map<String, String>? headers}) async {
     headers == null ? await readToken() : null;
@@ -69,7 +69,7 @@ class ApiClient {
     }
   }
 
-//post data to api
+  //post data to api
   Future<http.Response> postData(String uri, dynamic body,
       {Map<String, String>? headers}) async {
     try {
@@ -92,7 +92,7 @@ class ApiClient {
     }
   }
 
-//image upload to server
+  //image upload to server
   Future<http.Response> postMultipartData(
       String uri, Map<String, String> body, List<MultipartBody> multipartBody,
       {Map<String, String>? headers}) async {
@@ -119,13 +119,14 @@ class ApiClient {
       request.fields.addAll(body);
       http.Response response =
           await http.Response.fromStream(await request.send());
+      print(response.statusCode);
       return handleResponse(response, uri);
     } catch (e) {
       return http.Response(noInternetMessage, 1);
     }
   }
 
-//put data to api
+  //put data to api
   Future<http.Response> putData(String uri, dynamic body,
       {Map<String, String>? headers}) async {
     try {
@@ -169,7 +170,7 @@ class ApiClient {
     }
   }
 
-//delete methode
+  //delete methode
   Future<http.Response> deleteData(String uri,
       {Map<String, String>? headers}) async {
     try {

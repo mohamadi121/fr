@@ -58,8 +58,10 @@ class _ContactsInfoState extends State<ContactsInfo> {
         horizontal: Dimensions.khorisontal,
       ),
       child: Container(
-        height: Dimensions.height * .6,
-        padding: const EdgeInsets.symmetric(horizontal: 5),
+        // height: Dimensions.height * .7,
+        padding: EdgeInsets.symmetric(
+          horizontal: Dimensions.width * 0.01,
+        ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20), color: Colora.primaryColor),
         child: SingleChildScrollView(
@@ -118,376 +120,379 @@ class _ContactsInfoState extends State<ContactsInfo> {
                     widget.bloc.add(ChangeHasWorkTime(hasWorkTime: p0));
                   },
                   switchValue: widget.bloc.state.hasWorkTime),
-              Container(
-                margin: const EdgeInsets.all(10),
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.white
-                ),
-                child: FittedBox(
-                  alignment: Alignment.centerRight,
-                  child: Column(children: [
-                    RowWidgetTitle(
-                        title: "شنبه",
-                        widget: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 18),
-                                child: Container(
-                                  width: 200,
-                                  height: 40,
-                                  decoration: BoxDecoration(
+
+              if(widget.bloc.state.hasWorkTime == true)...[
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white
+                  ),
+                  child: FittedBox(
+                    alignment: Alignment.centerRight,
+                    child: Column(children: [
+                      RowWidgetTitle(
+                          title: "شنبه",
+                          widget: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 18),
+                                  child: Container(
+                                    width: 200,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: Colora.primaryColor
+                                    ),
+                                    child: Center(
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 90,
+                                            child: CustomTextField(
+                                              color: Colora.primaryColor,
+                                              controller: satFController,
+                                              text: 'از ساعت',
+                                              keyboardType: TextInputType.number,
+                                              hintStyle: const TextStyle(color: Colors.white),
+                                            ),
+                                          ),
+                                          const Text(
+                                            '-',
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                          SizedBox(
+                                            width: 90,
+                                            child: CustomTextField(
+                                              color: Colora.primaryColor,
+                                              controller: satTController,
+                                              text: 'تا ساعت',
+                                              keyboardType: TextInputType.number,
+                                              hintStyle: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                      const Divider(
+                        thickness: 1,
+                      ),
+                      RowWidgetTitle(
+                          title: "یکشنبه",
+                          widget: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 30.0),
+                                  child: Container(
+                                    width: 200,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: Colora.primaryColor),
+                                    child: Center(
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 90,
+                                            child: CustomTextField(
+                                              color: Colora.primaryColor,
+                                              controller: sunFController,
+                                              text: 'از ساعت',
+                                              keyboardType: TextInputType.number,
+                                              hintStyle: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                          const Text(
+                                            '-',
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                          SizedBox(
+                                            width: 90,
+                                            child: CustomTextField(
+                                              color: Colora.primaryColor,
+                                              controller: sunTController,
+                                              text: 'تا ساعت',
+                                              keyboardType: TextInputType.number,
+                                              hintStyle: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                      const Divider(
+                        thickness: 1,
+                      ),
+                      RowWidgetTitle(
+                          title: "دوشنبه",
+                          widget: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 30),
+                              child: Container(
+                                width: 200,
+                                height: 40,
+                                decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    color: Colora.primaryColor
-                                  ),
-                                  child: Center(
-                                    child: Row(
-                                      children: [
-                                        SizedBox(
-                                          width: 90,
-                                          child: CustomTextField(
-                                            color: Colora.primaryColor,
-                                            controller: satFController,
-                                            text: 'از ساعت',
-                                            keyboardType: TextInputType.number,
-                                            hintStyle: const TextStyle(color: Colors.white),
-                                          ),
+                                    color: Colora.primaryColor),
+                                child: Center(
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 90,
+                                        child: CustomTextField(
+                                          color: Colora.primaryColor,
+                                          controller: monFController,
+                                          text: 'از ساعت',
+                                          keyboardType: TextInputType.number,
+                                          hintStyle:
+                                          const TextStyle(color: Colors.white),
                                         ),
-                                        const Text(
-                                          '-',
-                                          style: TextStyle(color: Colors.white),
+                                      ),
+                                      const Text(
+                                        '-',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      SizedBox(
+                                        width: 90,
+                                        child: CustomTextField(
+                                          color: Colora.primaryColor,
+                                          controller: monTController,
+                                          text: 'تا ساعت',
+                                          keyboardType: TextInputType.number,
+                                          hintStyle:
+                                          const TextStyle(color: Colors.white),
                                         ),
-                                        SizedBox(
-                                          width: 90,
-                                          child: CustomTextField(
-                                            color: Colora.primaryColor,
-                                            controller: satTController,
-                                            text: 'تا ساعت',
-                                            keyboardType: TextInputType.number,
-                                            hintStyle: const TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )),
-                    const Divider(
-                      thickness: 1,
-                    ),
-                    RowWidgetTitle(
-                        title: "یکشنبه",
-                        widget: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 30.0),
-                                child: Container(
-                                  width: 200,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colora.primaryColor),
-                                  child: Center(
-                                    child: Row(
-                                      children: [
-                                        SizedBox(
-                                          width: 90,
-                                          child: CustomTextField(
-                                            color: Colora.primaryColor,
-                                            controller: sunFController,
-                                            text: 'از ساعت',
-                                            keyboardType: TextInputType.number,
-                                            hintStyle: const TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                        ),
-                                        const Text(
-                                          '-',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        SizedBox(
-                                          width: 90,
-                                          child: CustomTextField(
-                                            color: Colora.primaryColor,
-                                            controller: sunTController,
-                                            text: 'تا ساعت',
-                                            keyboardType: TextInputType.number,
-                                            hintStyle: const TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                        )),
-                    const Divider(
-                      thickness: 1,
-                    ),
-                    RowWidgetTitle(
-                        title: "دوشنبه",
-                        widget: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 30),
-                            child: Container(
-                              width: 200,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colora.primaryColor),
-                              child: Center(
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 90,
-                                      child: CustomTextField(
-                                        color: Colora.primaryColor,
-                                        controller: monFController,
-                                        text: 'از ساعت',
-                                        keyboardType: TextInputType.number,
-                                        hintStyle:
-                                            const TextStyle(color: Colors.white),
+                            ),
+                          )),
+                      const Divider(
+                        thickness: 1,
+                      ),
+                      RowWidgetTitle(
+                          title: "سه شنبه",
+                          widget: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 35),
+                              child: Container(
+                                width: 200,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colora.primaryColor),
+                                child: Center(
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 90,
+                                        child: CustomTextField(
+                                          color: Colora.primaryColor,
+                                          controller: tueFController,
+                                          text: 'از ساعت',
+                                          keyboardType: TextInputType.number,
+                                          hintStyle:
+                                          const TextStyle(color: Colors.white),
+                                        ),
                                       ),
-                                    ),
-                                    const Text(
-                                      '-',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    SizedBox(
-                                      width: 90,
-                                      child: CustomTextField(
-                                        color: Colora.primaryColor,
-                                        controller: monTController,
-                                        text: 'تا ساعت',
-                                        keyboardType: TextInputType.number,
-                                        hintStyle:
-                                            const TextStyle(color: Colors.white),
+                                      const Text(
+                                        '-',
+                                        style: TextStyle(color: Colors.white),
                                       ),
-                                    ),
-                                  ],
+                                      SizedBox(
+                                        width: 90,
+                                        child: CustomTextField(
+                                          color: Colora.primaryColor,
+                                          controller: tueTController,
+                                          text: 'تا ساعت',
+                                          keyboardType: TextInputType.number,
+                                          hintStyle:
+                                          const TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        )),
-                    const Divider(
-                      thickness: 1,
-                    ),
-                    RowWidgetTitle(
-                        title: "سه شنبه",
-                        widget: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 35),
-                            child: Container(
-                              width: 200,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colora.primaryColor),
-                              child: Center(
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 90,
-                                      child: CustomTextField(
-                                        color: Colora.primaryColor,
-                                        controller: tueFController,
-                                        text: 'از ساعت',
-                                        keyboardType: TextInputType.number,
-                                        hintStyle:
-                                            const TextStyle(color: Colors.white),
+                          )),
+                      const Divider(
+                        thickness: 1,
+                      ),
+                      RowWidgetTitle(
+                          title: "چهارشنبه",
+                          widget: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 35),
+                              child: Container(
+                                width: 200,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colora.primaryColor),
+                                child: Center(
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 90,
+                                        child: CustomTextField(
+                                          color: Colora.primaryColor,
+                                          controller: wedFController,
+                                          text: 'از ساعت',
+                                          keyboardType: TextInputType.number,
+                                          hintStyle:
+                                          const TextStyle(color: Colors.white),
+                                        ),
                                       ),
-                                    ),
-                                    const Text(
-                                      '-',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    SizedBox(
-                                      width: 90,
-                                      child: CustomTextField(
-                                        color: Colora.primaryColor,
-                                        controller: tueTController,
-                                        text: 'تا ساعت',
-                                        keyboardType: TextInputType.number,
-                                        hintStyle:
-                                            const TextStyle(color: Colors.white),
+                                      const Text(
+                                        '-',
+                                        style: TextStyle(color: Colors.white),
                                       ),
-                                    ),
-                                  ],
+                                      SizedBox(
+                                        width: 90,
+                                        child: CustomTextField(
+                                          color: Colora.primaryColor,
+                                          controller: wedTController,
+                                          text: 'تا ساعت',
+                                          keyboardType: TextInputType.number,
+                                          hintStyle:
+                                          const TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        )),
-                    const Divider(
-                      thickness: 1,
-                    ),
-                    RowWidgetTitle(
-                        title: "چهارشنبه",
-                        widget: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 35),
-                            child: Container(
-                              width: 200,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colora.primaryColor),
-                              child: Center(
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 90,
-                                      child: CustomTextField(
-                                        color: Colora.primaryColor,
-                                        controller: wedFController,
-                                        text: 'از ساعت',
-                                        keyboardType: TextInputType.number,
-                                        hintStyle:
-                                            const TextStyle(color: Colors.white),
+                          )),
+                      const Divider(
+                        thickness: 1,
+                      ),
+                      RowWidgetTitle(
+                          title: "پنجشنبه",
+                          widget: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 35),
+                              child: Container(
+                                width: 200,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colora.primaryColor),
+                                child: Center(
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 90,
+                                        child: CustomTextField(
+                                          color: Colora.primaryColor,
+                                          controller: thuFController,
+                                          text: 'از ساعت',
+                                          keyboardType: TextInputType.number,
+                                          hintStyle:
+                                          const TextStyle(color: Colors.white),
+                                        ),
                                       ),
-                                    ),
-                                    const Text(
-                                      '-',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    SizedBox(
-                                      width: 90,
-                                      child: CustomTextField(
-                                        color: Colora.primaryColor,
-                                        controller: wedTController,
-                                        text: 'تا ساعت',
-                                        keyboardType: TextInputType.number,
-                                        hintStyle:
-                                            const TextStyle(color: Colors.white),
+                                      const Text(
+                                        '-',
+                                        style: TextStyle(color: Colors.white),
                                       ),
-                                    ),
-                                  ],
+                                      SizedBox(
+                                        width: 90,
+                                        child: CustomTextField(
+                                          color: Colora.primaryColor,
+                                          controller: thuTController,
+                                          text: 'تا ساعت',
+                                          keyboardType: TextInputType.number,
+                                          hintStyle:
+                                          const TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        )),
-                    const Divider(
-                      thickness: 1,
-                    ),
-                    RowWidgetTitle(
-                        title: "پنجشنبه",
-                        widget: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 35),
-                            child: Container(
-                              width: 200,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colora.primaryColor),
-                              child: Center(
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 90,
-                                      child: CustomTextField(
-                                        color: Colora.primaryColor,
-                                        controller: thuFController,
-                                        text: 'از ساعت',
-                                        keyboardType: TextInputType.number,
-                                        hintStyle:
-                                            const TextStyle(color: Colors.white),
+                          )),
+                      const Divider(
+                        thickness: 1,
+                      ),
+                      RowWidgetTitle(
+                          title: "جمعه",
+                          widget: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 18),
+                              child: Container(
+                                width: 200,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colora.primaryColor),
+                                child: Center(
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 90,
+                                        child: CustomTextField(
+                                          color: Colora.primaryColor,
+                                          controller: friFController,
+                                          text: 'از ساعت',
+                                          keyboardType: TextInputType.number,
+                                          hintStyle:
+                                          const TextStyle(color: Colors.white),
+                                        ),
                                       ),
-                                    ),
-                                    const Text(
-                                      '-',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    SizedBox(
-                                      width: 90,
-                                      child: CustomTextField(
-                                        color: Colora.primaryColor,
-                                        controller: thuTController,
-                                        text: 'تا ساعت',
-                                        keyboardType: TextInputType.number,
-                                        hintStyle:
-                                            const TextStyle(color: Colors.white),
+                                      const Text(
+                                        '-',
+                                        style: TextStyle(color: Colors.white),
                                       ),
-                                    ),
-                                  ],
+                                      SizedBox(
+                                        width: 90,
+                                        child: CustomTextField(
+                                          color: Colora.primaryColor,
+                                          controller: friTController,
+                                          text: 'تا ساعت',
+                                          keyboardType: TextInputType.number,
+                                          hintStyle:
+                                          const TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        )),
-                    const Divider(
-                      thickness: 1,
-                    ),
-                    RowWidgetTitle(
-                        title: "جمعه",
-                        widget: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 18),
-                            child: Container(
-                              width: 200,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colora.primaryColor),
-                              child: Center(
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 90,
-                                      child: CustomTextField(
-                                        color: Colora.primaryColor,
-                                        controller: friFController,
-                                        text: 'از ساعت',
-                                        keyboardType: TextInputType.number,
-                                        hintStyle:
-                                            const TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                    const Text(
-                                      '-',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    SizedBox(
-                                      width: 90,
-                                      child: CustomTextField(
-                                        color: Colora.primaryColor,
-                                        controller: friTController,
-                                        text: 'تا ساعت',
-                                        keyboardType: TextInputType.number,
-                                        hintStyle:
-                                            const TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        )),
-                  ]),
+                          )),
+                    ]),
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 7,
+              ],
+              SizedBox(
+                height: Dimensions.height * 0.01
               ),
 
               //button
@@ -580,8 +585,8 @@ class _ContactsInfoState extends State<ContactsInfo> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 7,
+              SizedBox(
+                height: Dimensions.height * 0.03,
               ),
             ],
           ),

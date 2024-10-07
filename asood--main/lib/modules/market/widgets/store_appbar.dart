@@ -1,8 +1,16 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../shared/constants/constants.dart';
+import '../../../shared/utils/snack_bar_util.dart';
 import '../../../shared/widgets/hamberger_menu.dart';
 import '../../../shared/widgets/profile_menu_widget.dart';
+import '../../vendor/blocs/vendor/vendor_bloc.dart';
 
 class StoreAppBar extends StatelessWidget implements PreferredSizeWidget {
   const StoreAppBar({
@@ -136,18 +144,639 @@ class StoreAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(210);
 }
 
-class StoreAppbar2 extends StatelessWidget {
+class StoreAppbar2 extends StatefulWidget {
 
+  final String id;
   final String? title;
   final String? description;
-  final String? image;
+  final String? logoImage;
+  final String? backImage;
 
   const StoreAppbar2({
     super.key,
+    required this.id,
     this.title,
     this.description,
-    this.image
+    this.logoImage,
+    this.backImage
   });
+
+  @override
+  State<StoreAppbar2> createState() => _StoreAppbar2State();
+}
+
+class _StoreAppbar2State extends State<StoreAppbar2> {
+
+  String initLogoImage = '';
+  String editLogoImage = '';
+  XFile? logoImage;
+
+  String initBackImage = '';
+  String editBackImage = '';
+  XFile? backImage;
+
+  late VendorBloc bloc;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    bloc = BlocProvider.of<VendorBloc>(context);
+
+    initLogoImage = widget.logoImage!;
+    editLogoImage = widget.logoImage!;
+    initBackImage = widget.backImage!;
+    editBackImage = widget.backImage!;
+
+  }
+
+  void changeLogo(context){
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) =>
+        StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              content: SizedBox(
+                height: Dimensions.height * 0.26,
+                child: BlocConsumer<VendorBloc, VendorState>(
+                  listener: (context, state) {
+                    if (state.status == VendorStatus.success) {
+
+                    }
+                    else if (state.status == VendorStatus.failure) {
+                      showSnackBar(context, "مشکلی پیش آمده مجددا تلاش کنید");
+                    }
+                  },
+                  builder: (context, state){
+                    return Column(
+                      children: [
+                        //title
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            'عکس لوگو',
+                            style: TextStyle(
+                                color: Colora.primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: Dimensions.width * 0.05
+                            ),
+                          ),
+                        ),
+
+                        const Divider(
+                          color: Colora.primaryColor,
+                        ),
+
+                        //description
+                        Text(
+                          'جهت انتخاب عکس خود بر روی افزودن عکس کلیک کنید.',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                              color: Colora.primaryColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: Dimensions.width * 0.035
+                          ),
+                        ),
+
+                        //buttons and preview
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            //add
+                            InkWell(
+                              onTap: () async{
+                                var maxFileSizeInBytes = 5 * 1048576;
+
+                                final ImagePicker picker = ImagePicker();
+                                logoImage = await picker.pickImage(source: ImageSource.gallery);
+
+                                var imagePath = await logoImage!.readAsBytes();
+                                var fileSize = imagePath.length;
+
+                                if (fileSize <= maxFileSizeInBytes) {
+                                  setState(() {
+                                    editLogoImage = logoImage!.path;
+                                  });
+                                } else {
+                                  showSnackBar(context, "حجم عکس بیش از ۵ مگابایت است");
+                                }
+                              },
+                              child: Container(
+                                width: Dimensions.width * 0.2,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: Dimensions.height * 0.01
+                                ),
+                                decoration: BoxDecoration(
+                                    color: Colora.primaryColor,
+                                    borderRadius: BorderRadius.circular(20)
+                                ),
+                                child: Center(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      'افزودن عکس',
+                                      style: TextStyle(
+                                          color: Colora.scaffold,
+                                          fontSize: Dimensions.width * 0.033
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // delete
+                            InkWell(
+                              onTap: (){
+                                setState(() {
+                                  editLogoImage = '';
+                                });
+                              },
+                              child: Container(
+                                width: Dimensions.width * 0.2,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: Dimensions.height * 0.01
+                                ),
+                                decoration: BoxDecoration(
+                                    color: Colora.primaryColor,
+                                    borderRadius: BorderRadius.circular(20)
+                                ),
+                                child: Center(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      'حذف عکس',
+                                      style: TextStyle(
+                                          color: Colora.scaffold,
+                                          fontSize: Dimensions.width * 0.033
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            //preview
+                            SizedBox(
+                              width: Dimensions.width * 0.2,
+                              child: AspectRatio(
+                                aspectRatio: 1,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(color: Colora.backgroundSwitch, width: 3),
+                                  ),
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: editLogoImage == ''
+                                        ?Image.asset(
+                                          'assets/images/logo.png',
+                                          fit: BoxFit.cover,
+                                        )
+                                        :editLogoImage.contains('http')
+                                          ?CachedNetworkImage(
+                                            imageUrl: editLogoImage,
+                                            imageBuilder: (context, imageProvider) {
+                                              return Container(
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                                ),
+                                              );
+                                            },
+                                            placeholder: (context, url) => Shimmer.fromColors(
+                                              baseColor: Colors.grey.withOpacity(0.2),
+                                              highlightColor: Colors.black.withOpacity(0.2),
+                                              direction: ShimmerDirection.rtl,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey,
+                                                    borderRadius: BorderRadius.circular(5)
+                                                ),
+                                              ),
+                                            ),
+                                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                                          )
+                                          :Image.file(
+                                            File(editLogoImage),
+                                            fit: BoxFit.cover,
+                                          ),
+                                    )
+                                ),
+                              ),
+                            )
+
+                          ],
+                        ),
+
+                        //back and save
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+
+                            //save
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: state.status == VendorStatus.loading
+                                ?Container(
+                                  width: Dimensions.width * 0.3,
+                                  height: Dimensions.height * 0.042,
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: Dimensions.height * 0.01
+                                  ),
+                                  margin: EdgeInsets.only(
+                                      top: Dimensions.height * 0.02
+                                  ),
+                                  decoration: BoxDecoration(
+                                      color: Colora.primaryColor,
+                                      borderRadius: BorderRadius.circular(20)
+                                  ),
+                                  child: const Center(
+                                    child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child:CircularProgressIndicator(
+                                          color: Colora.scaffold_,
+                                        )
+                                    ),
+                                  ),
+                                )
+                                :InkWell(
+                                  onTap: (){
+                                    if(logoImage != null){
+                                      bloc.add(AddLogoEvent(id: 22, logoImage: logoImage!));
+                                      Navigator.pop(context);
+                                      initLogoImage = editLogoImage;
+                                    }
+                                    else{
+                                      showSnackBar(context, "لطفا عکس خود را انتخاب کنید");
+                                    }
+                                  },
+                                  child: Container(
+                                    width: Dimensions.width * 0.3,
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: Dimensions.height * 0.01
+                                    ),
+                                    margin: EdgeInsets.only(
+                                        top: Dimensions.height * 0.02
+                                    ),
+                                    decoration: BoxDecoration(
+                                        color: Colora.primaryColor,
+                                        borderRadius: BorderRadius.circular(20)
+                                    ),
+                                    child: Center(
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(
+                                          'ذخیره',
+                                          style: TextStyle(
+                                              color: Colora.scaffold,
+                                              fontSize: Dimensions.width * 0.033
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ),
+
+                            //back
+                            InkWell(
+                              onTap: (){
+                                editLogoImage = widget.logoImage!;
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                width: Dimensions.width * 0.3,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: Dimensions.height * 0.01
+                                ),
+                                margin: EdgeInsets.only(
+                                    top: Dimensions.height * 0.02
+                                ),
+                                decoration: BoxDecoration(
+                                    color: Colora.primaryColor,
+                                    borderRadius: BorderRadius.circular(20)
+                                ),
+                                child: Center(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      'بازگشت',
+                                      style: TextStyle(
+                                          color: Colora.scaffold,
+                                          fontSize: Dimensions.width * 0.033
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                          ],
+                        ),
+
+                      ],
+                    );
+                  },
+                )
+              ),
+            );
+          }
+        ),
+    );
+  }
+
+  void changeBack(context){
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) =>
+        StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              content: BlocConsumer<VendorBloc, VendorState>(
+                listener: (context, state) {
+                  if (state.status == VendorStatus.success) {
+
+                  }
+                  else if (state.status == VendorStatus.failure) {
+                    showSnackBar(context, "مشکلی پیش آمده مجددا تلاش کنید");
+                  }
+                },
+                builder: (context, state) => SizedBox(
+                  height: Dimensions.height * 0.25,
+                  child: Column(
+                    children: [
+                      //title
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'عکس پس زمینه',
+                          style: TextStyle(
+                              color: Colora.primaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: Dimensions.width * 0.05
+                          ),
+                        ),
+                      ),
+
+                      const Divider(
+                        color: Colora.primaryColor,
+                      ),
+
+                      //description
+                      Text(
+                        'جهت انتخاب عکس خود بر روی افزودن عکس کلیک کنید.',
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                            color: Colora.primaryColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: Dimensions.width * 0.035
+                        ),
+                      ),
+
+                      //buttons and preview
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // add
+                          InkWell(
+                            onTap: () async{
+                              var maxFileSizeInBytes = 5 * 1048576;
+
+                              final ImagePicker picker = ImagePicker();
+                              backImage = await picker.pickImage(source: ImageSource.gallery);
+
+                              var imagePath = await backImage!.readAsBytes();
+                              var fileSize = imagePath.length;
+
+                              if (fileSize <= maxFileSizeInBytes) {
+                                setState(() {
+                                  editBackImage = backImage!.path;
+                                });
+                              } else {
+                                showSnackBar(context, "حجم عکس بیش از ۵ مگابایت است");
+                              }
+                            },
+                            child: Container(
+                              width: Dimensions.width * 0.2,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: Dimensions.height * 0.01
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Colora.primaryColor,
+                                  borderRadius: BorderRadius.circular(20)
+                              ),
+                              child: Center(
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    'افزودن عکس',
+                                    style: TextStyle(
+                                        color: Colora.scaffold,
+                                        fontSize: Dimensions.width * 0.033
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          // delete
+                          Container(
+                            width: Dimensions.width * 0.2,
+                            padding: EdgeInsets.symmetric(
+                                vertical: Dimensions.height * 0.01
+                            ),
+                            decoration: BoxDecoration(
+                                color: Colora.primaryColor,
+                                borderRadius: BorderRadius.circular(20)
+                            ),
+                            child: Center(
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  'حذف عکس',
+                                  style: TextStyle(
+                                      color: Colora.scaffold,
+                                      fontSize: Dimensions.width * 0.033
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          //preview
+                          SizedBox(
+                            width: Dimensions.width * 0.2,
+                            child: AspectRatio(
+                              aspectRatio: 4/3,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: Colora.backgroundSwitch, width: 3),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: editBackImage == ''
+                                      ?Image.asset(
+                                    'assets/images/home_app_bar.png',
+                                    fit: BoxFit.cover,
+                                  )
+                                      :editBackImage.contains('http')
+                                      ?CachedNetworkImage(
+                                    imageUrl: editBackImage,
+                                    imageBuilder: (context, imageProvider) {
+                                      return Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                        ),
+                                      );
+                                    },
+                                    placeholder: (context, url) => Shimmer.fromColors(
+                                      baseColor: Colors.grey.withOpacity(0.2),
+                                      highlightColor: Colors.black.withOpacity(0.2),
+                                      direction: ShimmerDirection.rtl,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey,
+                                            borderRadius: BorderRadius.circular(5)
+                                        ),
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                                  )
+                                      :Image.file(
+                                    File(editBackImage),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+
+                        ],
+                      ),
+
+                      //save and back
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+
+                          //save
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: state.status == VendorStatus.loading
+                              ?Container(
+                                width: Dimensions.width * 0.3,
+                                height: Dimensions.height * 0.042,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: Dimensions.height * 0.01
+                                ),
+                                margin: EdgeInsets.only(
+                                    top: Dimensions.height * 0.02
+                                ),
+                                decoration: BoxDecoration(
+                                    color: Colora.primaryColor,
+                                    borderRadius: BorderRadius.circular(20)
+                                ),
+                                child: const Center(
+                                  child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child:CircularProgressIndicator(
+                                        color: Colora.scaffold_,
+                                      )
+                                  ),
+                                ),
+                              )
+                              :InkWell(
+                                onTap: (){
+                                  if(backImage != null){
+                                    bloc.add(AddBackgroundEvent(id: 22, backgroundImage: backImage!));
+                                    Navigator.pop(context);
+                                    initBackImage = editBackImage;
+                                  }
+                                  else{
+                                    showSnackBar(context, "لطفا عکس خود را انتخاب کنید");
+                                  }
+                                },
+                                child: Container(
+                                  width: Dimensions.width * 0.3,
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: Dimensions.height * 0.01
+                                  ),
+                                  margin: EdgeInsets.only(
+                                      top: Dimensions.height * 0.02
+                                  ),
+                                  decoration: BoxDecoration(
+                                      color: Colora.primaryColor,
+                                      borderRadius: BorderRadius.circular(20)
+                                  ),
+                                  child: Center(
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        'ذخیره',
+                                        style: TextStyle(
+                                            color: Colora.scaffold,
+                                            fontSize: Dimensions.width * 0.033
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ),
+
+                          //back
+                          InkWell(
+                            onTap: (){
+                              editBackImage = widget.backImage!;
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              width: Dimensions.width * 0.3,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: Dimensions.height * 0.01
+                              ),
+                              margin: EdgeInsets.only(
+                                  top: Dimensions.height * 0.02
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Colora.primaryColor,
+                                  borderRadius: BorderRadius.circular(20)
+                              ),
+                              child: Center(
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    'بازگشت',
+                                    style: TextStyle(
+                                        color: Colora.scaffold,
+                                        fontSize: Dimensions.width * 0.033
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                        ],
+                      ),
+
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }
+        ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,27 +788,27 @@ class StoreAppbar2 extends StatelessWidget {
         width: Dimensions.width,
         height: Dimensions.height * 0.25,
         padding: EdgeInsets.only(
-            bottom: Dimensions.height * 0.015
+          bottom: Dimensions.height * 0.015
         ),
         decoration: BoxDecoration(
             color: Colora.primaryColor,
             borderRadius: const BorderRadius.only(
-                bottomRight: Radius.circular(30),
-                bottomLeft: Radius.circular(30)
+              bottomRight: Radius.circular(30),
+              bottomLeft: Radius.circular(30)
             ),
             boxShadow: [
               BoxShadow(
-                  color: Colors.black.withOpacity(0.5),
-                  blurRadius: 5,
-                  spreadRadius: 2,
-                  offset: const Offset(0, 2)
+                color: Colors.black.withOpacity(0.5),
+                blurRadius: 5,
+                spreadRadius: 2,
+                offset: const Offset(0, 2)
               )
             ]
         ),
         child: ClipRRect(
           borderRadius: const BorderRadius.only(
-              bottomRight: Radius.circular(30),
-              bottomLeft: Radius.circular(30)
+            bottomRight: Radius.circular(30),
+            bottomLeft: Radius.circular(30)
           ),
           child: Stack(
             children: [
@@ -188,17 +817,50 @@ class StoreAppbar2 extends StatelessWidget {
               SizedBox(
                 width: Dimensions.width,
                 height: Dimensions.height * 0.25,
-                child: Image.asset(
-                  'assets/images/home_app_bar.png',
-                  fit: BoxFit.cover,
-                ),
+                child: initBackImage == ''
+                  ?Image.asset(
+                    'assets/images/home_app_bar.png',
+                    fit: BoxFit.cover,
+                  )
+                  :initBackImage.contains('http')
+                    ?CachedNetworkImage(
+                      imageUrl: initBackImage,
+                      imageBuilder: (context, imageProvider) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                          ),
+                        );
+                      },
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: Colors.grey.withOpacity(0.2),
+                        highlightColor: Colors.black.withOpacity(0.2),
+                        direction: ShimmerDirection.rtl,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(5)
+                          ),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                    )
+                    :Image.file(
+                      File(initBackImage),
+                      fit: BoxFit.cover,
+                    ),
               ),
 
               //image cover
-              Container(
-                width: Dimensions.width,
-                height: Dimensions.height * 0.25,
-                color: Colora.primaryColor.withOpacity(0.6),
+              InkWell(
+                onTap: (){
+                  changeBack(context);
+                },
+                child: Container(
+                  width: Dimensions.width,
+                  height: Dimensions.height * 0.25,
+                  color: Colora.primaryColor.withOpacity(0.6),
+                ),
               ),
 
               //back
@@ -269,43 +931,100 @@ class StoreAppbar2 extends StatelessWidget {
                           aspectRatio: 1,
                           child: Container(
                             decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                border: Border.all(color: Colora.backgroundSwitch, width: 3),
-                                image: const DecorationImage(
-                                    image: AssetImage('assets/images/logo.png'),
-                                    fit: BoxFit.cover
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colora.backgroundSwitch, width: 3),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: initLogoImage == ''
+                                ?Image.asset(
+                                  'assets/images/logo.png',
+                                  fit: BoxFit.cover,
                                 )
+                                :initLogoImage.contains('http')
+                                ?CachedNetworkImage(
+                                  imageUrl: initLogoImage,
+                                  imageBuilder: (context, imageProvider) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                      ),
+                                    );
+                                  },
+                                  placeholder: (context, url) => Shimmer.fromColors(
+                                    baseColor: Colors.grey.withOpacity(0.2),
+                                    highlightColor: Colors.black.withOpacity(0.2),
+                                    direction: ShimmerDirection.rtl,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey,
+                                          borderRadius: BorderRadius.circular(5)
+                                      ),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                                )
+                                :Image.file(
+                                  File(initLogoImage),
+                                  fit: BoxFit.cover,
+                                ),
+
                             ),
                           ),
                         ),
 
-                        // check
+                        // edit
                         Positioned(
                           top: Dimensions.height * 0.07,
-                          child: Container(
-                            decoration: BoxDecoration(
+                          child: InkWell(
+                            onTap: (){
+                              changeLogo(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
                                 color: Colors.white,
                                 shape: BoxShape.circle,
                                 border: Border.all(color: Colora.primaryColor, width: 2)
-                            ),
-                            child: const Icon(
-                              Icons.check_circle,
-                              color: Colora.primaryColor,
+                              ),
+                              child: Icon(
+                                Icons.edit_rounded,
+                                color: Colora.primaryColor,
+                                size: Dimensions.width * 0.05,
+                              ),
                             ),
                           ),
                         )
+
                       ],
                     ),
                   ),
 
                   //title
                   Text(
-                    title!,
+                    widget.title!,
                     style: TextStyle(
-                        color: Colors.white,
-                        fontSize: Dimensions.width * 0.05,
-                        fontWeight: FontWeight.bold
+                      color: Colors.white,
+                      fontSize: Dimensions.width * 0.05,
+                      fontWeight: FontWeight.bold,
+                      shadows: const [
+                        Shadow( // bottomLeft
+                            offset: Offset(-1.5, -1.5),
+                            color: Colors.black
+                        ),
+                        Shadow( // bottomRight
+                            offset: Offset(1.5, -1.5),
+                            color: Colors.black
+                        ),
+                        Shadow( // topRight
+                            offset: Offset(1.5, 1.5),
+                            color: Colors.black
+                        ),
+                        Shadow( // topLeft
+                            offset: Offset(-1.5, 1.5),
+                            color: Colors.black
+                        ),
+                      ]
                     ),
                   ),
 
@@ -319,6 +1038,24 @@ class StoreAppbar2 extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: Dimensions.width * 0.035,
+                      shadows: const [
+                          Shadow( // bottomLeft
+                              offset: Offset(-1.5, -1.5),
+                              color: Colors.black
+                          ),
+                          Shadow( // bottomRight
+                              offset: Offset(1.5, -1.5),
+                              color: Colors.black
+                          ),
+                          Shadow( // topRight
+                              offset: Offset(1.5, 1.5),
+                              color: Colors.black
+                          ),
+                          Shadow( // topLeft
+                              offset: Offset(-1.5, 1.5),
+                              color: Colors.black
+                          ),
+                    ]
                     ),
                   )
 

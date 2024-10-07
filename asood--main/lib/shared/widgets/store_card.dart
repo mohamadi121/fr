@@ -2,7 +2,9 @@
 
 import 'package:asood/shared/utils/app_router.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../models/market_model.dart';
 import '../../modules/market/screens/store.dart';
@@ -173,7 +175,6 @@ class _StoreCardState extends State<StoreCard> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -190,7 +191,7 @@ class _StoreCardState extends State<StoreCard> {
             },
             child: Container(
 
-              height: Dimensions.height * 0.12,
+              height: Dimensions.height * 0.14,
               width: Dimensions.width,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
@@ -201,9 +202,12 @@ class _StoreCardState extends State<StoreCard> {
               child: Row(
                 children: [
                   //image
-                  SizedBox(
+                  Container(
                     width: Dimensions.width * 0.25,
                     height: Dimensions.height * 0.2,
+                    margin: EdgeInsets.symmetric(
+                      vertical: Dimensions.height * 0.003
+                    ),
                     child: AspectRatio(
                       aspectRatio: 1,
                       child: Container(
@@ -214,17 +218,39 @@ class _StoreCardState extends State<StoreCard> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: widget.market.logoImg.toString() != 'null'
-                            ?Image.network(widget.market.logoImg.toString())
+                            ?CachedNetworkImage(
+                              imageUrl: widget.market.logoImg.toString(),
+                              imageBuilder: (context, imageProvider) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                  ),
+                                );
+                              },
+                              placeholder: (context, url) => Shimmer.fromColors(
+                                baseColor: Colors.grey.withOpacity(0.2),
+                                highlightColor: Colors.black.withOpacity(0.2),
+                                direction: ShimmerDirection.rtl,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(5)
+                                  ),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => const Icon(Icons.error),
+                            )
                             :Image.asset(
-                            'assets/images/logo.png'
+                              'assets/images/logo.png',
+                              fit: BoxFit.cover,
                             ),
                         ),
                       ),
                     ),
                   ),
 
-                  const SizedBox(
-                    width: 10,
+                  SizedBox(
+                    width: Dimensions.width * 0.02,
                   ),
 
                   Column(
@@ -233,13 +259,19 @@ class _StoreCardState extends State<StoreCard> {
                     children: [
 
                       //title
-                      Text(
-                        widget.market.name.toString(),
-                        style: ATextStyle.lightBold15.copyWith(color: Colors.white),
+                      SizedBox(
+                        width: Dimensions.width * 0.65,
+                        child: Text(
+                          widget.market.name.toString(),
+                          maxLines: 1,
+                          softWrap: true,
+                          overflow: TextOverflow.fade,
+                          style: ATextStyle.lightBold15.copyWith(color: Colors.white),
+                        ),
                       ),
 
                       //divider
-                      Container(
+                      SizedBox(
                         width: Dimensions.width * 0.65,
                         child: const Divider(
                           thickness: 1,
@@ -276,8 +308,8 @@ class _StoreCardState extends State<StoreCard> {
                         ),
                       ),
 
-                      const SizedBox(
-                        height: 5,
+                      SizedBox(
+                        height: Dimensions.height * 0.005,
                       ),
 
                       SizedBox(
