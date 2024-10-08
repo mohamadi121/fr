@@ -187,7 +187,7 @@ class _StoreCardState extends State<StoreCard> {
               setState(() {
                 isMenuVisible = !isMenuVisible;
               });
-              widget.bloc.add(SelectMarket(marketId: widget.index));
+              // widget.bloc.add(SelectMarket(marketId: widget.index));
             },
             child: Container(
 
@@ -284,11 +284,14 @@ class _StoreCardState extends State<StoreCard> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            //category
                             Text(
-                              widget.market.subCategory.toString(),
+                              widget.market.subCategoryTitle.toString(),
                               overflow: TextOverflow.fade,
                               style: ATextStyle.light12.copyWith(color: Colors.white),
                             ),
+
+                            //status
                             Container(
                               padding: EdgeInsets.symmetric(
                                 horizontal: Dimensions.width * 0.02,

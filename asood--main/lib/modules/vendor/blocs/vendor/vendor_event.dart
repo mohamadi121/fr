@@ -7,6 +7,7 @@ class VendorEvent extends Equatable {
   List<Object> get props => [];
 }
 
+//----------------- logo ------------------
 class AddLogoEvent extends VendorEvent {
   final int id;
   final XFile logoImage;
@@ -17,6 +18,17 @@ class AddLogoEvent extends VendorEvent {
   });
 }
 
+class DeleteLogoEvent extends VendorEvent{
+
+  final int id;
+
+  const DeleteLogoEvent({
+    required this.id,
+  });
+
+}
+
+//----------------- background ------------------
 class AddBackgroundEvent extends VendorEvent {
   final int id;
   final XFile backgroundImage;
@@ -24,6 +36,22 @@ class AddBackgroundEvent extends VendorEvent {
   const AddBackgroundEvent({
     required this.id,
     required this.backgroundImage,
+  });
+}
+
+class DeleteBackgroundEvent extends VendorEvent {
+  final int id;
+
+  const DeleteBackgroundEvent({
+    required this.id,
+  });
+}
+
+//----------------- slider ------------------
+class LoadSlider extends VendorEvent {
+  final int marketId;
+  const LoadSlider({
+    required this.marketId,
   });
 }
 
@@ -37,9 +65,27 @@ class AddSliderEvent extends VendorEvent {
   });
 }
 
-class LoadSlider extends VendorEvent {
-  final int marketId;
-  const LoadSlider({
-    required this.marketId,
+class DeleteSliderEvent extends VendorEvent {
+  final int id;
+
+  const DeleteSliderEvent({
+    required this.id,
   });
+}
+
+//----------------- color ------------------
+class SelectTopColor extends VendorEvent {
+  final Color topColor;
+  const SelectTopColor({required this.topColor});
+}
+
+//----------------- font ------------------
+class SelectFontColor extends VendorEvent {
+  final Color fontColor;
+  const SelectFontColor({required this.fontColor});
+}
+
+class SelectFontFamily extends VendorEvent {
+  final String fontFamily;
+  const SelectFontFamily({required this.fontFamily});
 }

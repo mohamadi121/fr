@@ -33,126 +33,127 @@ class _StoresScreenState extends State<StoresScreen> {
     return Scaffold(
       // appBar: DefaultAppBar(context: context, title: 'لیست فروشگاه های من',),
       body: BlocConsumer<WorkspaceBloc, WorkspaceState>(
-          listener: (context, state) {
+        listener: (context, state) {
         /*    if (state.status == Status.initial) {
             BlocProvider.of<WorkspaceBloc>(context).add(LoadStores());
           } */
         if (state.status == Status.failure) {
           showSnackBar(context, "مشکلی در بارگذاری پیش آمده , مجدد تلاش کنید!");
         }
-      }, builder: (context, state) {
-        return Container(
-          color: Colora.primaryColor,
-          child: SafeArea(
-            child: Scaffold(
-              body: Stack(
-                children: [
+      },
+        builder: (context, state) {
+          return Container(
+            color: Colora.primaryColor,
+            child: SafeArea(
+              child: Scaffold(
+                body: Stack(
+                  children: [
 
-                  SizedBox(
-                    height: Dimensions.height,
-                    width: Dimensions.width,
-                    child: state.status == Status.loading
-                      ? const Center(
-                        child: const CircularProgressIndicator(),
-                      )
-                      : SingleChildScrollView(
-                          child: Column(
-                            children: [
+                    SizedBox(
+                      height: Dimensions.height,
+                      width: Dimensions.width,
+                      child: state.status == Status.loading
+                        ? const Center(
+                          child: const CircularProgressIndicator(),
+                        )
+                        : SingleChildScrollView(
+                            child: Column(
+                              children: [
 
-                              SizedBox(
-                                height: Dimensions.height * 0.11,
-                              ),
+                                SizedBox(
+                                  height: Dimensions.height * 0.11,
+                                ),
 
-                              ListView.builder(
-                                itemCount: state.storesList.length,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return StoreCard(
-                                    index: index,
-                                    market: state.storesList[index],
-                                    bloc: bloc,
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                      ),
-                  ),
+                                ListView.builder(
+                                  itemCount: state.storesList.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return StoreCard(
+                                      index: index,
+                                      market: state.storesList[index],
+                                      bloc: bloc,
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                        ),
+                    ),
 
-                  const NewAppBar(title: 'لیست فروشگاه‌های من'),
+                    const NewAppBar(title: 'لیست فروشگاه‌های من'),
 
-                  //header buttons
-                  // Positioned(
-                  //   top: Dimensions.height * 0.08,
-                  //   width: Dimensions.width,
-                  //   height: Dimensions.height * 0.05,
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.center,
-                  //     children: [
-                  //
-                  //       //add new shop
-                  //       Container(
-                  //         width: Dimensions.width * 0.35,
-                  //         height: Dimensions.height * 0.05,
-                  //         decoration: BoxDecoration(
-                  //           color: Colora.primaryColor,
-                  //           borderRadius: BorderRadius.circular(20),
-                  //           boxShadow: [
-                  //             BoxShadow(
-                  //               color: Colors.grey.withOpacity(0.4),
-                  //               spreadRadius: 3,
-                  //               blurRadius: 5,
-                  //               offset: const Offset(0, 5)
-                  //             )
-                  //           ]
-                  //         ),
-                  //         alignment: AlignmentDirectional.center,
-                  //         child: const Text(
-                  //           'ثبت فروشگاه جدید',
-                  //           style: TextStyle(
-                  //             color: Colora.scaffold,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //
-                  //       SizedBox(
-                  //         width: Dimensions.width * 0.05,
-                  //       ),
-                  //
-                  //       //shop reports
-                  //       Container(
-                  //         width: Dimensions.width * 0.35,
-                  //         height: Dimensions.height * 0.05,
-                  //         decoration: BoxDecoration(
-                  //             color: Colora.primaryColor,
-                  //             borderRadius: BorderRadius.circular(20),
-                  //             boxShadow: [
-                  //               BoxShadow(
-                  //                   color: Colors.grey.withOpacity(0.4),
-                  //                   spreadRadius: 3,
-                  //                   blurRadius: 5,
-                  //                   offset: const Offset(0, 5)
-                  //               )
-                  //             ]
-                  //         ),
-                  //         alignment: AlignmentDirectional.center,
-                  //         child: const Text(
-                  //           'گزارشات فروشگاه',
-                  //           style: TextStyle(
-                  //             color: Colora.scaffold,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //
-                  //     ],
-                  //   ),
-                  // ),
+                    //header buttons
+                    // Positioned(
+                    //   top: Dimensions.height * 0.08,
+                    //   width: Dimensions.width,
+                    //   height: Dimensions.height * 0.05,
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.center,
+                    //     children: [
+                    //
+                    //       //add new shop
+                    //       Container(
+                    //         width: Dimensions.width * 0.35,
+                    //         height: Dimensions.height * 0.05,
+                    //         decoration: BoxDecoration(
+                    //           color: Colora.primaryColor,
+                    //           borderRadius: BorderRadius.circular(20),
+                    //           boxShadow: [
+                    //             BoxShadow(
+                    //               color: Colors.grey.withOpacity(0.4),
+                    //               spreadRadius: 3,
+                    //               blurRadius: 5,
+                    //               offset: const Offset(0, 5)
+                    //             )
+                    //           ]
+                    //         ),
+                    //         alignment: AlignmentDirectional.center,
+                    //         child: const Text(
+                    //           'ثبت فروشگاه جدید',
+                    //           style: TextStyle(
+                    //             color: Colora.scaffold,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //
+                    //       SizedBox(
+                    //         width: Dimensions.width * 0.05,
+                    //       ),
+                    //
+                    //       //shop reports
+                    //       Container(
+                    //         width: Dimensions.width * 0.35,
+                    //         height: Dimensions.height * 0.05,
+                    //         decoration: BoxDecoration(
+                    //             color: Colora.primaryColor,
+                    //             borderRadius: BorderRadius.circular(20),
+                    //             boxShadow: [
+                    //               BoxShadow(
+                    //                   color: Colors.grey.withOpacity(0.4),
+                    //                   spreadRadius: 3,
+                    //                   blurRadius: 5,
+                    //                   offset: const Offset(0, 5)
+                    //               )
+                    //             ]
+                    //         ),
+                    //         alignment: AlignmentDirectional.center,
+                    //         child: const Text(
+                    //           'گزارشات فروشگاه',
+                    //           style: TextStyle(
+                    //             color: Colora.scaffold,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //
+                    //     ],
+                    //   ),
+                    // ),
 
-                ],
+                  ],
+                )
               )
-            )
-          ),
-        );
+            ),
+          );
       }),
     );
   }

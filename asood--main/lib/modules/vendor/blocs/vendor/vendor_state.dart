@@ -22,6 +22,11 @@ class VendorState extends Equatable {
   final XFile sliderFile;
   final List<SliderModel> sliderList;
 
+  final Color topColor;
+
+  final Color fontColor;
+  final String fontFamily;
+
   const VendorState({
     required this.id,
     required this.businessId,
@@ -39,6 +44,11 @@ class VendorState extends Equatable {
 
     required this.sliderFile,
     required this.sliderList,
+
+    required this.topColor,
+
+    required this.fontColor,
+    required this.fontFamily,
   });
 
   factory VendorState.initial() {
@@ -59,6 +69,12 @@ class VendorState extends Equatable {
 
       sliderFile: XFile(''),
       sliderList: [],
+
+      topColor: const Color.fromARGB(255, 10, 25, 146),
+
+      fontColor: const Color.fromARGB(255, 255, 255, 255),
+      fontFamily: '',
+
     );
   }
 
@@ -78,6 +94,11 @@ class VendorState extends Equatable {
 
     XFile? sliderFile,
     List<SliderModel>? sliderList,
+
+    Color? topColor,
+
+    Color? fontColor,
+    String? fontFamily,
   }) {
     return VendorState(
       id: id ?? this.id,
@@ -96,6 +117,12 @@ class VendorState extends Equatable {
 
       sliderFile: sliderFile ?? this.sliderFile,
       sliderList: sliderList ?? this.sliderList,
+
+      topColor: topColor ?? this.topColor,
+
+      fontColor: fontColor ?? this.fontColor,
+      fontFamily: fontFamily ?? this.fontFamily,
+
     );
   }
 
@@ -120,7 +147,12 @@ class VendorState extends Equatable {
       backgroundFile,
 
       sliderFile,
-      sliderList
+      sliderList,
+
+      topColor,
+
+      fontColor,
+      fontFamily,
     ];
   }
   

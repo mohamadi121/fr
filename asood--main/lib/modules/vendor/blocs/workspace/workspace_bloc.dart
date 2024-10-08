@@ -16,7 +16,7 @@ class WorkspaceBloc extends Bloc<WorkspaceEvent, WorkspaceState> {
 
   WorkspaceBloc() : super(WorkspaceState.initial()) {
     on<LoadStores>(_getStores);
-    on<SelectMarket>(_selectMarket);
+    // on<SelectMarket>(_selectMarket);
     on<GetProducts>(_getProducts);
     on<ContactUs>(_contactUs);
     on<GetComments>(_getComments);

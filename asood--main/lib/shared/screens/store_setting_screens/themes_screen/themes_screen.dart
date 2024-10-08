@@ -22,7 +22,7 @@ class _MultiViewSliderScreenState extends State<MultiViewSliderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(context: context),
+      appBar: DefaultAppBar(context: context, title: '',),
       bottomNavigationBar: const SimpleBotNavBar(),
       body: Column(
         children: [

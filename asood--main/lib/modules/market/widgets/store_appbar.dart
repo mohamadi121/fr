@@ -11,6 +11,7 @@ import '../../../shared/utils/snack_bar_util.dart';
 import '../../../shared/widgets/hamberger_menu.dart';
 import '../../../shared/widgets/profile_menu_widget.dart';
 import '../../vendor/blocs/vendor/vendor_bloc.dart';
+import '../../vendor/blocs/workspace/workspace_bloc.dart';
 
 class StoreAppBar extends StatelessWidget implements PreferredSizeWidget {
   const StoreAppBar({
@@ -146,11 +147,15 @@ class StoreAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 class StoreAppbar2 extends StatefulWidget {
 
-  final String id;
+  final int id;
   final String? title;
   final String? description;
   final String? logoImage;
   final String? backImage;
+  final Color? mainColor;
+
+  final Color? fontColor;
+  final String? fontFamily;
 
   const StoreAppbar2({
     super.key,
@@ -158,7 +163,12 @@ class StoreAppbar2 extends StatefulWidget {
     this.title,
     this.description,
     this.logoImage,
-    this.backImage
+    this.backImage,
+    this.mainColor = Colora.primaryColor,
+
+    this.fontColor = Colors.white,
+    this.fontFamily,
+
   });
 
   @override
@@ -203,10 +213,7 @@ class _StoreAppbar2State extends State<StoreAppbar2> {
                 height: Dimensions.height * 0.26,
                 child: BlocConsumer<VendorBloc, VendorState>(
                   listener: (context, state) {
-                    if (state.status == VendorStatus.success) {
-
-                    }
-                    else if (state.status == VendorStatus.failure) {
+                    if (state.status == VendorStatus.failure) {
                       showSnackBar(context, "مشکلی پیش آمده مجددا تلاش کنید");
                     }
                   },
@@ -406,12 +413,17 @@ class _StoreAppbar2State extends State<StoreAppbar2> {
                                 :InkWell(
                                   onTap: (){
                                     if(logoImage != null){
-                                      bloc.add(AddLogoEvent(id: 22, logoImage: logoImage!));
+                                      bloc.add(AddLogoEvent(id: widget.id, logoImage: logoImage!));
+                                      Navigator.pop(context);
+                                      initLogoImage = editLogoImage;
+                                    }
+                                    else if(editLogoImage==''){
+                                      bloc.add(DeleteLogoEvent(id: widget.id));
                                       Navigator.pop(context);
                                       initLogoImage = editLogoImage;
                                     }
                                     else{
-                                      showSnackBar(context, "لطفا عکس خود را انتخاب کنید");
+                                      showSnackBar(context, "لطفا عکس خود را انتخاب یا حذف کنید");
                                     }
                                   },
                                   child: Container(
@@ -586,23 +598,30 @@ class _StoreAppbar2State extends State<StoreAppbar2> {
                           ),
 
                           // delete
-                          Container(
-                            width: Dimensions.width * 0.2,
-                            padding: EdgeInsets.symmetric(
-                                vertical: Dimensions.height * 0.01
-                            ),
-                            decoration: BoxDecoration(
-                                color: Colora.primaryColor,
-                                borderRadius: BorderRadius.circular(20)
-                            ),
-                            child: Center(
-                              child: FittedBox(
-                                fit: BoxFit.scaleDown,
-                                child: Text(
-                                  'حذف عکس',
-                                  style: TextStyle(
-                                      color: Colora.scaffold,
-                                      fontSize: Dimensions.width * 0.033
+                          InkWell(
+                            onTap: (){
+                              setState(() {
+                                editBackImage = '';
+                              });
+                            },
+                            child: Container(
+                              width: Dimensions.width * 0.2,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: Dimensions.height * 0.01
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Colora.primaryColor,
+                                  borderRadius: BorderRadius.circular(20)
+                              ),
+                              child: Center(
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    'حذف عکس',
+                                    style: TextStyle(
+                                        color: Colora.scaffold,
+                                        fontSize: Dimensions.width * 0.033
+                                    ),
                                   ),
                                 ),
                               ),
@@ -686,22 +705,27 @@ class _StoreAppbar2State extends State<StoreAppbar2> {
                                 ),
                                 child: const Center(
                                   child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child:CircularProgressIndicator(
-                                        color: Colora.scaffold_,
-                                      )
+                                    fit: BoxFit.scaleDown,
+                                    child:CircularProgressIndicator(
+                                      color: Colora.scaffold_,
+                                    )
                                   ),
                                 ),
                               )
                               :InkWell(
                                 onTap: (){
                                   if(backImage != null){
-                                    bloc.add(AddBackgroundEvent(id: 22, backgroundImage: backImage!));
+                                    bloc.add(AddBackgroundEvent(id: widget.id, backgroundImage: backImage!));
+                                    Navigator.pop(context);
+                                    initBackImage = editBackImage;
+                                  }
+                                  else if(editBackImage==''){
+                                    bloc.add(DeleteBackgroundEvent(id: widget.id));
                                     Navigator.pop(context);
                                     initBackImage = editBackImage;
                                   }
                                   else{
-                                    showSnackBar(context, "لطفا عکس خود را انتخاب کنید");
+                                    showSnackBar(context, "لطفا عکس خود را انتخاب یا حذف کنید");
                                   }
                                 },
                                 child: Container(
@@ -791,12 +815,12 @@ class _StoreAppbar2State extends State<StoreAppbar2> {
           bottom: Dimensions.height * 0.015
         ),
         decoration: BoxDecoration(
-            color: Colora.primaryColor,
-            borderRadius: const BorderRadius.only(
-              bottomRight: Radius.circular(30),
-              bottomLeft: Radius.circular(30)
-            ),
-            boxShadow: [
+          color: widget.mainColor,
+          borderRadius: const BorderRadius.only(
+            bottomRight: Radius.circular(30),
+            bottomLeft: Radius.circular(30)
+          ),
+          boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.5),
                 blurRadius: 5,
@@ -859,7 +883,7 @@ class _StoreAppbar2State extends State<StoreAppbar2> {
                 child: Container(
                   width: Dimensions.width,
                   height: Dimensions.height * 0.25,
-                  color: Colora.primaryColor.withOpacity(0.6),
+                  color: widget.mainColor?.withOpacity(0.6),
                 ),
               ),
 
@@ -871,10 +895,11 @@ class _StoreAppbar2State extends State<StoreAppbar2> {
                 child: SizedBox(
                   width: Dimensions.width * 0.1,
                   child: IconButton(
-                      onPressed: (){
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(
+                    onPressed: (){
+                      BlocProvider.of<WorkspaceBloc>(context).add(LoadStores());
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
                         Icons.arrow_back,
                         color: Colora.scaffold,
                         size: Dimensions.width * 0.07,
@@ -885,10 +910,10 @@ class _StoreAppbar2State extends State<StoreAppbar2> {
 
               //menu button
               Positioned(
-                  top: 20,
-                  left: 10,
-                  width: Dimensions.width * 0.1,
-                  child: InkWell(
+                top: 20,
+                left: 10,
+                width: Dimensions.width * 0.1,
+                child: InkWell(
                     child: AspectRatio(
                       aspectRatio: 1,
                       child: Container(
@@ -933,7 +958,7 @@ class _StoreAppbar2State extends State<StoreAppbar2> {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               shape: BoxShape.circle,
-                              border: Border.all(color: Colora.backgroundSwitch, width: 3),
+                              border: Border.all(color: widget.mainColor!, width: 3),
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(100),
@@ -969,7 +994,6 @@ class _StoreAppbar2State extends State<StoreAppbar2> {
                                   File(initLogoImage),
                                   fit: BoxFit.cover,
                                 ),
-
                             ),
                           ),
                         ),
@@ -985,11 +1009,11 @@ class _StoreAppbar2State extends State<StoreAppbar2> {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 shape: BoxShape.circle,
-                                border: Border.all(color: Colora.primaryColor, width: 2)
+                                border: Border.all(color: widget.mainColor!, width: 2)
                               ),
                               child: Icon(
                                 Icons.edit_rounded,
-                                color: Colora.primaryColor,
+                                color: widget.mainColor!,
                                 size: Dimensions.width * 0.05,
                               ),
                             ),
@@ -1004,27 +1028,10 @@ class _StoreAppbar2State extends State<StoreAppbar2> {
                   Text(
                     widget.title!,
                     style: TextStyle(
-                      color: Colors.white,
+                      color: widget.fontColor,
                       fontSize: Dimensions.width * 0.05,
                       fontWeight: FontWeight.bold,
-                      shadows: const [
-                        Shadow( // bottomLeft
-                            offset: Offset(-1.5, -1.5),
-                            color: Colors.black
-                        ),
-                        Shadow( // bottomRight
-                            offset: Offset(1.5, -1.5),
-                            color: Colors.black
-                        ),
-                        Shadow( // topRight
-                            offset: Offset(1.5, 1.5),
-                            color: Colors.black
-                        ),
-                        Shadow( // topLeft
-                            offset: Offset(-1.5, 1.5),
-                            color: Colors.black
-                        ),
-                      ]
+                      fontFamily: widget.fontFamily
                     ),
                   ),
 
@@ -1036,26 +1043,9 @@ class _StoreAppbar2State extends State<StoreAppbar2> {
                   Text(
                     'برند اصل برای همه',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: widget.fontColor,
                       fontSize: Dimensions.width * 0.035,
-                      shadows: const [
-                          Shadow( // bottomLeft
-                              offset: Offset(-1.5, -1.5),
-                              color: Colors.black
-                          ),
-                          Shadow( // bottomRight
-                              offset: Offset(1.5, -1.5),
-                              color: Colors.black
-                          ),
-                          Shadow( // topRight
-                              offset: Offset(1.5, 1.5),
-                              color: Colors.black
-                          ),
-                          Shadow( // topLeft
-                              offset: Offset(-1.5, 1.5),
-                              color: Colors.black
-                          ),
-                    ]
+                        fontFamily: widget.fontFamily
                     ),
                   )
 

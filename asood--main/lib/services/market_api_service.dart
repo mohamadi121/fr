@@ -131,7 +131,7 @@ class MarketApiService {
 
   //delete logo image
   Future deleteMarketLogo(marketId) async {
-    var uri = 'logo/$marketId';
+    var uri = 'logo/$marketId/';
 
     try {
       http.Response res = await apiClient.deleteData(uri);
@@ -156,7 +156,7 @@ class MarketApiService {
 
   //delete background image
   Future deleteMarketBackground(marketId) async {
-    var uri = 'background/$marketId';
+    var uri = 'background/$marketId/';
 
     try {
       http.Response res = await apiClient.deleteData(uri);
@@ -205,7 +205,7 @@ class MarketApiService {
 
   //delete slider by id
   Future deleteMarketSlider(sliderId) async {
-    var uri = 'slider/$sliderId';
+    var uri = 'slider/$sliderId/';
     try {
       http.Response res = await apiClient.deleteData(uri);
       return ApiStatus(res);
