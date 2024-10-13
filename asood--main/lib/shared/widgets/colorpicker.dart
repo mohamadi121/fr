@@ -11,10 +11,18 @@ class AColorPicker extends StatefulWidget {
     super.key,
     required this.titleWidget,
     this.paletteType = PaletteType.hsvWithHue,
+    this.currentIndex = 0,
+    this.mainColor,
+    this.backgroundColor,
+    this.secondColor,
   });
 
   final Widget titleWidget;
   final PaletteType paletteType;
+  final int? currentIndex;
+  final Function(Color)? mainColor ;
+  final Function(Color)? backgroundColor ;
+  final Function(Color)? secondColor ;
 
   @override
   State<AColorPicker> createState() => _AColorPickerState();
@@ -35,7 +43,7 @@ class _AColorPickerState extends State<AColorPicker> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(Dimensions.seven),
-      height: Dimensions.height * .35,
+      height: Dimensions.height * .4,
       decoration: const BoxDecoration(
         color: Colora.lightBlue,
         borderRadius: BorderRadius.only(
@@ -57,13 +65,24 @@ class _AColorPickerState extends State<AColorPicker> {
             colorPickerWidth: Dimensions.width * .7,
             pickerAreaBorderRadius: BorderRadius.circular(Dimensions.fifteen),
             onColorChanged: (Color color) {
-              bloc.add(SelectTopColor(topColor: color));
+              if(widget.currentIndex == 0){
+                widget.mainColor!(color);
+                bloc.add(SelectTopColor(topColor: color));
+              }
+              if(widget.currentIndex == 1){
+                widget.secondColor!(color);
+                bloc.add(SelectSecondColor(secondColor: color));
+              }
+              if(widget.currentIndex == 2){
+                widget.backgroundColor!(color);
+                bloc.add(SelectBackColor(backColor: color));
+              }
             },
-            displayThumbColor: false,
-            portraitOnly: false,
-            // showLabel: false,
+            displayThumbColor: true,
+            portraitOnly: true,
             enableAlpha: false,
-            labelTypes: const [],
+            labelTypes: const [ColorLabelType.rgb, ColorLabelType.hex],
+            labelTextStyle: const TextStyle(color: Colora.scaffold_),
             pickerAreaHeightPercent: .5,
             pickerColor: Colors.white,
           ),
@@ -78,10 +97,17 @@ class BColorPicker extends StatefulWidget {
     super.key,
     required this.titleWidget,
     this.paletteType = PaletteType.hsvWithHue,
+    this.currentIndex = 0,
+    this.fontColor,
+    this.fontSecondColor
   });
 
   final Widget titleWidget;
   final PaletteType paletteType;
+  final int currentIndex;
+
+  final Function(Color)? fontColor;
+  final Function(Color)? fontSecondColor;
 
   @override
   State<BColorPicker> createState() => _BColorPickerState();
@@ -124,7 +150,14 @@ class _BColorPickerState extends State<BColorPicker> {
             colorPickerWidth: Dimensions.width * .7,
             pickerAreaBorderRadius: BorderRadius.circular(Dimensions.fifteen),
             onColorChanged: (Color color) {
-              bloc.add(SelectFontColor(fontColor: color));
+              if(widget.currentIndex == 1){
+                widget.fontColor!(color);
+                bloc.add(SelectFontColor(fontColor: color));
+              }
+              else if(widget.currentIndex == 2){
+                widget.fontSecondColor!(color);
+                bloc.add(SelectSecondFontColor(secondFontColor: color));
+              }
             },
             displayThumbColor: false,
             portraitOnly: false,

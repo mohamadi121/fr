@@ -112,7 +112,7 @@ class ApiClient {
             multipart.key,
             multipart.file!.readAsBytes().asStream(),
             list.length,
-            filename: '${DateTime.now().toString()}.png',
+            filename: '1.png',
           ));
         }
       }

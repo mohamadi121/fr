@@ -7,10 +7,50 @@ sealed class ThemeEvent extends Equatable {
   List<Object> get props => [];
 }
 
-final class SetTheme extends ThemeEvent {}
+//----------------- color ------------------
+class SelectTopColor extends ThemeEvent {
+  final Color topColor;
+  const SelectTopColor({required this.topColor});
+}
 
-final class GetTheme extends ThemeEvent {}
+class SelectSecondColor extends ThemeEvent {
+  final Color secondColor;
+  const SelectSecondColor({required this.secondColor});
+}
 
-final class ChangeTheme extends ThemeEvent {}
+class SelectBackColor extends ThemeEvent {
+  final Color backColor;
+  const SelectBackColor({required this.backColor});
+}
 
-final class ResetTheme extends ThemeEvent {}
+//----------------- font ------------------
+class SelectFontColor extends ThemeEvent {
+  final Color fontColor;
+  const SelectFontColor({required this.fontColor});
+}
+
+class SelectSecondFontColor extends ThemeEvent {
+  final Color secondFontColor;
+  const SelectSecondFontColor({required this.secondFontColor});
+}
+
+class SelectFontFamily extends ThemeEvent {
+  final String fontFamily;
+  const SelectFontFamily({required this.fontFamily});
+}
+
+//----------------- theme ------------------
+class SelectTheme extends ThemeEvent {
+
+  final int marketId;
+  final String? color;
+  final String? font;
+  final String? fontColor;
+
+  const SelectTheme({
+    required this.marketId,
+    this.color,
+    this.font,
+    this.fontColor
+  });
+}

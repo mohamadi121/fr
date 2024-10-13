@@ -17,7 +17,29 @@ import '../utils/app_router.dart';
 import 'colorpicker.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
-  const CustomBottomNavigationBar({super.key});
+
+  final int? marketId;
+
+  final Color? initTopColor;
+  final Color? initBackColor;
+  final Color? initSecondColor;
+
+  final String? initFont;
+  final Color? initFontColor;
+  final Color? initFontSecondColor;
+
+  const CustomBottomNavigationBar({
+    super.key,
+    this.marketId,
+
+    this.initBackColor,
+    this.initTopColor,
+    this.initSecondColor,
+
+    this.initFont,
+    this.initFontColor,
+    this.initFontSecondColor
+  });
 
   @override
   State<CustomBottomNavigationBar> createState() => _CustomBottomNavigationBarState();
@@ -38,7 +60,20 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showBottomSheet(context, bloc);
+        showBottomSheet(
+          context,
+          bloc,
+
+          widget.marketId,
+
+          widget.initTopColor,
+          widget.initBackColor,
+          widget.initSecondColor,
+
+          widget.initFont,
+          widget.initFontColor,
+          widget.initFontSecondColor
+        );
       },
       child: Container(
         height: Dimensions.height * 0.05,
@@ -82,7 +117,13 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 //   }
 // }
 
-void showBottomSheet(BuildContext context, bloc) {
+void showBottomSheet(
+  BuildContext context,
+  bloc,
+  marketId,
+  initTopColor, initBackColor, initSecondColor,
+  initFont, initFontColor, initFontSecondColor
+  ){
 
   showModalBottomSheet(
     context: context,
@@ -168,7 +209,17 @@ void showBottomSheet(BuildContext context, bloc) {
                       onPressed: () {
 
                         Navigator.pop(context);
-                        changeFont(context, bloc);
+                        changeFont(
+                          context,
+                          bloc,
+                          marketId,
+                          initFont,
+                          initTopColor,
+                          initBackColor,
+                          initSecondColor,
+                          initFontColor,
+                          initFontSecondColor,
+                        );
 
                         // context.router.push(const FontColorSettingRoute());
                         /*    Navigator.push(
@@ -188,7 +239,17 @@ void showBottomSheet(BuildContext context, bloc) {
                   IconButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      changeColor(context, bloc);
+                      changeColor(
+                        context,
+                        bloc,
+                        marketId,
+                        initFont,
+                        initTopColor,
+                        initBackColor,
+                        initSecondColor,
+                        initFontColor,
+                        initFontSecondColor,
+                      );
                       // Navigator.pop(context);
                       // context.router.push(const ColorSettingRoute());
                       /*   Navigator.push(
@@ -243,10 +304,21 @@ void showBottomSheet(BuildContext context, bloc) {
       );
     },
   );
+
 }
 
 
-void changeFont(BuildContext context, bloc){
+void changeFont(
+  BuildContext context,
+  bloc,
+  marketId,
+  initFont,
+  Color initTopColor,
+  Color initBackColor,
+  Color initSecondColor,
+  Color initFontColor,
+  Color initFontSecondColor
+  ){
 
   Map fontList = {
     'irs':{
@@ -275,84 +347,102 @@ void changeFont(BuildContext context, bloc){
     }
   };
 
-  int currentIndex = -1;
+  int index = 0;
+
+  int currentFontIndex = -1;
+
+  bool pos = false;
+
+  String initSelectedFont = initFont;
+  Color initSelectedFontColor = initFontColor;
+  Color initSelectedFontSecondColor = initFontSecondColor;
 
   showDialog(
     barrierColor: const Color(0x00000000),
     barrierDismissible: false,
     context: context,
     builder: (context) =>
-        AlertDialog(
-          // shadowColor: Colors.black,
-          contentPadding: const EdgeInsets.all(0),
-          backgroundColor: Colors.transparent,
-          alignment: Alignment.bottomCenter,
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              return Container(
-                height: Dimensions.height * 0.65,
-                width: Dimensions.width * 0.73,
-                padding: EdgeInsets.symmetric(
-                    vertical: Dimensions.height * 0.01,
-                    horizontal: Dimensions.width * 0.01
-                ),
-                decoration: BoxDecoration(
-                    color: Colora.lightBlue,
-                    borderRadius: BorderRadius.circular(20)
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
+      StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            contentPadding: const EdgeInsets.all(0),
+            backgroundColor: Colors.transparent,
+            alignment: pos == false
+              ?Alignment.bottomCenter
+              :Alignment.topCenter,
+            content: Container(
+              height: Dimensions.height * 0.47,
+              width: Dimensions.width * 0.8,
+              padding: EdgeInsets.symmetric(
+                vertical: Dimensions.height * 0.01,
+                horizontal: Dimensions.width * 0.01
+              ),
+              decoration: BoxDecoration(
+                color: Colora.lightBlue,
+                borderRadius: BorderRadius.circular(20)
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
 
+                    if(index == 0)...[
                       GridView.builder(
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 2/1
-                        ),
-                        shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: fontList.length,
-                        itemBuilder: (context, index) {
-                          var value = fontList.values.toList();
-                          return InkWell(
-                            onTap: (){
-                              bloc.add(SelectFontFamily(fontFamily: value[index]['font']));
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 2/1
+                          ),
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: fontList.length,
+                          itemBuilder: (context, index) {
+                            var value = fontList.values.toList();
+                            return InkWell(
+                              onTap: (){
+                                bloc.add(SelectFontFamily(fontFamily: value[index]['font']));
 
-                              setState(() {
-                                currentIndex = index;
-                              });
+                                initSelectedFont = value[index]['font'];
 
-                            },
-                            child: Container(
-                              margin: EdgeInsets.symmetric(
-                                horizontal: Dimensions.width * 0.01,
-                                vertical: Dimensions.height * 0.005
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colora.primaryColor,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: currentIndex == index
-                                    ?Colors.white
-                                    :Colora.lightBlue,
-                                  width: 2
-                                )
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                value[index]['name'].toString(),
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Dimensions.width * 0.04,
-                                    fontFamily: value[index]['font']
+                                setState(() {
+                                  currentFontIndex = index;
+                                });
+
+                              },
+                              child: Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: Dimensions.width * 0.01,
+                                    vertical: Dimensions.height * 0.005
+                                ),
+                                decoration: BoxDecoration(
+                                    color: Colora.primaryColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color: currentFontIndex == index
+                                            ?Colors.white
+                                            :Colora.lightBlue,
+                                        width: 2
+                                    )
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  value[index]['name'].toString(),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Dimensions.width * 0.04,
+                                      fontFamily: value[index]['font']
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        }
+                            );
+                          }
                       ),
 
+                      SizedBox(
+                        height: Dimensions.height * 0.08,
+                      )
+
+                    ]
+                    else if(index == 1)...[
                       BColorPicker(
                         paletteType: PaletteType.hsl,
                         titleWidget: Container(
@@ -364,144 +454,470 @@ void changeFont(BuildContext context, bloc){
                           ),
                           child: const Center(
                             child: Text(
-                              "رنگ بندی فونت",
-                              style: TextStyle(color: Colora.scaffold)),
+                                "رنگ بندی فونت",
+                                style: TextStyle(color: Colora.scaffold)),
                           ),
                         ),
+                        currentIndex: 1,
+                        fontColor: (value) {
+                          initSelectedFontColor = value;
+                        },
                       ),
+                    ]
+                    else if(index == 2)...[
+                        BColorPicker(
+                          paletteType: PaletteType.hsl,
+                          titleWidget: Container(
+                            height: 40,
+                            width: Dimensions.width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(40),
+                              color: Colora.primaryColor,
+                            ),
+                            child: const Center(
+                              child: Text(
+                                  "رنگ بندی دوم فونت",
+                                  style: TextStyle(color: Colora.scaffold)),
+                            ),
+                          ),
+                          currentIndex: 2,
+                          fontSecondColor: (value) {
+                            initSelectedFontSecondColor = value;
+                          },
+                        ),
+                      ],
 
-                      Container(
-                        width: Dimensions.width,
-                        decoration: const BoxDecoration(
-                          color: Colora.lightBlue,
-                          borderRadius: BorderRadius.only(
+                    Container(
+                      height: Dimensions.height * 0.05,
+                      color: Colora.primaryColor,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          //font
+                          InkWell(
+                            child: Container(
+                              width: Dimensions.width * 0.25,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: index == 0 ?Colors.white :Colora.primaryColor)
+                              ),
+                              child: Text(
+                                'فونت',
+                                style: TextStyle(
+                                    color: Colora.scaffold,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Dimensions.width * 0.037
+                                ),
+                              ),
+                            ),
+                            onTap: (){
+                              setState((){
+                                index = 0;
+                              });
+                            },
+                          ),
+
+                          //font color
+                          InkWell(
+                            onTap: (){
+                              setState((){
+                                index = 1;
+                              });
+                            },
+                            child: Container(
+                                width: Dimensions.width * 0.25,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: index == 1 ?Colors.white :Colora.primaryColor)
+                                ),
+                                child: Text(
+                                  'رنگ اصلی',
+                                  style: TextStyle(
+                                      color: Colora.scaffold,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Dimensions.width * 0.037
+                                  ),
+                                )
+                            ),
+                          ),
+
+                          //second font color
+                          InkWell(
+                            onTap: (){
+                              setState((){
+                                index = 2;
+                              });
+                            },
+                            child: Container(
+                              width: Dimensions.width * 0.25,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: index == 2 ?Colors.white :Colora.primaryColor)
+                              ),
+                              child: Text(
+                                'رنگ دوم',
+                                style: TextStyle(
+                                    color: Colora.scaffold,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Dimensions.width * 0.037
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+
+                    Container(
+                      width: Dimensions.width,
+                      decoration: const BoxDecoration(
+                        color: Colora.lightBlue,
+                        borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(Dimensions.fifteen),
                             bottomRight: Radius.circular(Dimensions.fifteen)
-                          )
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            MaterialButton(
-                              onPressed: (){
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                'ذخیره',
-                                style: TextStyle(
-                                    color: Colora.scaffold_,
-                                    fontSize: Dimensions.width * 0.038,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              ),
-                            ),
-                            MaterialButton(
-                              onPressed: (){
-                                Navigator.pop(context);
-                                bloc.add(const SelectFontColor(fontColor: Colors.white));
-                                bloc.add(const SelectFontFamily(fontFamily: ''));
-                              },
-                              child: Text(
-                                'بازگشت',
-                                style: TextStyle(
-                                    color: Colora.scaffold_,
-                                    fontSize: Dimensions.width * 0.038,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
+                        )
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
 
-                    ],
-                  ),
+                          //save
+                          MaterialButton(
+                            onPressed: (){
+                              var topColor = initTopColor.toString().substring(10, 16);
+                              var secondColor = initSecondColor.toString().substring(10, 16);
+                              var backColor = initBackColor.toString().substring(10, 16);
+                              var fontColor = initSelectedFontColor.toString().substring(10, 16);
+                              var fontSecondColor = initSelectedFontSecondColor.toString().substring(10, 16);
+
+                              bloc.add(SelectTheme(
+                                  marketId: marketId,
+                                  color: topColor,
+                                  backgroundColor: backColor,
+                                  secondaryColor: secondColor,
+
+                                  font: initSelectedFont,
+                                  fontColor: fontColor,
+                                  fontSecondaryColor: fontSecondColor
+
+                              ));
+
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              'ذخیره',
+                              style: TextStyle(
+                                  color: Colora.scaffold_,
+                                  fontSize: Dimensions.width * 0.038,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ),
+
+                          IconButton(
+                              onPressed: (){
+                                setState((){
+                                  pos = !pos;
+                                });
+                              },
+                              icon: Icon(
+                                pos == false
+                                    ?Icons.arrow_circle_up_rounded
+                                    :Icons.arrow_circle_down_rounded,
+                                color: Colora.scaffold,
+                              )
+                          ),
+
+                          //back
+                          MaterialButton(
+                            onPressed: (){
+                              Navigator.pop(context);
+                              bloc.add(SelectFontFamily(fontFamily: initFont));
+                              bloc.add(SelectFontColor(fontColor: initFontColor));
+                              bloc.add(SelectSecondFontColor(secondFontColor: initFontSecondColor));
+                            },
+                            child: Text(
+                              'بازگشت',
+                              style: TextStyle(
+                                  color: Colora.scaffold_,
+                                  fontSize: Dimensions.width * 0.038,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+
+                  ],
                 ),
-              );
-            }
-          ),
-        ),
+              ),
+            )
+          );
+        }
+      ),
   );
 }
 
-void changeColor(BuildContext context, bloc){
+void changeColor(
+  BuildContext context,
+  bloc,
+  marketId,
+  initFont,
+  Color initTopColor,
+  Color initBackColor,
+  Color initSecondColor,
+  Color initFontColor,
+  Color initFontSecondColor
+  ){
+
+  int index = 0;
+  Color mainColorPicker = initTopColor;
+  Color backgroundColorPicker = initBackColor;
+  Color secondColorPicker = initSecondColor;
 
   showDialog(
     barrierColor: const Color(0x00000000),
     barrierDismissible: false,
     context: context,
     builder: (context) =>
-        AlertDialog(
-          // shadowColor: Colors.black,
-          contentPadding: const EdgeInsets.all(0),
-          backgroundColor: Colors.transparent,
-          alignment: Alignment.bottomCenter,
-          content: SizedBox(
-            height: Dimensions.height * 0.42,
-            child: Column(
-              children: [
+        StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              contentPadding: const EdgeInsets.all(0),
+              backgroundColor: Colors.transparent,
+              alignment: Alignment.bottomCenter,
+              content: SizedBox(
+                height: Dimensions.height * 0.51,
+                child: Column(
+                  children: [
 
-                AColorPicker(
-                  paletteType: PaletteType.hsl,
-                  titleWidget: Container(
-                    height: 40,
-                    width: Dimensions.width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40),
-                      color: Colora.primaryColor,
-                    ),
-                    child: const Center(
-                      child: Text(
-                          "رنگ بندی قسمت بالا",
-                          style: TextStyle(color: Colora.scaffold)),
-                    ),
-                  ),
-                ),
-
-                Container(
-                  width: Dimensions.width,
-                  decoration: const BoxDecoration(
-                      color: Colora.lightBlue,
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(Dimensions.fifteen),
-                          bottomRight: Radius.circular(Dimensions.fifteen)
-                      )
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      MaterialButton(
-                        onPressed: (){},
-                        child: Text(
-                          'ذخیره',
-                          style: TextStyle(
-                              color: Colora.scaffold_,
-                              fontSize: Dimensions.width * 0.038,
-                              fontWeight: FontWeight.bold
+                    if(index == 0)...[
+                      AColorPicker(
+                        paletteType: PaletteType.hsl,
+                        titleWidget: Container(
+                          height: 40,
+                          width: Dimensions.width,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            color: Colora.primaryColor,
+                          ),
+                          child: const Center(
+                            child: Text(
+                                "رنگ بندی اصلی",
+                                style: TextStyle(color: Colora.scaffold)),
                           ),
                         ),
-                      ),
-                      MaterialButton(
-                        onPressed: (){
-                          Navigator.pop(context);
-                          bloc.add(const SelectTopColor(topColor: Colora.primaryColor));
+                        currentIndex: 0,
+                        mainColor: (value) {
+                          mainColorPicker = value;
                         },
-                        child: Text(
-                          'بازگشت',
-                          style: TextStyle(
-                              color: Colora.scaffold_,
-                              fontSize: Dimensions.width * 0.038,
-                              fontWeight: FontWeight.bold
+                      ),
+                    ]
+                    else if(index == 1)...[
+                      AColorPicker(
+                        paletteType: PaletteType.hsl,
+                        titleWidget: Container(
+                          height: 40,
+                          width: Dimensions.width,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            color: Colora.primaryColor,
+                          ),
+                          child: const Center(
+                            child: Text(
+                                "رنگ بندی دوم",
+                                style: TextStyle(color: Colora.scaffold)),
                           ),
                         ),
+                        currentIndex: 1,
+                        secondColor: (value) {
+                          secondColorPicker = value;
+                        },
+                      ),
+                    ]
+                    else if(index == 2)...[
+                      AColorPicker(
+                        paletteType: PaletteType.hsl,
+                        titleWidget: Container(
+                          height: 40,
+                          width: Dimensions.width,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            color: Colora.primaryColor,
+                          ),
+                          child: const Center(
+                            child: Text(
+                                "رنگ بندی زمینه",
+                                style: TextStyle(color: Colora.scaffold)),
+                          ),
+                        ),
+                        currentIndex: 2,
+                        backgroundColor: (value) {
+                          backgroundColorPicker = value;
+                        },
                       ),
                     ],
-                  ),
-                )
 
-              ],
-            ),
-          ),
+                    Container(
+                      height: Dimensions.height * 0.05,
+                      color: Colora.primaryColor,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          //main color
+                          InkWell(
+                            child: Container(
+                              width: Dimensions.width * 0.25,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: index == 0 ?Colors.white :Colora.primaryColor)
+                              ),
+                              child: Text(
+                                'رنگ اصلی',
+                                style: TextStyle(
+                                    color: Colora.scaffold,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Dimensions.width * 0.037
+                                ),
+                              ),
+                            ),
+                            onTap: (){
+                              setState((){
+                                index = 0;
+                              });
+                            },
+                          ),
+
+                          //second color
+                          InkWell(
+                            onTap: (){
+                              setState((){
+                                index = 1;
+                              });
+                            },
+                            child: Container(
+                                width: Dimensions.width * 0.25,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: index == 1 ?Colors.white :Colora.primaryColor)
+                                ),
+                                child: Text(
+                                  'رنگ دوم',
+                                  style: TextStyle(
+                                      color: Colora.scaffold,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Dimensions.width * 0.037
+                                  ),
+                                )
+                            ),
+                          ),
+
+                          //back color
+                          InkWell(
+                            onTap: (){
+                              setState((){
+                                index = 2;
+                              });
+                            },
+                            child: Container(
+                              width: Dimensions.width * 0.25,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: index == 2 ?Colors.white :Colora.primaryColor)
+                              ),
+                              child: Text(
+                                'رنگ زمینه',
+                                style: TextStyle(
+                                    color: Colora.scaffold,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Dimensions.width * 0.037
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Container(
+                      width: Dimensions.width,
+                      decoration: const BoxDecoration(
+                        color: Colora.lightBlue,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(Dimensions.fifteen),
+                          bottomRight: Radius.circular(Dimensions.fifteen)
+                        )
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          //save
+                          MaterialButton(
+                            onPressed: (){
+                              var topColor = mainColorPicker.toString().substring(10, 16);
+                              var secondColor = secondColorPicker.toString().substring(10, 16);
+                              var backColor = backgroundColorPicker.toString().substring(10, 16);
+                              var fontColor = initFontColor.toString().substring(10, 16);
+                              var fontSecondColor = initFontSecondColor.toString().substring(10, 16);
+
+                              bloc.add(SelectTheme(
+                                marketId: marketId,
+                                color: topColor,
+                                backgroundColor: backColor,
+                                secondaryColor: secondColor,
+
+                                font: initFont,
+                                fontColor: fontColor,
+                                fontSecondaryColor: fontSecondColor
+
+                              ));
+
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              'ذخیره',
+                              style: TextStyle(
+                                  color: Colora.scaffold_,
+                                  fontSize: Dimensions.width * 0.038,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ),
+
+                          // back
+                          MaterialButton(
+                            onPressed: (){
+                              Navigator.pop(context);
+                              bloc.add(SelectTopColor(topColor: initTopColor));
+                              bloc.add(SelectSecondColor(secondColor: initSecondColor));
+                              bloc.add(SelectBackColor(backColor: initBackColor));
+                            },
+                            child: Text(
+                              'بازگشت',
+                              style: TextStyle(
+                                  color: Colora.scaffold_,
+                                  fontSize: Dimensions.width * 0.038,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+
+                  ],
+                ),
+              )
+            );
+          }
         ),
   );
 

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -210,7 +211,7 @@ class _StoreAppbar2State extends State<StoreAppbar2> {
           builder: (context, setState) {
             return AlertDialog(
               content: SizedBox(
-                height: Dimensions.height * 0.26,
+                height: Dimensions.height * 0.27,
                 child: BlocConsumer<VendorBloc, VendorState>(
                   listener: (context, state) {
                     if (state.status == VendorStatus.failure) {
@@ -963,10 +964,14 @@ class _StoreAppbar2State extends State<StoreAppbar2> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(100),
                               child: initLogoImage == ''
-                                ?Image.asset(
-                                  'assets/images/logo.png',
-                                  fit: BoxFit.cover,
+                                ?SvgPicture.asset(
+                                  'assets/images/logo_svg.svg',
+                                  colorFilter: ColorFilter.mode(widget.mainColor!, BlendMode.srcIn)
                                 )
+                                // Image.asset(
+                                //   'assets/images/logo.png',
+                                //   fit: BoxFit.cover,
+                                // )
                                 :initLogoImage.contains('http')
                                 ?CachedNetworkImage(
                                   imageUrl: initLogoImage,
@@ -1007,13 +1012,13 @@ class _StoreAppbar2State extends State<StoreAppbar2> {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: widget.mainColor,
                                 shape: BoxShape.circle,
                                 border: Border.all(color: widget.mainColor!, width: 2)
                               ),
                               child: Icon(
                                 Icons.edit_rounded,
-                                color: widget.mainColor!,
+                                color: widget.fontColor!,
                                 size: Dimensions.width * 0.05,
                               ),
                             ),

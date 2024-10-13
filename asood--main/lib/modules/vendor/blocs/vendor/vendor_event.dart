@@ -79,13 +79,53 @@ class SelectTopColor extends VendorEvent {
   const SelectTopColor({required this.topColor});
 }
 
+class SelectSecondColor extends VendorEvent {
+  final Color secondColor;
+  const SelectSecondColor({required this.secondColor});
+}
+
+class SelectBackColor extends VendorEvent {
+  final Color backColor;
+  const SelectBackColor({required this.backColor});
+}
+
 //----------------- font ------------------
 class SelectFontColor extends VendorEvent {
   final Color fontColor;
   const SelectFontColor({required this.fontColor});
 }
 
+class SelectSecondFontColor extends VendorEvent {
+  final Color secondFontColor;
+  const SelectSecondFontColor({required this.secondFontColor});
+}
+
 class SelectFontFamily extends VendorEvent {
   final String fontFamily;
   const SelectFontFamily({required this.fontFamily});
+}
+
+//----------------- theme ------------------
+class SelectTheme extends VendorEvent {
+
+  final int marketId;
+  final String? color;
+  final String? backgroundColor;
+  final String? secondaryColor;
+
+  final String? font;
+  final String? fontColor;
+  final String? fontSecondaryColor;
+
+  const SelectTheme({
+    required this.marketId,
+    this.color,
+    this.backgroundColor,
+    this.secondaryColor,
+
+    this.font,
+    this.fontColor,
+    this.fontSecondaryColor,
+
+  });
 }

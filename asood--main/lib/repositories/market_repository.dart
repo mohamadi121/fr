@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:asood/models/market_location_model.dart';
+import 'package:asood/models/theme_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../models/market_base.dart';
@@ -121,4 +122,9 @@ class MarketRepository {
   Future<dynamic> deleteMarketSlider(sliderId) async {
     return await marketApiService.deleteMarketSlider(sliderId);
   }
+
+  Future<dynamic> setMarketTheme(int marketId, ThemeModel themeModel) async {
+    return await marketApiService.setMarketTheme(marketId, themeModel);
+  }
+
 }

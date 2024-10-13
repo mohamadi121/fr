@@ -5,8 +5,10 @@ import 'package:asood/models/slider_model.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -40,11 +42,112 @@ class _StoreScreenState extends State<StoreScreen> {
 
   int sliderLength = 6;
 
+  Color initTopColor = Colora.primaryColor;
+  Color initBackColor = Colora.scaffold;
+  Color initSecondColor = Colora.lightBlue;
+
+  String initFont = 'irs';
+  Color initFontColor = Colora.scaffold;
+  Color initFontSecondColor = Colora.primaryColor;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     bloc = BlocProvider.of<VendorBloc>(context);
+    loadSlider();
+    initTheme();
+  }
+
+  void initTheme(){
+    if(widget.market.theme != null){
+      //top color
+      if(widget.market.theme!.color != null){
+        bloc.add(SelectTopColor(topColor: Color(int.parse('0xFF${widget.market.theme!.color}'))));
+        initTopColor = Color(int.parse('0xFF${widget.market.theme!.color}'));
+      }
+      else{
+        bloc.add(const SelectTopColor(topColor: Colora.primaryColor));
+        initTopColor = Colora.primaryColor;
+      }
+
+      //background color
+      if(widget.market.theme!.backgroundColor != null){
+        bloc.add(SelectBackColor(backColor: Color(int.parse('0xFF${widget.market.theme!.backgroundColor}'))));
+        initBackColor = Color(int.parse('0xFF${widget.market.theme!.backgroundColor}'));
+      }
+      else{
+        bloc.add(const SelectBackColor(backColor: Colora.scaffold));
+        initBackColor = Colora.scaffold;
+      }
+
+      //second color
+      if(widget.market.theme!.secondaryColor != null){
+        bloc.add(SelectSecondColor(secondColor: Color(int.parse('0xFF${widget.market.theme!.secondaryColor}'))));
+        initSecondColor = Color(int.parse('0xFF${widget.market.theme!.secondaryColor}'));
+      }
+      else{
+        bloc.add(const SelectSecondColor(secondColor: Colora.lightBlue));
+        initSecondColor = Colora.lightBlue;
+      }
+
+      // font family
+      if(widget.market.theme!.font != null){
+        bloc.add(SelectFontFamily(fontFamily:  widget.market.theme!.font!));
+        initFont = widget.market.theme!.font!;
+      }
+      else{
+        bloc.add(const SelectFontFamily(fontFamily: 'irs'));
+        initFont = 'irs';
+      }
+
+      //font color
+      if(widget.market.theme!.fontColor != null){
+        bloc.add(SelectFontColor(fontColor:  Color(int.parse('0xFF${widget.market.theme!.fontColor}'))));
+        initFontColor = Color(int.parse('0xFF${widget.market.theme!.fontColor}'));
+      }
+      else{
+        bloc.add(const SelectFontColor(fontColor: Colora.scaffold));
+        initFontColor = Colora.scaffold;
+      }
+
+      //font second color
+      if(widget.market.theme!.fontColor != null){
+        bloc.add(SelectSecondFontColor(secondFontColor: Color(int.parse('0xFF${widget.market.theme!.secondaryFontColor}'))));
+        initFontSecondColor = Color(int.parse('0xFF${widget.market.theme!.secondaryFontColor}'));
+      }
+      else{
+        bloc.add(const SelectSecondFontColor(secondFontColor: Colora.primaryColor));
+        initFontSecondColor = Colora.primaryColor;
+      }
+
+    }
+    else{
+      //top color
+      bloc.add(const SelectTopColor(topColor: Colora.primaryColor));
+      initTopColor = Colora.primaryColor;
+
+      //second top color
+      bloc.add(const SelectSecondColor(secondColor: Colora.lightBlue));
+      initSecondColor = Colora.lightBlue;
+
+      //back color
+      bloc.add(const SelectBackColor(backColor: Colora.scaffold));
+      initBackColor = Colora.scaffold;
+
+      //font family
+      bloc.add(const SelectFontFamily(fontFamily: 'irs'));
+      initFont = 'irs';
+
+      bloc.add(const SelectFontColor(fontColor: Colora.scaffold));
+      initFontColor = Colora.scaffold;
+
+      bloc.add(const SelectSecondFontColor(secondFontColor: Colora.primaryColor));
+      initFontSecondColor = Colora.primaryColor;
+    }
+  }
+
+  void loadSlider(){
     bloc.add(LoadSlider(marketId: widget.market.id!));
   }
 
@@ -59,14 +162,15 @@ class _StoreScreenState extends State<StoreScreen> {
           builder: (context, setState) {
             return AlertDialog(
               content: SizedBox(
-                height: Dimensions.height * 0.24,
+                height: Dimensions.height * 0.26,
                 width: Dimensions.width * 0.7,
                 child: BlocConsumer<VendorBloc, VendorState>(
                   listener: (context, state) {
-                    if (state.status == VendorStatus.success) {
-
+                    if (state.sliderStatus == VendorStatus.success) {
+                      loadSlider();
+                      Navigator.pop(context);
                     }
-                    else if (state.status == VendorStatus.failure) {
+                    else if (state.sliderStatus == VendorStatus.failure) {
                       showSnackBar(context, "مشکلی پیش آمده مجددا تلاش کنید");
                     }
                   },
@@ -155,7 +259,7 @@ class _StoreScreenState extends State<StoreScreen> {
                             //save
                             Align(
                               alignment: Alignment.centerLeft,
-                              child: state.status == VendorStatus.loading
+                              child: state.sliderStatus == VendorStatus.loading
                                 ?Container(
                                   width: Dimensions.width * 0.3,
                                   height: Dimensions.height * 0.042,
@@ -179,12 +283,9 @@ class _StoreScreenState extends State<StoreScreen> {
                                   ),
                                 )
                                 :InkWell(
-                                  onTap: (){
+                                  onTap: () async{
                                     if(image != null){
                                       bloc.add(AddSliderEvent(id: widget.market.id!, sliderImage: image!));
-                                      bloc.add(LoadSlider(marketId: widget.market.id!));
-                                      Navigator.pop(context);
-                                      // initLogoImage = editLogoImage;
                                     }
                                     else{
                                       showSnackBar(context, "لطفا عکس خود را انتخاب کنید");
@@ -219,9 +320,10 @@ class _StoreScreenState extends State<StoreScreen> {
                               ),
 
                             //back
-                            InkWell(
+                            state.sliderStatus == VendorStatus.loading
+                            ?const SizedBox()
+                            :InkWell(
                               onTap: (){
-                                // editLogoImage = widget.logoImage!;
                                 Navigator.pop(context);
                               },
                               child: Container(
@@ -273,6 +375,7 @@ class _StoreScreenState extends State<StoreScreen> {
           color: state.topColor,
           child: SafeArea(
             child: Scaffold(
+              backgroundColor: state.backColor,
               // appBar: StoreAppBar(
               //   context: context,
               //   title: widget.market.name!,
@@ -390,13 +493,50 @@ class _StoreScreenState extends State<StoreScreen> {
                                   pageSnapping: true,
                                   autoPlay: false,
                                 ),
-                                items: List.generate(
-                                    state.sliderList.length != sliderLength
-                                      ?state.sliderList.length + 1
-                                      :state.sliderList.length,
-                                  (index) {
-                                    if(index != state.sliderList.length){
-                                      return Container(
+                                items: state.status == VendorStatus.loading
+                                  ?List.generate(1, (index){
+                                    return Container(
+                                      width: Dimensions.width,
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: Dimensions.height * 0.01
+                                      ),
+                                      padding: EdgeInsets.only(
+                                          bottom: Dimensions.height * 0.01
+                                      ),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(20),
+                                          color: state.topColor,
+                                          boxShadow: const [
+                                            BoxShadow(
+                                                color: Colors.grey,
+                                                blurRadius: 5,
+                                                spreadRadius: 1
+                                            )
+                                          ]
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: Shimmer.fromColors(
+                                          baseColor: Colors.grey.withOpacity(0.2),
+                                          highlightColor: Colors.black.withOpacity(0.2),
+                                          direction: ShimmerDirection.rtl,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                color: Colors.grey,
+                                                borderRadius: BorderRadius.circular(5)
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    );
+                                  })
+                                  :List.generate(
+                                    state.sliderList.length >= sliderLength
+                                      ?state.sliderList.length
+                                      :state.sliderList.length + 1,
+                                    (index) {
+                                      if(index != state.sliderList.length){
+                                        return Container(
                                           width: Dimensions.width,
                                           margin: EdgeInsets.symmetric(
                                               vertical: Dimensions.height * 0.01
@@ -416,115 +556,115 @@ class _StoreScreenState extends State<StoreScreen> {
                                               ]
                                           ),
                                           child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(20),
-                                            child: Stack(
-                                              alignment: Alignment.center,
-                                              children: [
+                                              borderRadius: BorderRadius.circular(20),
+                                              child: Stack(
+                                                alignment: Alignment.center,
+                                                children: [
 
-                                                //image
-                                                if(state.sliderList[index].image!.contains('http'))...[
-                                                  CachedNetworkImage(
-                                                    imageUrl: state.sliderList[index].image.toString(),
-                                                    imageBuilder: (context, imageProvider) {
-                                                      return Container(
-                                                        decoration: BoxDecoration(
-                                                          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                                                        ),
-                                                      );
-                                                    },
-                                                    placeholder: (context, url) => Shimmer.fromColors(
-                                                      baseColor: Colors.grey.withOpacity(0.2),
-                                                      highlightColor: Colors.black.withOpacity(0.2),
-                                                      direction: ShimmerDirection.rtl,
-                                                      child: Container(
-                                                        decoration: BoxDecoration(
-                                                            color: Colors.grey,
-                                                            borderRadius: BorderRadius.circular(5)
+                                                  //image
+                                                  if(state.sliderList[index].image!.contains('http'))...[
+                                                    CachedNetworkImage(
+                                                      imageUrl: state.sliderList[index].image.toString(),
+                                                      imageBuilder: (context, imageProvider) {
+                                                        return Container(
+                                                          decoration: BoxDecoration(
+                                                            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                                          ),
+                                                        );
+                                                      },
+                                                      placeholder: (context, url) => Shimmer.fromColors(
+                                                        baseColor: Colors.grey.withOpacity(0.2),
+                                                        highlightColor: Colors.black.withOpacity(0.2),
+                                                        direction: ShimmerDirection.rtl,
+                                                        child: Container(
+                                                          decoration: BoxDecoration(
+                                                              color: Colors.grey,
+                                                              borderRadius: BorderRadius.circular(5)
+                                                          ),
                                                         ),
                                                       ),
+                                                      errorWidget: (context, url, error) => const Icon(Icons.error),
                                                     ),
-                                                    errorWidget: (context, url, error) => const Icon(Icons.error),
-                                                  ),
-                                                ]
-                                                else...[
-                                                  Image.file(
-                                                    File(state.sliderList[index].image!),
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                ],
+                                                  ]
+                                                  else...[
+                                                    Image.file(
+                                                      File(state.sliderList[index].image!),
+                                                      fit: BoxFit.cover,
+                                                    )
+                                                  ],
 
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
 
-                                                    //edit
-                                                    Container(
-                                                      decoration: BoxDecoration(
+                                                      //edit
+                                                      Container(
+                                                        decoration: BoxDecoration(
                                                           shape: BoxShape.circle,
                                                           color: Colora.scaffold_,
                                                           border: Border.all(
                                                               color: state.topColor,
                                                               width: 2
                                                           )
-                                                      ),
-                                                      child: IconButton(
+                                                        ),
+                                                        child: IconButton(
                                                           onPressed: (){},
                                                           icon: Icon(
                                                             Icons.edit_rounded,
                                                             color: state.topColor,
                                                             size: Dimensions.width * 0.06,
                                                           )
+                                                        ),
                                                       ),
-                                                    ),
 
-                                                    SizedBox(width: Dimensions.width * 0.1,),
+                                                      SizedBox(width: Dimensions.width * 0.1,),
 
-                                                    //remove
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        color: Colora.scaffold_,
-                                                        border: Border.all(
-                                                            color: state.topColor,
-                                                            width: 2
-                                                        )
-                                                      ),
-                                                      child: IconButton(
-                                                          onPressed: (){
-                                                            bloc.add(DeleteSliderEvent(id: state.sliderList[index].id!));
-                                                            state.sliderList.removeAt(index);
-                                                            setState(() {
-                                                              currentSliderIndex = index + 1;
-                                                            });
-                                                          },
-                                                          icon: Icon(
-                                                            Icons.delete_rounded,
-                                                            color: Colors.redAccent,
-                                                            size: Dimensions.width * 0.06,
+                                                      //remove
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                          color: Colora.scaffold_,
+                                                          border: Border.all(
+                                                              color: state.topColor,
+                                                              width: 2
                                                           )
-                                                      ),
-                                                    )
+                                                        ),
+                                                        child: IconButton(
+                                                            onPressed: (){
+                                                              bloc.add(DeleteSliderEvent(id: state.sliderList[index].id!));
+                                                              state.sliderList.removeAt(index);
+                                                              setState(() {
+                                                                currentSliderIndex = index + 1;
+                                                              });
+                                                            },
+                                                            icon: Icon(
+                                                              Icons.delete_rounded,
+                                                              color: Colors.redAccent,
+                                                              size: Dimensions.width * 0.06,
+                                                            )
+                                                        ),
+                                                      )
 
-                                                  ],
-                                                )
+                                                    ],
+                                                  )
 
-                                              ],
-                                            ),
-                                          )
-                                      );
-                                    }
-                                    else{
-                                      return Stack(
-                                        children: [
-                                          Container(
-                                              width: Dimensions.width,
-                                              margin: EdgeInsets.symmetric(
+                                                ],
+                                              ),
+                                            )
+                                        );
+                                      }
+                                      else{
+                                        return Stack(
+                                          children: [
+                                            Container(
+                                                width: Dimensions.width,
+                                                margin: EdgeInsets.symmetric(
                                                   vertical: Dimensions.height * 0.01
-                                              ),
-                                              padding: EdgeInsets.only(
+                                                ),
+                                                padding: EdgeInsets.only(
                                                   bottom: Dimensions.height * 0.01
-                                              ),
-                                              decoration: BoxDecoration(
+                                                ),
+                                                decoration: BoxDecoration(
                                                   borderRadius: BorderRadius.circular(20),
                                                   color: state.topColor,
                                                   boxShadow: const [
@@ -534,73 +674,80 @@ class _StoreScreenState extends State<StoreScreen> {
                                                         spreadRadius: 1
                                                     )
                                                   ]
-                                              ),
-                                              child: InkWell(
-                                                onTap: (){
-                                                  addSliderImage(context);
-                                                },
-                                                child: Stack(
-                                                  children: [
-                                                    //image
-                                                    Container(
-                                                      width: Dimensions.width,
-                                                      decoration: BoxDecoration(
-                                                        color: Colora.scaffold,
-                                                        borderRadius: BorderRadius.circular(20),
+                                                ),
+                                                child: InkWell(
+                                                  onTap: (){
+                                                    addSliderImage(context);
+                                                  },
+                                                  child: Stack(
+                                                    children: [
+                                                      //image
+                                                      Container(
+                                                        width: Dimensions.width,
+                                                        decoration: BoxDecoration(
+                                                          color: Colora.scaffold,
+                                                          borderRadius: BorderRadius.circular(20),
+                                                        ),
+                                                        child: SvgPicture.asset(
+                                                            'assets/images/logo_svg.svg',
+                                                            colorFilter: ColorFilter.mode(state.topColor.withOpacity(0.7), BlendMode.srcIn)
+                                                        )
+                                                        // Image.asset(
+                                                        //     'assets/images/logo.png'
+                                                        // ),
                                                       ),
-                                                      child: Image.asset(
-                                                          'assets/images/logo.png'
-                                                      ),
-                                                    ),
 
-                                                    //add
-                                                    Container(
-                                                      width: Dimensions.width,
-                                                      decoration: BoxDecoration(
-                                                        color: Colora.scaffold.withOpacity(0.7),
-                                                        borderRadius: BorderRadius.circular(20),
-                                                      ),
-                                                      child: Center(
+                                                      //add
+                                                      Container(
+                                                        width: Dimensions.width,
+                                                        decoration: BoxDecoration(
+                                                          color: Colora.scaffold.withOpacity(0.7),
+                                                          borderRadius: BorderRadius.circular(20),
+                                                        ),
+                                                        margin: EdgeInsets.only(
+                                                          bottom: Dimensions.height * 0.01,
+                                                          left: Dimensions.width * 0.02
+                                                        ),
+                                                        alignment: Alignment.bottomLeft,
                                                         child: Icon(
                                                           Icons.add_photo_alternate_rounded,
                                                           color: state.topColor,
-                                                          size: Dimensions.width * 0.2,
+                                                          size: Dimensions.width * 0.1,
                                                         ),
+
                                                       ),
+                                                    ],
+                                                  ),
+                                                )
+                                            ),
 
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                          ),
-
-                                          //delete
-                                          // Positioned(
-                                          //   top: Dimensions.height * 0.015,
-                                          //   left: Dimensions.width * 0.01,
-                                          //   child: Container(
-                                          //     decoration: BoxDecoration(
-                                          //       shape: BoxShape.circle,
-                                          //       color: Colors.white,
-                                          //       border: Border.all(
-                                          //         color: Colora.primaryColor,
-                                          //         width: 2
-                                          //       )
-                                          //     ),
-                                          //     child: IconButton(
-                                          //       onPressed: (){},
-                                          //       icon: const Icon(
-                                          //         Icons.delete,
-                                          //         color: Colors.redAccent,
-                                          //       ),
-                                          //     ),
-                                          //   )
-                                          // )
-                                        ],
-                                      );
+                                            //delete
+                                            // Positioned(
+                                            //   top: Dimensions.height * 0.015,
+                                            //   left: Dimensions.width * 0.01,
+                                            //   child: Container(
+                                            //     decoration: BoxDecoration(
+                                            //       shape: BoxShape.circle,
+                                            //       color: Colors.white,
+                                            //       border: Border.all(
+                                            //         color: Colora.primaryColor,
+                                            //         width: 2
+                                            //       )
+                                            //     ),
+                                            //     child: IconButton(
+                                            //       onPressed: (){},
+                                            //       icon: const Icon(
+                                            //         Icons.delete,
+                                            //         color: Colors.redAccent,
+                                            //       ),
+                                            //     ),
+                                            //   )
+                                            // )
+                                          ],
+                                        );
+                                      }
                                     }
-                                  }
-                                ),
+                                  ),
                               ),
                             ),
 
@@ -651,7 +798,7 @@ class _StoreScreenState extends State<StoreScreen> {
                                               fontFamily: state.fontFamily,
                                               color: selectedIndex == index
                                                 ? state.fontColor
-                                                : state.topColor,
+                                                : state.secondFontColor,
                                               fontWeight: FontWeight.bold,
                                               fontSize: Dimensions.width * 0.035
                                             ),
@@ -836,7 +983,15 @@ class _StoreScreenState extends State<StoreScreen> {
                   ],
                 ),
               ),
-              bottomNavigationBar: const CustomBottomNavigationBar(),
+              bottomNavigationBar: CustomBottomNavigationBar(
+                marketId: widget.market.id!,
+                initTopColor: initTopColor,
+                initBackColor: initBackColor,
+                initSecondColor: initSecondColor,
+                initFont: initFont,
+                initFontColor: initFontColor,
+                initFontSecondColor: initFontSecondColor,
+              ),
             ),
           ),
         );

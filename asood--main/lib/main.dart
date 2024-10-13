@@ -88,7 +88,7 @@ class Asood extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colora.primaryColor),
           useMaterial3: true,
-          // fontFamily: 'irs'
+          fontFamily: 'irs'
         ),
 
         //: const SplashScreen(),

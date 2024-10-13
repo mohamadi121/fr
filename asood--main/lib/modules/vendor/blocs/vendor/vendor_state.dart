@@ -20,11 +20,15 @@ class VendorState extends Equatable {
   final XFile backgroundFile;
 
   final XFile sliderFile;
+  final VendorStatus sliderStatus;
   final List<SliderModel> sliderList;
 
   final Color topColor;
+  final Color backColor;
+  final Color secondColor;
 
   final Color fontColor;
+  final Color secondFontColor;
   final String fontFamily;
 
   const VendorState({
@@ -43,11 +47,15 @@ class VendorState extends Equatable {
     required this.backgroundFile,
 
     required this.sliderFile,
+    required this.sliderStatus,
     required this.sliderList,
 
     required this.topColor,
+    required this.backColor,
+    required this.secondColor,
 
     required this.fontColor,
+    required this.secondFontColor,
     required this.fontFamily,
   });
 
@@ -68,11 +76,15 @@ class VendorState extends Equatable {
       backgroundFile: XFile(''),
 
       sliderFile: XFile(''),
+      sliderStatus: VendorStatus.initial,
       sliderList: [],
 
       topColor: const Color.fromARGB(255, 10, 25, 146),
+      backColor: const Color.fromARGB(255, 255, 255, 255),
+      secondColor: const Color.fromARGB(255, 37, 55, 197),
 
       fontColor: const Color.fromARGB(255, 255, 255, 255),
+      secondFontColor: const Color.fromARGB(255, 10, 25, 146),
       fontFamily: '',
 
     );
@@ -92,12 +104,16 @@ class VendorState extends Equatable {
     XFile? logoFile,
     XFile? backgroundFile,
 
+    VendorStatus? sliderStatus,
     XFile? sliderFile,
     List<SliderModel>? sliderList,
 
     Color? topColor,
+    Color? backColor,
+    Color? secondColor,
 
     Color? fontColor,
+    Color? secondFontColor,
     String? fontFamily,
   }) {
     return VendorState(
@@ -115,12 +131,16 @@ class VendorState extends Equatable {
       logoFile: logoFile ?? this.logoFile,
       backgroundFile: backgroundFile ?? this.backgroundFile,
 
+      sliderStatus: sliderStatus ?? this.sliderStatus,
       sliderFile: sliderFile ?? this.sliderFile,
       sliderList: sliderList ?? this.sliderList,
 
       topColor: topColor ?? this.topColor,
+      backColor: backColor ?? this.backColor,
+      secondColor: secondColor ?? this.secondColor,
 
       fontColor: fontColor ?? this.fontColor,
+      secondFontColor: secondFontColor ?? this.secondFontColor,
       fontFamily: fontFamily ?? this.fontFamily,
 
     );
@@ -146,12 +166,16 @@ class VendorState extends Equatable {
       logoFile,
       backgroundFile,
 
+      sliderStatus,
       sliderFile,
       sliderList,
 
       topColor,
+      backColor,
+      secondColor,
 
       fontColor,
+      secondFontColor,
       fontFamily,
     ];
   }

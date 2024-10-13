@@ -2,6 +2,8 @@
 
 //part 'market_model.g.dart';
 
+import 'package:asood/models/theme_model.dart';
+
 class MarketModel {
   int? id;
   String? businessId;
@@ -16,6 +18,8 @@ class MarketModel {
   String? logoImg;
   String? backgroundImg;
 
+  ThemeModel? theme;
+
   MarketModel({
     this.id,
     this.businessId,
@@ -28,7 +32,8 @@ class MarketModel {
     this.inactiveUrl,
     this.queueUrl,
     this.logoImg,
-    this.backgroundImg
+    this.backgroundImg,
+    this.theme
   });
 
   MarketModel.fromJson(Map<String, dynamic> json) {
@@ -44,6 +49,7 @@ class MarketModel {
     queueUrl = json['queue_url'];
     logoImg = json['logo_img'];
     backgroundImg = json['background_img'];
+    theme = json['theme'] != null ? ThemeModel.fromJson(json['theme']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -60,6 +66,9 @@ class MarketModel {
     data['queue_url'] = queueUrl;
     data['logo_img'] = logoImg;
     data['background_img'] = backgroundImg;
+    if (theme != null) {
+      data['theme'] = theme!.toJson();
+    }
     return data;
   }
 }

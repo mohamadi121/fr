@@ -4,6 +4,7 @@ import 'package:asood/shared/utils/app_router.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../models/market_model.dart';
@@ -240,10 +241,10 @@ class _StoreCardState extends State<StoreCard> {
                               ),
                               errorWidget: (context, url, error) => const Icon(Icons.error),
                             )
-                            :Image.asset(
-                              'assets/images/logo.png',
-                              fit: BoxFit.cover,
-                            ),
+                            :SvgPicture.asset(
+                              'assets/images/logo_svg.svg',
+                              colorFilter: const ColorFilter.mode(Colora.lightBlue, BlendMode.srcIn)
+                            )
                         ),
                       ),
                     ),
@@ -312,7 +313,7 @@ class _StoreCardState extends State<StoreCard> {
                       ),
 
                       SizedBox(
-                        height: Dimensions.height * 0.005,
+                        height: Dimensions.height * 0.01,
                       ),
 
                       SizedBox(
@@ -384,7 +385,7 @@ class _StoreCardState extends State<StoreCard> {
                             ),
                           ); */
                       },
-                      text: "ویرایش"),
+                      text: "نمایش"),
 
                   //share
                   CustomButton(

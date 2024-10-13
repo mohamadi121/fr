@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:asood/models/slider_model.dart';
+import 'package:asood/models/theme_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:image_picker/image_picker.dart';
@@ -28,8 +29,14 @@ class VendorBloc extends Bloc<VendorEvent, VendorState> {
     on<DeleteSliderEvent>(_deleteShopSlider);
 
     on<SelectTopColor>(_selectTopColor);
+    on<SelectSecondColor>(_selectSecondColor);
+    on<SelectBackColor>(_selectBackColor);
+
     on<SelectFontColor>(_selectFontColor);
+    on<SelectSecondFontColor>(_selectSecondFontColor);
     on<SelectFontFamily>(_selectFontFamily);
+
+    on<SelectTheme>(_setMarketTheme);
   }
 
   //------------- logo -----------------
@@ -51,7 +58,8 @@ class VendorBloc extends Bloc<VendorEvent, VendorState> {
         emit(state.copyWith(
             status: VendorStatus.failure, error: res.error.toString()));
       }
-    }
+    emit(state.copyWith(status: VendorStatus.initial));
+  }
 
   _deleteShopLogo(DeleteLogoEvent event, Emitter<VendorState> emit) async {
     emit(state.copyWith(
@@ -69,6 +77,7 @@ class VendorBloc extends Bloc<VendorEvent, VendorState> {
       emit(state.copyWith(
           status: VendorStatus.failure, error: res.error.toString()));
     }
+    emit(state.copyWith(status: VendorStatus.initial));
   }
 
 
@@ -91,6 +100,7 @@ class VendorBloc extends Bloc<VendorEvent, VendorState> {
       emit(state.copyWith(
           status: VendorStatus.failure, error: res.error.toString()));
     }
+    emit(state.copyWith(status: VendorStatus.initial));
   }
 
   _deleteShopBackground(DeleteBackgroundEvent event, Emitter<VendorState> emit) async {
@@ -109,6 +119,7 @@ class VendorBloc extends Bloc<VendorEvent, VendorState> {
       emit(state.copyWith(
           status: VendorStatus.failure, error: res.error.toString()));
     }
+    emit(state.copyWith(status: VendorStatus.initial));
   }
 
 
@@ -129,26 +140,29 @@ class VendorBloc extends Bloc<VendorEvent, VendorState> {
     } catch (e) {
       emit(state.copyWith(status: VendorStatus.failure));
     }
+    emit(state.copyWith(status: VendorStatus.initial));
   }
 
   _setShopSlider(AddSliderEvent event, Emitter<VendorState> emit) async {
     emit(state.copyWith(
       id: event.id,
       logoFile: event.sliderImage,
-      status: VendorStatus.loading
+      sliderStatus: VendorStatus.loading
     ));
     var res = await marketRepository.uploadMarketSlider(
       event.id,
       event.sliderImage,
     );
     if (res is Success) {
-      var json = jsonDecode(res.response.toString());
-      emit(state.copyWith(status: VendorStatus.success));
+      // var json = jsonDecode(res.response.toString());
+      emit(state.copyWith(sliderStatus: VendorStatus.success));
     }
     else {
       emit(state.copyWith(
-          status: VendorStatus.failure, error: res.error.toString()));
+          sliderStatus: VendorStatus.failure, error: res.error.toString()));
     }
+    emit(state.copyWith(
+        sliderStatus: VendorStatus.initial,));
   }
 
   _deleteShopSlider(DeleteSliderEvent event, Emitter<VendorState> emit) async {
@@ -167,6 +181,7 @@ class VendorBloc extends Bloc<VendorEvent, VendorState> {
       emit(state.copyWith(
           status: VendorStatus.failure, error: res.error.toString()));
     }
+    emit(state.copyWith(status: VendorStatus.initial));
   }
 
   //-------------- color -----------------
@@ -174,14 +189,67 @@ class VendorBloc extends Bloc<VendorEvent, VendorState> {
     emit(state.copyWith(topColor: event.topColor));
   }
 
+  _selectSecondColor(SelectSecondColor event, Emitter<VendorState> emit) {
+    emit(state.copyWith(secondColor: event.secondColor));
+  }
+
+  _selectBackColor(SelectBackColor event, Emitter<VendorState> emit) {
+    emit(state.copyWith(backColor: event.backColor));
+  }
 
   //--------------- font -----------------
   _selectFontColor(SelectFontColor event, Emitter<VendorState> emit) {
     emit(state.copyWith(fontColor: event.fontColor));
   }
 
+  _selectSecondFontColor(SelectSecondFontColor event, Emitter<VendorState> emit) {
+      emit(state.copyWith(secondFontColor: event.secondFontColor));
+  }
+
   _selectFontFamily(SelectFontFamily event, Emitter<VendorState> emit) {
     emit(state.copyWith(fontFamily: event.fontFamily));
+  }
+
+  //--------------- theme -----------------
+  _setMarketTheme(SelectTheme event, Emitter<VendorState> emit) async {
+    // emit(
+    //   state.copyWith(
+    //     status: VendorStatus.loading,
+    //     topColor: event.color,
+    //     address: event.workAddress,
+    //     zipCode: event.postalCode,
+    //     latitude: event.latitude,
+    //     longitude: event.longitude,
+    //   )
+    // );
+    ThemeModel themeModel = ThemeModel(
+      color: event.color,
+      backgroundColor: event.backgroundColor,
+      secondaryColor: event.secondaryColor,
+
+      fontColor: event.fontColor,
+      font: event.font,
+      secondaryFontColor: event.fontSecondaryColor
+    );
+
+    try {
+      var res = await marketRepository.setMarketTheme(
+        event.marketId,
+        themeModel,
+      );
+      if (res is Success) {
+        // var json = jsonDecode(res.response.toString());
+        emit(state.copyWith(status: VendorStatus.success));
+      } else {
+        emit(state.copyWith(
+            status: VendorStatus.failure, error: res.error.toString()));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+          status: VendorStatus.failure, error: e.toString()));
+    }
+
+    emit(state.copyWith(status: VendorStatus.initial));
   }
 
 }

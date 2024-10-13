@@ -4,6 +4,7 @@ import 'package:asood/shared/constants/constants.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../shared/utils/snack_bar_util.dart';
 import '../../../shared/widgets/default_appbar.dart';
@@ -41,8 +42,8 @@ class _StoresScreenState extends State<StoresScreen> {
           showSnackBar(context, "مشکلی در بارگذاری پیش آمده , مجدد تلاش کنید!");
         }
       },
-        builder: (context, state) {
-          return Container(
+      builder: (context, state) {
+        return Container(
             color: Colora.primaryColor,
             child: SafeArea(
               child: Scaffold(
@@ -53,10 +54,66 @@ class _StoresScreenState extends State<StoresScreen> {
                       height: Dimensions.height,
                       width: Dimensions.width,
                       child: state.status == Status.loading
-                        ? const Center(
-                          child: const CircularProgressIndicator(),
+                        ? Column(
+                          children: [
+
+                            SizedBox(
+                              height: Dimensions.height * 0.11,
+                            ),
+                            
+                            ListView.builder(
+                              itemCount: 5,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) => Container(
+                                height: Dimensions.height * 0.14,
+                                width: Dimensions.width,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colora.lightBlue.withOpacity(0.3),
+                                ),
+                                margin: const EdgeInsets.all(8.0),
+                                child: Shimmer.fromColors(
+                                  baseColor: Colors.grey.withOpacity(0.2),
+                                  highlightColor: Colors.black.withOpacity(0.2),
+                                  direction: ShimmerDirection.rtl,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        borderRadius: BorderRadius.circular(20)
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
                         )
-                        : SingleChildScrollView(
+                        :state.status == Status.failure
+                          ?Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children:[
+                              Text(
+                                'مشکلی در بارگذاری پیش آمده , مجدد تلاش کنید!',
+                                style: TextStyle(
+                                  color: Colora.primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Dimensions.width * 0.04
+                                ),
+                              ),
+
+                              SizedBox(
+                                height:  Dimensions.height * 0.05,
+                              ),
+
+                              ElevatedButton(
+                                onPressed: (){
+                                  bloc.add(LoadStores());
+                                },
+                                child: const Text('تلاش مجدد')
+                              )
+
+                            ]
+                          )
+                          :SingleChildScrollView(
                             child: Column(
                               children: [
 

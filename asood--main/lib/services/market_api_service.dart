@@ -1,6 +1,8 @@
 // import 'dart:convert';
 
 import 'package:asood/models/market_location_model.dart';
+import 'package:asood/models/theme_model.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
@@ -100,7 +102,7 @@ class MarketApiService {
     }
   }
 
-//queue market
+  //queue market
   Future queueMarket(marketId) async {
     var uri = 'queue/$marketId';
     try {
@@ -142,7 +144,7 @@ class MarketApiService {
   }
 
   //market background upload
-  Future uploadMarketBackground(XFile imagesFile,marketId,) async {
+  Future uploadMarketBackground(XFile imagesFile, marketId,) async {
     List<MultipartBody> images = [MultipartBody('background_img', imagesFile)];
     var uri = 'background/$marketId/';
     var body = <String, String>{};
@@ -213,4 +215,24 @@ class MarketApiService {
       return CustomApiStatus();
     }
   }
+
+  Future setMarketTheme(int marketId, ThemeModel themeModel) async {
+    var body = {
+      "color": themeModel.color,
+      "background_color": themeModel.backgroundColor,
+      "secondary_color": themeModel.secondaryColor,
+
+      "font_color": themeModel.fontColor,
+      "font": themeModel.font,
+      "secondary_font_color": themeModel.secondaryFontColor
+    };
+    var uri = 'theme/$marketId/';
+    try {
+      http.Response res = await apiClient.postData(uri, body);
+      return ApiStatus(res);
+    } catch (e) {
+      return CustomApiStatus();
+    }
+  }
+
 }
