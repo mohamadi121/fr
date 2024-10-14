@@ -1,6 +1,8 @@
 // import 'package:asood/screens/store_screen/store_screen.dart';
 // ignore_for_file: unused_import
 
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -77,6 +79,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       },
       child: Container(
         height: Dimensions.height * 0.05,
+        width: Dimensions.width,
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
@@ -130,7 +133,7 @@ void showBottomSheet(
     builder: (BuildContext context) {
       return Container(
         width: Dimensions.width,
-        height: Dimensions.height * 0.15,
+        height: Dimensions.height * 0.16,
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(27),
@@ -588,11 +591,11 @@ void changeFont(
                           //save
                           MaterialButton(
                             onPressed: (){
-                              var topColor = initTopColor.toString().substring(10, 16);
-                              var secondColor = initSecondColor.toString().substring(10, 16);
-                              var backColor = initBackColor.toString().substring(10, 16);
-                              var fontColor = initSelectedFontColor.toString().substring(10, 16);
-                              var fontSecondColor = initSelectedFontSecondColor.toString().substring(10, 16);
+                              var topColor = initTopColor.value.toRadixString(16).substring(2, 8);
+                              var secondColor = initSecondColor.value.toRadixString(16).substring(2, 8);
+                              var backColor = initBackColor.value.toRadixString(16).substring(2, 8);
+                              var fontColor = initSelectedFontColor.value.toRadixString(16).substring(2, 8);
+                              var fontSecondColor = initSelectedFontSecondColor.value.toRadixString(16).substring(2, 8);
 
                               bloc.add(SelectTheme(
                                   marketId: marketId,
@@ -680,6 +683,8 @@ void changeColor(
   Color backgroundColorPicker = initBackColor;
   Color secondColorPicker = initSecondColor;
 
+  bool pos = false;
+
   showDialog(
     barrierColor: const Color(0x00000000),
     barrierDismissible: false,
@@ -690,9 +695,11 @@ void changeColor(
             return AlertDialog(
               contentPadding: const EdgeInsets.all(0),
               backgroundColor: Colors.transparent,
-              alignment: Alignment.bottomCenter,
+              alignment:pos == false
+                ?Alignment.bottomCenter
+                :Alignment.topCenter,
               content: SizedBox(
-                height: Dimensions.height * 0.51,
+                height: Dimensions.height * 0.53,
                 child: Column(
                   children: [
 
@@ -862,11 +869,11 @@ void changeColor(
                           //save
                           MaterialButton(
                             onPressed: (){
-                              var topColor = mainColorPicker.toString().substring(10, 16);
-                              var secondColor = secondColorPicker.toString().substring(10, 16);
-                              var backColor = backgroundColorPicker.toString().substring(10, 16);
-                              var fontColor = initFontColor.toString().substring(10, 16);
-                              var fontSecondColor = initFontSecondColor.toString().substring(10, 16);
+                              var topColor = mainColorPicker.value.toRadixString(16).substring(2, 8);
+                              var secondColor = secondColorPicker.value.toRadixString(16).substring(2, 8);
+                              var backColor = backgroundColorPicker.value.toRadixString(16).substring(2, 8);
+                              var fontColor = initFontColor.value.toRadixString(16).substring(2, 8);
+                              var fontSecondColor = initFontSecondColor.value.toRadixString(16).substring(2, 8);
 
                               bloc.add(SelectTheme(
                                 marketId: marketId,
@@ -890,6 +897,20 @@ void changeColor(
                                   fontWeight: FontWeight.bold
                               ),
                             ),
+                          ),
+
+                          IconButton(
+                            onPressed: (){
+                              setState((){
+                                pos = !pos;
+                              });
+                            },
+                            icon: Icon(
+                              pos == false
+                                  ?Icons.arrow_circle_up_rounded
+                                  :Icons.arrow_circle_down_rounded,
+                              color: Colora.scaffold,
+                            )
                           ),
 
                           // back

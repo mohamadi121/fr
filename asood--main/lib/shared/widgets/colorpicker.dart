@@ -43,7 +43,7 @@ class _AColorPickerState extends State<AColorPicker> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(Dimensions.seven),
-      height: Dimensions.height * .4,
+      height: Dimensions.height * .42,
       decoration: const BoxDecoration(
         color: Colora.lightBlue,
         borderRadius: BorderRadius.only(
@@ -59,32 +59,48 @@ class _AColorPickerState extends State<AColorPicker> {
           decoration: BoxDecoration(
             color: Colora.primaryColor,
             borderRadius: BorderRadius.circular(Dimensions.fifteen)),
-          child: ColorPicker(
-            paletteType: widget.paletteType,
-            hexInputBar: false,
-            colorPickerWidth: Dimensions.width * .7,
-            pickerAreaBorderRadius: BorderRadius.circular(Dimensions.fifteen),
-            onColorChanged: (Color color) {
-              if(widget.currentIndex == 0){
-                widget.mainColor!(color);
-                bloc.add(SelectTopColor(topColor: color));
-              }
-              if(widget.currentIndex == 1){
-                widget.secondColor!(color);
-                bloc.add(SelectSecondColor(secondColor: color));
-              }
-              if(widget.currentIndex == 2){
-                widget.backgroundColor!(color);
-                bloc.add(SelectBackColor(backColor: color));
-              }
-            },
-            displayThumbColor: true,
-            portraitOnly: true,
-            enableAlpha: false,
-            labelTypes: const [ColorLabelType.rgb, ColorLabelType.hex],
-            labelTextStyle: const TextStyle(color: Colora.scaffold_),
-            pickerAreaHeightPercent: .5,
-            pickerColor: Colors.white,
+          child: Stack(
+            children: [
+
+              Positioned(
+                bottom: Dimensions.height * 0.03,
+                right: Dimensions.width * 0.15,
+                child: Container(
+                  height: Dimensions.height * 0.05,
+                  width: Dimensions.width * 0.15,
+                  color: Colora.scaffold,
+                ),
+              ),
+
+              ColorPicker(
+                paletteType: widget.paletteType,
+                hexInputBar: false,
+                colorPickerWidth: Dimensions.width * .7,
+                pickerAreaBorderRadius: BorderRadius.circular(Dimensions.fifteen),
+                onColorChanged: (Color color) {
+                  if(widget.currentIndex == 0){
+                    widget.mainColor!(color);
+                    bloc.add(SelectTopColor(topColor: color));
+                  }
+                  if(widget.currentIndex == 1){
+                    widget.secondColor!(color);
+                    bloc.add(SelectSecondColor(secondColor: color));
+                  }
+                  if(widget.currentIndex == 2){
+                    widget.backgroundColor!(color);
+                    bloc.add(SelectBackColor(backColor: color));
+                  }
+                },
+                displayThumbColor: true,
+                portraitOnly: true,
+                enableAlpha: false,
+                labelTypes: const [ColorLabelType.rgb, ColorLabelType.hex],
+                labelTextStyle: const TextStyle(color: Colora.scaffold_),
+                pickerAreaHeightPercent: .5,
+                pickerColor: Colors.white,
+              ),
+
+            ],
           ),
         ),
       ]),

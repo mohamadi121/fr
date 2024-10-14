@@ -1,8 +1,13 @@
 // ignore_for_file: avoid_unnecessary_containers, sized_box_for_whitespace
 
+import 'package:asood/modules/market/blocs/bloc/market_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
+import '../../../../modules/vendor/blocs/vendor/vendor_bloc.dart';
+import '../../../utils/snack_bar_util.dart';
 import '../../../widgets/default_appbar.dart';
 import '../../../widgets/simple_bot_navbar.dart';
 import '../../../constants/constants.dart';
@@ -16,275 +21,1859 @@ class MultiViewSliderScreen extends StatefulWidget {
 }
 
 class _MultiViewSliderScreenState extends State<MultiViewSliderScreen> {
+
+  late MarketBloc bloc;
+
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: DefaultAppBar(context: context, title: '',),
-      bottomNavigationBar: const SimpleBotNavBar(),
-      body: Column(
-        children: [
-          Container(
-            height: Dimensions.height / 3,
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: (int page) {
-                setState(() {
-                  _currentPage = page;
-                });
-              },
-              children: [
-                buildProductGridView(),
-                buildProductGridView2(),
-                buildProductGridView3(),
-                buildProductGridView4(),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 100,
-          ),
-          buildDotList(),
-        ],
-      ),
-    );
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    bloc = BlocProvider.of<MarketBloc>(context);
   }
 
-  Widget buildProductGridView() {
-    return Row(
-      children: [
-        // Right product cards
-        Expanded(
-          child: Column(
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colora.primaryColor,
+      child: SafeArea(
+        child: Scaffold(
+          // bottomNavigationBar: const SimpleBotNavBar(),
+          body: Stack(
             children: [
-              Expanded(
-                child: Container(
-                  height: _currentPage == 0
-                      ? MediaQuery.of(context).size.height / 4
-                      : null,
-                  color: Colors.green,
-                  child: const Center(child: Text('Product 2')),
-                ),
-              ),
-              const SizedBox(
-                  height: 8), // Add some spacing between the product cards
-              Expanded(
-                child: Container(
-                  height: _currentPage == 0
-                      ? MediaQuery.of(context).size.height / 4
-                      : null,
-                  color: Colors.red,
-                  child: const Center(child: Text('Product 3')),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 8), // Add some spacing between the product cards
-        // Left product card
-        Container(
-          width: MediaQuery.of(context).size.width /
-              3, // Adjust the width as needed
-          height: _currentPage == 0
-              ? MediaQuery.of(context).size.height / 2
-              : MediaQuery.of(context).size.height /
-                  1.5, // Change the height as needed
-          color: Colors.blue,
-          child: Container(
-            child: Stack(
-              children: [
-                Positioned(
-                  /*   top: 0,
-                  left: 0,
-                  right: 0,
-                  //bottom: MediaQuery.of(context).size.height / 2, */
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft:
-                          Radius.circular(20), // Adjust the radius as needed
-                      bottomRight:
-                          Radius.circular(20), // Adjust the radius as needed
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+
+                  SizedBox(
+                    height: Dimensions.height * 0.1,
+                  ),
+
+                  Container(
+                    height: Dimensions.height * 0.35,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.width * 0.02
                     ),
-                    child: Image.network(
-                      'https://picsum.photos/id/237/300/200', // Your image URL here
-                      fit: BoxFit.cover,
+                    child: PageView(
+                      controller: _pageController,
+                      onPageChanged: (int page) {
+                        setState(() {
+                          _currentPage = page;
+                        });
+                      },
+                      children: [
+                        buildProductGridView0(),
+                        buildProductGridView1(),
+                        buildProductGridView2(),
+                        buildProductGridView3(),
+                        buildProductGridView4(),
+                        buildProductGridView5(),
+                        buildProductGridView6(),
+                        buildProductGridView7(),
+                        buildProductGridView8(),
+                      ],
                     ),
                   ),
-                ),
-                const Positioned(
-                  //top: MediaQuery.of(context).size.height / 2,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: Center(
-                    child: Text(
-                      'Product Name', // Your product name here
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+
+                  const SizedBox(
+                    height: 30,
+                  ),
+
+                  buildDotList(),
+
+                  SizedBox(
+                    height: Dimensions.height * 0.05,
+                  ),
+
+                  //save button
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      width: Dimensions.width * 0.3,
+                      height: Dimensions.height * 0.05,
+                      color: Colora.primaryColor,
+                      child: MaterialButton(
+                        onPressed: (){
+                          bloc.add(AddTemplateEvent(template: _currentPage));
+                          showSnackBar(context, "قالب با موفقیت اضافه شد");
+                        },
+                        child: Text(
+                          'ذخیره',
+                          style: TextStyle(
+                            color: Colora.scaffold,
+                            fontSize: Dimensions.width * 0.037
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+                  )
 
-  Widget buildProductGridView2() {
-    return Row(
-      children: [
-        // Left product card
-        Container(
-          width: MediaQuery.of(context).size.width /
-              3, // Adjust the width as needed
-          height:
-              _currentPage == 0 ? MediaQuery.of(context).size.height / 2 : null,
-          color: Colors.blue,
-          child: const Center(child: Text('Product 1')),
-        ),
-        const SizedBox(width: 8), // Add some spacing between the product cards
-        // Right product cards
-        Expanded(
-          child: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  height: _currentPage == 0
-                      ? MediaQuery.of(context).size.height / 4
-                      : null,
-                  color: Colors.green,
-                  child: const Center(child: Text('Product 2')),
-                ),
+                ],
               ),
-              const SizedBox(
-                  height: 8), // Add some spacing between the product cards
-              Expanded(
-                child: Container(
-                  height: _currentPage == 0
-                      ? MediaQuery.of(context).size.height / 4
-                      : null,
-                  color: Colors.red,
-                  child: const Center(child: Text('Product 3')),
-                ),
-              ),
+
+              const NewAppBar(title: 'قالب ها',),
+
             ],
           ),
         ),
-      ],
-    );
-  }
-
-  Widget buildProductGridView3() {
-    return Row(
-      children: [
-        // Right product cards
-        Expanded(
-          child: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  height: _currentPage == 0
-                      ? MediaQuery.of(context).size.height / 4
-                      : null,
-                  color: Colors.green,
-                  child: const Center(child: Text('Product 2')),
-                ),
-              ),
-              const SizedBox(
-                  height: 8), // Add some spacing between the product cards
-              Expanded(
-                child: Container(
-                  height: _currentPage == 0
-                      ? MediaQuery.of(context).size.height / 4
-                      : null,
-                  color: Colors.red,
-                  child: const Center(child: Text('Product 3')),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 8), // Add some spacing between the product cards
-        // Left product card
-        Container(
-          width: MediaQuery.of(context).size.width /
-              3, // Adjust the width as needed
-          height:
-              _currentPage == 0 ? MediaQuery.of(context).size.height / 2 : null,
-          color: Colors.blue,
-          child: const Center(child: Text('Product 1')),
-        ),
-      ],
-    );
-  }
-
-  Widget buildProductGridView4() {
-    return Row(
-      children: [
-        // Right product cards
-        Expanded(
-          child: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  height: _currentPage == 0
-                      ? MediaQuery.of(context).size.height / 4
-                      : null,
-                  color: Colors.green,
-                  child: const Center(child: Text('Product 2')),
-                ),
-              ),
-              const SizedBox(
-                  height: 8), // Add some spacing between the product cards
-              Expanded(
-                child: Container(
-                  height: _currentPage == 0
-                      ? MediaQuery.of(context).size.height / 8
-                      : null,
-                  color: Colors.red,
-                  child: const Center(child: Text('Product 3')),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 8), // Add some spacing between the product cards
-        // Left product card
-        Container(
-          width: MediaQuery.of(context).size.width /
-              1.7, // Adjust the width as needed
-          height: _currentPage == 0
-              ? MediaQuery.of(context).size.height / 2
-              : MediaQuery.of(context).size.height /
-                  1.5, // Change the height as needed
-          color: Colors.blue,
-          child: const Center(child: Text('Product 1')),
-        ),
-      ],
+      ),
     );
   }
 
   Widget buildDotList() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List<Widget>.generate(4, (index) {
+      children: List<Widget>.generate(18, (index) {
         return Container(
-          width: 15,
-          height: 15,
+          width: 10,
+          height: 10,
           margin: const EdgeInsets.symmetric(horizontal: 5),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: _currentPage == index ? Colors.blue : Colors.grey,
+            border: Border.all(
+              color: Colora.primaryColor,
+              width: 2
+            ),
+            color: _currentPage == index ? Colora.primaryColor : Colora.scaffold,
           ),
         );
       }),
     );
   }
+}
+
+Widget buildProductGridView0() {
+  return SizedBox(
+    width: Dimensions.width,
+    height: Dimensions.height * 0.35,
+    child: BlocBuilder<VendorBloc, VendorState>(
+      builder: (context, styleState) => Row(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    height: Dimensions.height * 0.5,
+                    margin: EdgeInsets.symmetric(
+                        horizontal: Dimensions.width * 0.01,
+                        vertical: Dimensions.height * 0.008
+                    ),
+                    decoration: BoxDecoration(
+                        color: styleState.secondColor,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 5,
+                              spreadRadius: 1
+                          )
+                        ]
+                    ),
+                    child: Column(
+                      children: [
+
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            height: Dimensions.height * 0.115,
+                            color: Colors.white,
+                            child: SvgPicture.asset(
+                                'assets/images/logo_svg.svg',
+                                colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width * 0.01,
+                              vertical: Dimensions.height * 0.005
+                          ),
+                          child: Text(
+                            'عنوان محصول',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: styleState.fontColor,
+                                fontFamily: styleState.fontFamily,
+                                fontWeight: FontWeight.bold,
+                                fontSize: Dimensions.width * 0.02
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width * 0.01,
+                              vertical: Dimensions.height * 0.003
+                          ),
+                          child: Text(
+                            '120.000 تومان',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: styleState.fontColor,
+                                fontFamily: styleState.fontFamily,
+                                fontSize: Dimensions.width * 0.017
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ),
+
+                Expanded(
+                  child: Container(
+                    height: Dimensions.height * 0.5,
+                    margin: EdgeInsets.symmetric(
+                        horizontal: Dimensions.width * 0.01,
+                        vertical: Dimensions.height * 0.008
+                    ),
+                    decoration: BoxDecoration(
+                        color: styleState.secondColor,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 5,
+                              spreadRadius: 1
+                          )
+                        ]
+                    ),
+                    child: Column(
+                      children: [
+
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            height: Dimensions.height * 0.115,
+                            color: Colors.white,
+                            child: SvgPicture.asset(
+                                'assets/images/logo_svg.svg',
+                                colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width * 0.01,
+                              vertical: Dimensions.height * 0.005
+                          ),
+                          child: Text(
+                            'عنوان محصول',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: styleState.fontColor,
+                                fontFamily: styleState.fontFamily,
+                                fontWeight: FontWeight.bold,
+                                fontSize: Dimensions.width * 0.02
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width * 0.01,
+                              vertical: Dimensions.height * 0.003
+                          ),
+                          child: Text(
+                            '120.000 تومان',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: styleState.fontColor,
+                                fontFamily: styleState.fontFamily,
+                                fontSize: Dimensions.width * 0.017
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Container(
+            width: Dimensions.width * 0.4,
+            height: Dimensions.height * 0.35,
+            margin: EdgeInsets.symmetric(
+              horizontal: Dimensions.width * 0.01,
+              vertical: Dimensions.height * 0.008
+            ),
+            decoration: BoxDecoration(
+              color: styleState.secondColor,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 5,
+                  spreadRadius: 1
+                )
+              ]
+            ),
+            child: Column(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: Dimensions.height * 0.275,
+                        color: Colors.white,
+                        child: SvgPicture.asset(
+                            'assets/images/logo_svg.svg',
+                            colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                        ),
+                      ),
+                      // Positioned(
+                      //   bottom: Dimensions.height * 0.01,
+                      //   left: Dimensions.width * 0.2,
+                      //   child: Container(
+                      //     decoration: BoxDecoration(
+                      //       color: Colora.lightBlue,
+                      //       shape: BoxShape.circle
+                      //     ),
+                      //     child: Icon(
+                      //       Icons.add_shopping_cart_rounded
+                      //     ),
+                      //   )
+                      // ),
+                    ],
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.width * 0.01,
+                      vertical: Dimensions.height * 0.007
+                  ),
+                  child: Text(
+                    'عنوان محصول',
+                    softWrap: true,
+                    maxLines: 1,
+                    style: TextStyle(
+                        color: styleState.fontColor,
+                        fontFamily: styleState.fontFamily,
+                        fontWeight: FontWeight.bold,
+                        fontSize: Dimensions.width * 0.025
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.width * 0.01,
+                      vertical: Dimensions.height * 0.005
+                  ),
+                  child: Text(
+                    '120.000 تومان',
+                    softWrap: true,
+                    maxLines: 1,
+                    style: TextStyle(
+                        color: styleState.fontColor,
+                        fontFamily: styleState.fontFamily,
+                        fontSize: Dimensions.width * 0.017
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+        ],
+      ),
+    )
+
+  );
+}
+
+Widget buildProductGridView1() {
+  return SizedBox(
+      width: Dimensions.width,
+      height: Dimensions.height * 0.35,
+      child: BlocBuilder<VendorBloc, VendorState>(
+        builder: (context, styleState) => Row(
+          children: [
+
+            Container(
+              width: Dimensions.width * 0.4,
+              height: Dimensions.height * 0.35,
+              margin: EdgeInsets.symmetric(
+                  horizontal: Dimensions.width * 0.01,
+                  vertical: Dimensions.height * 0.008
+              ),
+              decoration: BoxDecoration(
+                  color: styleState.secondColor,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 5,
+                        spreadRadius: 1
+                    )
+                  ]
+              ),
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: Dimensions.height * 0.275,
+                          color: Colors.white,
+                          child: SvgPicture.asset(
+                              'assets/images/logo_svg.svg',
+                              colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                          ),
+                        ),
+                        // Positioned(
+                        //   bottom: Dimensions.height * 0.01,
+                        //   left: Dimensions.width * 0.2,
+                        //   child: Container(
+                        //     decoration: BoxDecoration(
+                        //       color: Colora.lightBlue,
+                        //       shape: BoxShape.circle
+                        //     ),
+                        //     child: Icon(
+                        //       Icons.add_shopping_cart_rounded
+                        //     ),
+                        //   )
+                        // ),
+                      ],
+                    ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: Dimensions.width * 0.01,
+                        vertical: Dimensions.height * 0.007
+                    ),
+                    child: Text(
+                      'عنوان محصول',
+                      softWrap: true,
+                      maxLines: 1,
+                      style: TextStyle(
+                          color: styleState.fontColor,
+                          fontFamily: styleState.fontFamily,
+                          fontWeight: FontWeight.bold,
+                          fontSize: Dimensions.width * 0.025
+                      ),
+                    ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: Dimensions.width * 0.01,
+                        vertical: Dimensions.height * 0.005
+                    ),
+                    child: Text(
+                      '120.000 تومان',
+                      softWrap: true,
+                      maxLines: 1,
+                      style: TextStyle(
+                          color: styleState.fontColor,
+                          fontFamily: styleState.fontFamily,
+                          fontSize: Dimensions.width * 0.017
+                      ),
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+
+            Expanded(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: Dimensions.height * 0.5,
+                      margin: EdgeInsets.symmetric(
+                          horizontal: Dimensions.width * 0.01,
+                          vertical: Dimensions.height * 0.008
+                      ),
+                      decoration: BoxDecoration(
+                          color: styleState.secondColor,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black.withOpacity(0.3),
+                                blurRadius: 5,
+                                spreadRadius: 1
+                            )
+                          ]
+                      ),
+                      child: Column(
+                        children: [
+
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              height: Dimensions.height * 0.115,
+                              color: Colors.white,
+                              child: SvgPicture.asset(
+                                  'assets/images/logo_svg.svg',
+                                  colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                              ),
+                            ),
+                          ),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Dimensions.width * 0.01,
+                                vertical: Dimensions.height * 0.005
+                            ),
+                            child: Text(
+                              'عنوان محصول',
+                              softWrap: true,
+                              maxLines: 1,
+                              style: TextStyle(
+                                  color: styleState.fontColor,
+                                  fontFamily: styleState.fontFamily,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Dimensions.width * 0.02
+                              ),
+                            ),
+                          ),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Dimensions.width * 0.01,
+                                vertical: Dimensions.height * 0.003
+                            ),
+                            child: Text(
+                              '120.000 تومان',
+                              softWrap: true,
+                              maxLines: 1,
+                              style: TextStyle(
+                                  color: styleState.fontColor,
+                                  fontFamily: styleState.fontFamily,
+                                  fontSize: Dimensions.width * 0.017
+                              ),
+                            ),
+                          ),
+
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  Expanded(
+                    child: Container(
+                      height: Dimensions.height * 0.5,
+                      margin: EdgeInsets.symmetric(
+                          horizontal: Dimensions.width * 0.01,
+                          vertical: Dimensions.height * 0.008
+                      ),
+                      decoration: BoxDecoration(
+                          color: styleState.secondColor,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black.withOpacity(0.3),
+                                blurRadius: 5,
+                                spreadRadius: 1
+                            )
+                          ]
+                      ),
+                      child: Column(
+                        children: [
+
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              height: Dimensions.height * 0.115,
+                              color: Colors.white,
+                              child: SvgPicture.asset(
+                                  'assets/images/logo_svg.svg',
+                                  colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                              ),
+                            ),
+                          ),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Dimensions.width * 0.01,
+                                vertical: Dimensions.height * 0.005
+                            ),
+                            child: Text(
+                              'عنوان محصول',
+                              softWrap: true,
+                              maxLines: 1,
+                              style: TextStyle(
+                                  color: styleState.fontColor,
+                                  fontFamily: styleState.fontFamily,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Dimensions.width * 0.02
+                              ),
+                            ),
+                          ),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Dimensions.width * 0.01,
+                                vertical: Dimensions.height * 0.003
+                            ),
+                            child: Text(
+                              '120.000 تومان',
+                              softWrap: true,
+                              maxLines: 1,
+                              style: TextStyle(
+                                  color: styleState.fontColor,
+                                  fontFamily: styleState.fontFamily,
+                                  fontSize: Dimensions.width * 0.017
+                              ),
+                            ),
+                          ),
+
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+          ],
+        ),
+      )
+
+  );
+}
+
+Widget buildProductGridView2() {
+  return SizedBox(
+    width: Dimensions.width,
+    height: Dimensions.height * 0.35,
+    child: BlocBuilder<VendorBloc, VendorState>(
+      builder: (context, styleState) => Row(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    height: Dimensions.height * 0.5,
+                    margin: EdgeInsets.symmetric(
+                        horizontal: Dimensions.width * 0.01,
+                        vertical: Dimensions.height * 0.008
+                    ),
+                    decoration: BoxDecoration(
+                        color: styleState.secondColor,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 5,
+                              spreadRadius: 1
+                          )
+                        ]
+                    ),
+                    child: Column(
+                      children: [
+
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            height: Dimensions.height * 0.115,
+                            color: Colors.white,
+                            child: SvgPicture.asset(
+                                'assets/images/logo_svg.svg',
+                                colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Dimensions.width * 0.01,
+                            vertical: Dimensions.height * 0.005
+                          ),
+                          child: Text(
+                            'عنوان محصول',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: styleState.fontColor,
+                              fontFamily: styleState.fontFamily,
+                              fontWeight: FontWeight.bold,
+                              fontSize: Dimensions.width * 0.02
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width * 0.01,
+                              vertical: Dimensions.height * 0.003
+                          ),
+                          child: Text(
+                            '120.000 تومان',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: styleState.fontColor,
+                              fontFamily: styleState.fontFamily,
+                              fontSize: Dimensions.width * 0.017
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ),
+
+                Expanded(
+                  child: Container(
+                    height: Dimensions.height * 0.5,
+                    margin: EdgeInsets.symmetric(
+                        horizontal: Dimensions.width * 0.01,
+                        vertical: Dimensions.height * 0.008
+                    ),
+                    decoration: BoxDecoration(
+                        color: styleState.secondColor,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 5,
+                              spreadRadius: 1
+                          )
+                        ]
+                    ),
+                    child: Column(
+                      children: [
+
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            height: Dimensions.height * 0.115,
+                            color: Colors.white,
+                            child: SvgPicture.asset(
+                                'assets/images/logo_svg.svg',
+                                colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Dimensions.width * 0.01,
+                            vertical: Dimensions.height * 0.005
+                          ),
+                          child: Text(
+                            'عنوان محصول',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: styleState.fontColor,
+                              fontFamily: styleState.fontFamily,
+                              fontWeight: FontWeight.bold,
+                              fontSize: Dimensions.width * 0.02
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Dimensions.width * 0.01,
+                            vertical: Dimensions.height * 0.003
+                          ),
+                          child: Text(
+                            '120.000 تومان',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: styleState.fontColor,
+                              fontFamily: styleState.fontFamily,
+                              fontSize: Dimensions.width * 0.017
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Container(
+            width: Dimensions.width * 0.45,
+            height: Dimensions.height,
+            margin: EdgeInsets.symmetric(
+              horizontal: Dimensions.width * 0.01,
+              vertical: Dimensions.height * 0.008
+            ),
+            decoration: BoxDecoration(
+              color: styleState.secondColor,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 5,
+                  spreadRadius: 1
+                )
+              ]
+            ),
+            child: Column(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    height: Dimensions.height * 0.275,
+                    color: Colors.white,
+                    child: SvgPicture.asset(
+                        'assets/images/logo_svg.svg',
+                        colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.width * 0.01,
+                      vertical: Dimensions.height * 0.007
+                  ),
+                  child: Text(
+                    'عنوان محصول',
+                    softWrap: true,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: styleState.fontColor,
+                      fontFamily: styleState.fontFamily,
+                      fontWeight: FontWeight.bold,
+                      fontSize: Dimensions.width * 0.025
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Dimensions.width * 0.01,
+                    vertical: Dimensions.height * 0.005
+                  ),
+                  child: Text(
+                    '120.000 تومان',
+                    softWrap: true,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: styleState.fontColor,
+                      fontFamily: styleState.fontFamily,
+                      fontSize: Dimensions.width * 0.017
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+        ],
+      )
+    ),
+  );
+}
+
+Widget buildProductGridView3() {
+  return SizedBox(
+    width: Dimensions.width,
+    height: Dimensions.height * 0.35,
+    child: BlocBuilder<VendorBloc, VendorState>(
+      builder: (context, styleState) => Row(
+        children: [
+
+          Container(
+            width: Dimensions.width * 0.45,
+            height: Dimensions.height,
+            margin: EdgeInsets.symmetric(
+              horizontal: Dimensions.width * 0.01,
+              vertical: Dimensions.height * 0.008
+            ),
+            decoration: BoxDecoration(
+                color: styleState.secondColor,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 5,
+                      spreadRadius: 1
+                  )
+                ]
+            ),
+            child: Column(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    height: Dimensions.height * 0.275,
+                    color: Colors.white,
+                    child: SvgPicture.asset(
+                        'assets/images/logo_svg.svg',
+                        colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Dimensions.width * 0.01,
+                    vertical: Dimensions.height * 0.007
+                  ),
+                  child: Text(
+                    'عنوان محصول',
+                    softWrap: true,
+                    maxLines: 1,
+                    style: TextStyle(
+                        color: styleState.fontColor,
+                        fontFamily: styleState.fontFamily,
+                        fontWeight: FontWeight.bold,
+                        fontSize: Dimensions.width * 0.025
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.width * 0.01,
+                      vertical: Dimensions.height * 0.005
+                  ),
+                  child: Text(
+                    '120.000 تومان',
+                    softWrap: true,
+                    maxLines: 1,
+                    style: TextStyle(
+                        color: styleState.fontColor,
+                        fontFamily: styleState.fontFamily,
+                        fontSize: Dimensions.width * 0.017
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+
+          Expanded(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    height: Dimensions.height * 0.5,
+                    margin: EdgeInsets.symmetric(
+                        horizontal: Dimensions.width * 0.01,
+                        vertical: Dimensions.height * 0.008
+                    ),
+                    decoration: BoxDecoration(
+                        color: styleState.secondColor,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 5,
+                              spreadRadius: 1
+                          )
+                        ]
+                    ),
+                    child: Column(
+                      children: [
+
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            height: Dimensions.height * 0.115,
+                            color: Colors.white,
+                            child: SvgPicture.asset(
+                                'assets/images/logo_svg.svg',
+                                colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width * 0.01,
+                              vertical: Dimensions.height * 0.005
+                          ),
+                          child: Text(
+                            'عنوان محصول',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: styleState.fontColor,
+                                fontFamily: styleState.fontFamily,
+                                fontWeight: FontWeight.bold,
+                                fontSize: Dimensions.width * 0.02
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width * 0.01,
+                              vertical: Dimensions.height * 0.003
+                          ),
+                          child: Text(
+                            '120.000 تومان',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: styleState.fontColor,
+                                fontFamily: styleState.fontFamily,
+                                fontSize: Dimensions.width * 0.017
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ),
+
+                Expanded(
+                  child: Container(
+                    height: Dimensions.height * 0.5,
+                    margin: EdgeInsets.symmetric(
+                        horizontal: Dimensions.width * 0.01,
+                        vertical: Dimensions.height * 0.008
+                    ),
+                    decoration: BoxDecoration(
+                        color: styleState.secondColor,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 5,
+                              spreadRadius: 1
+                          )
+                        ]
+                    ),
+                    child: Column(
+                      children: [
+
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            height: Dimensions.height * 0.115,
+                            color: Colors.white,
+                            child: SvgPicture.asset(
+                                'assets/images/logo_svg.svg',
+                                colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width * 0.01,
+                              vertical: Dimensions.height * 0.005
+                          ),
+                          child: Text(
+                            'عنوان محصول',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: styleState.fontColor,
+                                fontFamily: styleState.fontFamily,
+                                fontWeight: FontWeight.bold,
+                                fontSize: Dimensions.width * 0.02
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width * 0.01,
+                              vertical: Dimensions.height * 0.003
+                          ),
+                          child: Text(
+                            '120.000 تومان',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: styleState.fontColor,
+                                fontFamily: styleState.fontFamily,
+                                fontSize: Dimensions.width * 0.017
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      )
+    ),
+  );
+}
+
+Widget buildProductGridView4() {
+  return SizedBox(
+    width: Dimensions.width,
+    height: Dimensions.height * 0.35,
+    child: BlocBuilder<VendorBloc, VendorState>(
+      builder: (context, styleState) => Row(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    height: Dimensions.height * 0.5,
+                    margin: EdgeInsets.symmetric(
+                      horizontal: Dimensions.width * 0.01,
+                      vertical: Dimensions.height * 0.008
+                    ),
+                    decoration: BoxDecoration(
+                        color: styleState.secondColor,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 5,
+                              spreadRadius: 1
+                          )
+                        ]
+                    ),
+                    child: Column(
+                      children: [
+
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            height: Dimensions.height * 0.115,
+                            color: Colors.white,
+                            child: SvgPicture.asset(
+                                'assets/images/logo_svg.svg',
+                                colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width * 0.01,
+                              vertical: Dimensions.height * 0.005
+                          ),
+                          child: Text(
+                            'عنوان محصول',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: styleState.fontColor,
+                                fontFamily: styleState.fontFamily,
+                                fontWeight: FontWeight.bold,
+                                fontSize: Dimensions.width * 0.02
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width * 0.01,
+                              vertical: Dimensions.height * 0.003
+                          ),
+                          child: Text(
+                            '120.000 تومان',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: styleState.fontColor,
+                              fontFamily: styleState.fontFamily,
+                              fontSize: Dimensions.width * 0.017
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ),
+
+                Expanded(
+                  child: Container(
+                    height: Dimensions.height * 0.5,
+                    margin: EdgeInsets.symmetric(
+                      horizontal: Dimensions.width * 0.01,
+                      vertical: Dimensions.height * 0.008
+                    ),
+                    decoration: BoxDecoration(
+                        color: styleState.secondColor,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 5,
+                              spreadRadius: 1
+                          )
+                        ]
+                    ),
+                    child: Column(
+                      children: [
+
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            height: Dimensions.height * 0.115,
+                            color: Colors.white,
+                            child: SvgPicture.asset(
+                                'assets/images/logo_svg.svg',
+                                colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width * 0.01,
+                              vertical: Dimensions.height * 0.005
+                          ),
+                          child: Text(
+                            'عنوان محصول',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: styleState.fontColor,
+                                fontFamily: styleState.fontFamily,
+                                fontWeight: FontWeight.bold,
+                                fontSize: Dimensions.width * 0.02
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width * 0.01,
+                              vertical: Dimensions.height * 0.003
+                          ),
+                          child: Text(
+                            '120.000 تومان',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: styleState.fontColor,
+                                fontFamily: styleState.fontFamily,
+                                fontSize: Dimensions.width * 0.017
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Container(
+            width: Dimensions.width * 0.5,
+            // height: Dimensions.height,
+            margin: EdgeInsets.symmetric(
+                horizontal: Dimensions.width * 0.01,
+                vertical: Dimensions.height * 0.008
+            ),
+            decoration: BoxDecoration(
+                color: styleState.secondColor,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 5,
+                      spreadRadius: 1
+                  )
+                ]
+            ),
+            child: Column(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    height: Dimensions.height * 0.275,
+                    color: Colors.white,
+                    child: SvgPicture.asset(
+                        'assets/images/logo_svg.svg',
+                        colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.width * 0.01,
+                      vertical: Dimensions.height * 0.007
+                  ),
+                  child: Text(
+                    'عنوان محصول',
+                    softWrap: true,
+                    maxLines: 1,
+                    style: TextStyle(
+                        color: styleState.fontColor,
+                        fontFamily: styleState.fontFamily,
+                        fontWeight: FontWeight.bold,
+                        fontSize: Dimensions.width * 0.025
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.width * 0.01,
+                      vertical: Dimensions.height * 0.005
+                  ),
+                  child: Text(
+                    '120.000 تومان',
+                    softWrap: true,
+                    maxLines: 1,
+                    style: TextStyle(
+                        color: styleState.fontColor,
+                        fontFamily: styleState.fontFamily,
+                        fontSize: Dimensions.width * 0.017
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+        ],
+      )
+    ),
+  );
+}
+
+Widget buildProductGridView5() {
+  return SizedBox(
+    width: Dimensions.width,
+    height: Dimensions.height * 0.35,
+    child: BlocBuilder<VendorBloc, VendorState>(
+      builder: (context, styleState) => Row(
+        children: [
+
+          Container(
+            width: Dimensions.width * 0.5,
+            // height: Dimensions.height,
+            margin: EdgeInsets.symmetric(
+              horizontal: Dimensions.width * 0.01,
+              vertical: Dimensions.height * 0.008
+            ),
+            decoration: BoxDecoration(
+                color: styleState.secondColor,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 5,
+                      spreadRadius: 1
+                  )
+                ]
+            ),
+            child: Column(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    height: Dimensions.height * 0.275,
+                    color: Colors.white,
+                    child: SvgPicture.asset(
+                        'assets/images/logo_svg.svg',
+                        colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Dimensions.width * 0.01,
+                    vertical: Dimensions.height * 0.007
+                  ),
+                  child: Text(
+                    'عنوان محصول',
+                    softWrap: true,
+                    maxLines: 1,
+                    style: TextStyle(
+                        color: styleState.fontColor,
+                        fontFamily: styleState.fontFamily,
+                        fontWeight: FontWeight.bold,
+                        fontSize: Dimensions.width * 0.025
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.width * 0.01,
+                      vertical: Dimensions.height * 0.005
+                  ),
+                  child: Text(
+                    '120.000 تومان',
+                    softWrap: true,
+                    maxLines: 1,
+                    style: TextStyle(
+                        color: styleState.fontColor,
+                        fontFamily: styleState.fontFamily,
+                        fontSize: Dimensions.width * 0.017
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+
+          Expanded(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    height: Dimensions.height * 0.5,
+                    margin: EdgeInsets.symmetric(
+                        horizontal: Dimensions.width * 0.01,
+                        vertical: Dimensions.height * 0.008
+                    ),
+                    decoration: BoxDecoration(
+                        color: styleState.secondColor,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 5,
+                              spreadRadius: 1
+                          )
+                        ]
+                    ),
+                    child: Column(
+                      children: [
+
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            height: Dimensions.height * 0.115,
+                            color: Colors.white,
+                            child: SvgPicture.asset(
+                                'assets/images/logo_svg.svg',
+                                colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width * 0.01,
+                              vertical: Dimensions.height * 0.005
+                          ),
+                          child: Text(
+                            'عنوان محصول',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: styleState.fontColor,
+                                fontFamily: styleState.fontFamily,
+                                fontWeight: FontWeight.bold,
+                                fontSize: Dimensions.width * 0.02
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width * 0.01,
+                              vertical: Dimensions.height * 0.003
+                          ),
+                          child: Text(
+                            '120.000 تومان',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: styleState.fontColor,
+                                fontFamily: styleState.fontFamily,
+                                fontSize: Dimensions.width * 0.017
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ),
+
+                Expanded(
+                  child: Container(
+                    height: Dimensions.height * 0.5,
+                    margin: EdgeInsets.symmetric(
+                        horizontal: Dimensions.width * 0.01,
+                        vertical: Dimensions.height * 0.008
+                    ),
+                    decoration: BoxDecoration(
+                        color: styleState.secondColor,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 5,
+                              spreadRadius: 1
+                          )
+                        ]
+                    ),
+                    child: Column(
+                      children: [
+
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            height: Dimensions.height * 0.115,
+                            color: Colors.white,
+                            child: SvgPicture.asset(
+                                'assets/images/logo_svg.svg',
+                                colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width * 0.01,
+                              vertical: Dimensions.height * 0.005
+                          ),
+                          child: Text(
+                            'عنوان محصول',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: styleState.fontColor,
+                                fontFamily: styleState.fontFamily,
+                                fontWeight: FontWeight.bold,
+                                fontSize: Dimensions.width * 0.02
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width * 0.01,
+                              vertical: Dimensions.height * 0.003
+                          ),
+                          child: Text(
+                            '120.000 تومان',
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: styleState.fontColor,
+                                fontFamily: styleState.fontFamily,
+                                fontSize: Dimensions.width * 0.017
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      )
+    ),
+  );
+}
+
+Widget buildProductGridView6() {
+  return SizedBox(
+    width: Dimensions.width,
+    height: Dimensions.height * 0.35,
+    child: BlocBuilder<VendorBloc, VendorState>(
+      builder: (context, styleState) => Container(
+        width: Dimensions.width * 0.94,
+        margin: EdgeInsets.symmetric(
+          horizontal: Dimensions.width * 0.01,
+          vertical: Dimensions.height * 0.008
+        ),
+        decoration: BoxDecoration(
+          color: styleState.secondColor,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 5,
+              spreadRadius: 1
+            )
+          ]
+        ),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                height: Dimensions.height * 0.28,
+                color: Colors.white,
+                child: SvgPicture.asset(
+                    'assets/images/logo_svg.svg',
+                    colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                ),
+              ),
+            ),
+
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: Dimensions.width * 0.05,
+                vertical: Dimensions.height * 0.017
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: Dimensions.width * 0.69,
+                    child: Text(
+                      'عنوان محصول',
+                      softWrap: true,
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: styleState.fontColor,
+                        fontFamily: styleState.fontFamily,
+                        fontWeight: FontWeight.bold,
+                        fontSize: Dimensions.width * 0.025
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(
+                    width: Dimensions.width * 0.15,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '120.000 تومان',
+                        softWrap: true,
+                        maxLines: 1,
+                        style: TextStyle(
+                            color: styleState.fontColor,
+                            fontFamily: styleState.fontFamily,
+                            fontSize: Dimensions.width * 0.017
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+
+          ],
+        ),
+      )
+    ),
+  );
+}
+
+Widget buildProductGridView7() {
+  return BlocBuilder<VendorBloc, VendorState>(
+    builder: (context, styleState) => Row(
+      children: [
+        Container(
+          width: Dimensions.width * 0.94,
+          height: Dimensions.height * 0.13,
+
+          margin: EdgeInsets.symmetric(
+            horizontal: Dimensions.width * 0.01,
+            vertical: Dimensions.height * 0.008
+          ),
+          decoration: BoxDecoration(
+              color: styleState.secondColor,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 5,
+                    spreadRadius: 1
+                )
+              ]
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Dimensions.width * 0.05,
+                  vertical: Dimensions.height * 0.017
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: Dimensions.width * 0.54,
+                      padding: EdgeInsets.symmetric(
+                        vertical: Dimensions.height * 0.01
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'عنوان محصول',
+                        softWrap: true,
+                        maxLines: 3,
+                        style: TextStyle(
+                          color: styleState.fontColor,
+                          fontFamily: styleState.fontFamily,
+                          fontWeight: FontWeight.bold,
+                          fontSize: Dimensions.width * 0.028,
+                          height: 1.6
+                        ),
+                      ),
+                    ),
+
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: Dimensions.height * 0.01
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        '120.000 تومان',
+                        softWrap: true,
+                        maxLines: 1,
+                        style: TextStyle(
+                            color: styleState.fontColor,
+                            fontFamily: styleState.fontFamily,
+                            fontSize: Dimensions.width * 0.017
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  height: Dimensions.height * 0.15,
+                  width: Dimensions.width * 0.3,
+                  color: Colors.white,
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: SvgPicture.asset(
+                      'assets/images/logo_svg.svg',
+                      colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                    ),
+                  ),
+                ),
+              ),
+
+            ],
+          ),
+        ),
+      ],
+    )
+  );
+}
+
+Widget buildProductGridView8() {
+  return BlocBuilder<VendorBloc, VendorState>(
+    builder: (context, styleState) => Row(
+        children: [
+          Container(
+            width: Dimensions.width * 0.94,
+            height: Dimensions.height * 0.13,
+
+            margin: EdgeInsets.symmetric(
+                horizontal: Dimensions.width * 0.01,
+                vertical: Dimensions.height * 0.008
+            ),
+            decoration: BoxDecoration(
+                color: styleState.secondColor,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 5,
+                      spreadRadius: 1
+                  )
+                ]
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    height: Dimensions.height * 0.15,
+                    width: Dimensions.width * 0.3,
+                    color: Colors.white,
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: SvgPicture.asset(
+                          'assets/images/logo_svg.svg',
+                          colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                      ),
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.width * 0.05,
+                      vertical: Dimensions.height * 0.017
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: Dimensions.width * 0.54,
+                        padding: EdgeInsets.symmetric(
+                            vertical: Dimensions.height * 0.01
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          'عنوان محصول',
+                          softWrap: true,
+                          maxLines: 3,
+                          style: TextStyle(
+                              color: styleState.fontColor,
+                              fontFamily: styleState.fontFamily,
+                              fontWeight: FontWeight.bold,
+                              fontSize: Dimensions.width * 0.028,
+                              height: 1.6
+                          ),
+                        ),
+                      ),
+
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: Dimensions.height * 0.01
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          '120.000 تومان',
+                          softWrap: true,
+                          maxLines: 1,
+                          style: TextStyle(
+                              color: styleState.fontColor,
+                              fontFamily: styleState.fontFamily,
+                              fontSize: Dimensions.width * 0.017
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+        ],
+      )
+  );
 }

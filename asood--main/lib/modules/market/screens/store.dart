@@ -5,20 +5,24 @@ import 'package:asood/models/slider_model.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../shared/constants/constants.dart';
+import '../../../shared/screens/store_setting_screens/themes_screen/themes_screen.dart';
 import '../../../shared/utils/snack_bar_util.dart';
 import '../../../shared/widgets/comment_messagebox_widget.dart';
 import '../../../shared/widgets/custom_bottom_navbar.dart';
 import '../../../shared/widgets/custom_button.dart';
 import '../../../shared/widgets/custom_textfield.dart';
 import '../../vendor/blocs/vendor/vendor_bloc.dart';
+import '../blocs/bloc/market_bloc.dart';
 import '../widgets/store_appbar.dart';
 
 @RoutePage()
@@ -33,6 +37,7 @@ class StoreScreen extends StatefulWidget {
 class _StoreScreenState extends State<StoreScreen> {
 
   late VendorBloc bloc;
+  late MarketBloc marketBloc;
 
   List<String> buttonTitles = ["محصولات", "ویژه ها", "نظرات", "ارتباط با ما"];
 
@@ -55,6 +60,7 @@ class _StoreScreenState extends State<StoreScreen> {
     // TODO: implement initState
     super.initState();
     bloc = BlocProvider.of<VendorBloc>(context);
+    marketBloc = BlocProvider.of<MarketBloc>(context);
     loadSlider();
     initTheme();
   }
@@ -809,59 +815,12 @@ class _StoreScreenState extends State<StoreScreen> {
                                   ],
                                 ),
                               ),
-                              // child: Expanded(
-                              //   child: ListView.builder(
-                              //     scrollDirection: Axis.horizontal,
-                              //     shrinkWrap: true,
-                              //     physics: const NeverScrollableScrollPhysics(),
-                              //     itemCount: buttonTitles.length,
-                              //     itemBuilder: (context, index) {
-                              //       return Padding(
-                              //         padding: const EdgeInsets.symmetric(
-                              //             vertical: 5, horizontal: 3.0),
-                              //         child: ElevatedButton(
-                              //           onPressed: () {
-                              //             setState(() {
-                              //               selectedIndex = index;
-                              //             });
-                              //           },
-                              //           style: ButtonStyle(
-                              //             backgroundColor: selectedIndex == index
-                              //                 ? MaterialStateProperty.all(
-                              //                     Colora.primaryColor)
-                              //                 : MaterialStateProperty.all(Colors.white),
-                              //             shadowColor: MaterialStateProperty.all(
-                              //                 Colors.transparent),
-                              //             elevation: MaterialStateProperty.all(
-                              //                 0), // Remove box shadow
-                              //             shape: MaterialStateProperty.all(
-                              //               RoundedRectangleBorder(
-                              //                 borderRadius: BorderRadius.circular(25.0),
-                              //                 side: const BorderSide(
-                              //                   color: Colora
-                              //                       .primaryColor, // Specify the border color
-                              //                 ),
-                              //               ),
-                              //             ),
-                              //           ),
-                              //           child: Text(
-                              //             buttonTitles[index],
-                              //             style: TextStyle(
-                              //                 color: selectedIndex == index
-                              //                     ? Colors.white
-                              //                     : Colora.primaryColor),
-                              //           ),
-                              //         ),
-                              //       );
-                              //     },
-                              //   ),
-                              // ),
                             ),
 
                             //items
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 7),
-                              child: selectPageView(selectedIndex),
+                              child: selectPageView(selectedIndex, state, marketBloc),
                             )
 
                           ],
@@ -980,18 +939,32 @@ class _StoreScreenState extends State<StoreScreen> {
                       ),
                     ),
 
+                    //bottom settings
+                    Positioned(
+                      bottom: 0,
+                      child: CustomBottomNavigationBar(
+                      marketId: widget.market.id!,
+                      initTopColor: initTopColor,
+                      initBackColor: initBackColor,
+                      initSecondColor: initSecondColor,
+                      initFont: initFont,
+                      initFontColor: initFontColor,
+                      initFontSecondColor: initFontSecondColor,
+                    )
+                    )
+
                   ],
                 ),
               ),
-              bottomNavigationBar: CustomBottomNavigationBar(
-                marketId: widget.market.id!,
-                initTopColor: initTopColor,
-                initBackColor: initBackColor,
-                initSecondColor: initSecondColor,
-                initFont: initFont,
-                initFontColor: initFontColor,
-                initFontSecondColor: initFontSecondColor,
-              ),
+              // bottomNavigationBar: CustomBottomNavigationBar(
+              //   marketId: widget.market.id!,
+              //   initTopColor: initTopColor,
+              //   initBackColor: initBackColor,
+              //   initSecondColor: initSecondColor,
+              //   initFont: initFont,
+              //   initFontColor: initFontColor,
+              //   initFontSecondColor: initFontSecondColor,
+              // ),
             ),
           ),
         );
@@ -1062,31 +1035,287 @@ class _ScrollableButtonListState extends State<ScrollableButtonList> {
   }
 }*/
 
-selectPageView(index) {
+selectPageView(index, styleState, MarketBloc marketBloc) {
   switch (index) {
     case 0:
-      return productView();
+      return productView(styleState, marketBloc);
     case 1:
-      return specialView();
+      return specialView(styleState);
     case 2:
-      return commentView();
+      return commentView(styleState);
     case 3:
-      return contactUsView();
+      return contactUsView(styleState);
     default:
   }
 }
 
-productView() {
-  return const SingleChildScrollView(
-    child: Column(children: [
-      Center(
-        child: Text("فروش ابزار یراق"),
+productView(styleState, MarketBloc marketBloc) {
+
+
+  Widget templateWidget(int template){
+
+    switch (template) {
+      case 0:
+        return buildProductGridView0();
+      case 1:
+        return buildProductGridView1();
+      case 2:
+        return buildProductGridView2();
+      case 3:
+        return buildProductGridView3();
+      case 4:
+        return buildProductGridView4();
+      case 5:
+        return buildProductGridView5();
+      case 6:
+        return buildProductGridView6();
+      case 7:
+        return buildProductGridView7();
+      case 8:
+        return buildProductGridView8();
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+
+  return Column(
+    children: [
+
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            height: 2,
+            width: Dimensions.width * 0.3,
+            color: styleState.topColor,
+          ),
+          SizedBox(
+            width: Dimensions.width * 0.3,
+            child: Center(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  "فروش ابزار یراق",
+                  style: TextStyle(
+                    color: styleState.topColor,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: styleState.fontFamily,
+                    fontSize: Dimensions.width * 0.035
+                  ),
+                ),
+              )
+            ),
+          ),
+          Container(
+            height: 2,
+            width: Dimensions.width * 0.3,
+            color: styleState.topColor,
+          ),
+        ],
       ),
-    ]),
+
+      // Container(
+      //   width: Dimensions.width,
+      //   height: Dimensions.height * 0.07,
+      //   margin: EdgeInsets.symmetric(
+      //     vertical: Dimensions.height * 0.01
+      //   ),
+      //   decoration: BoxDecoration(
+      //     color: styleState.topColor,
+      //     borderRadius: BorderRadius.circular(10)
+      //   ),
+      //   child: MaterialButton(
+      //     onPressed: (){
+      //       // showTemplates(context);
+      //     },
+      //     child: Row(
+      //       mainAxisAlignment: MainAxisAlignment.center,
+      //       children: [
+      //
+      //         Text(
+      //           'اضافه کردن قالب جدید',
+      //           style: TextStyle(
+      //             color: styleState.fontColor,
+      //             fontFamily: styleState.fontFamily
+      //           ),
+      //         ),
+      //
+      //         SizedBox(width: Dimensions.width * 0.01,),
+      //
+      //         Icon(
+      //           Icons.add_box,
+      //           color: styleState.fontColor,
+      //         )
+      //       ],
+      //     ),
+      //   ),
+      // ),
+
+      BlocBuilder<MarketBloc, MarketState>(
+        builder: (context, state) {
+          if(state.templateList.isEmpty){
+
+            return const Center(child: Text(''),);
+
+          }
+          else{
+            return  ListView.builder(
+              itemCount: state.templateList.length,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+
+                return Column(
+                  children: [
+
+                    Container(
+                      width: Dimensions.width,
+                      margin: EdgeInsets.symmetric(
+                        vertical: Dimensions.height * 0.0
+                      ),
+                      child: templateWidget(state.templateList[index]),
+                    ),
+
+                    // Container(
+                    //   height: Dimensions.height * 0.05,
+                    //   width: Dimensions.width,
+                    //   child: Row(
+                    //     children: [
+                    //       IconButton(
+                    //         onPressed: (){
+                    //           marketBloc.add(RemoveTemplateEvent(index: index));
+                    //           // state.templateList.removeAt(index);
+                    //         },
+                    //         icon: Icon(
+                    //           Icons.delete_rounded,
+                    //           color: Colors.redAccent,
+                    //         )
+                    //       )
+                    //     ],
+                    //   ),
+                    // )
+
+                  ],
+                );
+
+              },
+            );
+          }
+
+        },
+      ),
+
+      SizedBox(
+        height: Dimensions.height * 0.05,
+      )
+
+
+    ]
   );
 }
 
-specialView() {
+// void showTemplates(context){
+//
+//   final PageController _pageController = PageController();
+//   int _currentPage = 0;
+//
+//   showDialog(
+//     // barrierColor: const Color(0x00000000),
+//     barrierDismissible: false,
+//     context: context,
+//     builder: (context) =>
+//       StatefulBuilder(
+//         builder: (context, setState)
+//         {
+//           return AlertDialog(
+//               contentPadding: const EdgeInsets.all(0),
+//               backgroundColor: Colors.transparent,
+//               content: ClipRRect(
+//                 borderRadius: BorderRadius.circular(10),
+//                 child: Container(
+//                   width: Dimensions.width * 0.8,
+//                   height: Dimensions.height * 0.5,
+//                   color: Colora.primaryColor,
+//                   child: Column(
+//                     children: [
+//
+//                       Container(
+//                         width: Dimensions.width,
+//                         height: Dimensions.height * 0.06,
+//                         color: Colora.scaffold,
+//                         padding: EdgeInsets.symmetric(
+//                           vertical: Dimensions.height * 0.02
+//                         ),
+//                         child: Center(
+//                           child: Text(
+//                             'انتخاب قالب',
+//                             style: TextStyle(
+//                               color: Colora.primaryColor,
+//                               fontSize: Dimensions.width * 0.038,
+//                               fontWeight: FontWeight.bold
+//                             ),
+//                           ),
+//                         ),
+//                       ),
+//
+//                       Container(
+//                         width: Dimensions.width * 0.8,
+//                         height: Dimensions.height * 0.38,
+//                         padding: EdgeInsets.symmetric(
+//                           horizontal: Dimensions.width * 0.02,
+//                           vertical: Dimensions.height * 0.01
+//                         ),
+//                         child: PageView(
+//                           controller: _pageController,
+//                           onPageChanged: (int page) {
+//                             setState(() {
+//                               _currentPage = page;
+//                             });
+//                           },
+//                           children: [
+//                             buildProductGridView(),
+//                             buildProductGridView2(),
+//                             buildProductGridView3(),
+//                             buildProductGridView4(),
+//                             buildProductGridView5(),
+//                             buildProductGridView6(),
+//                             buildProductGridView7(),
+//                             buildProductGridView8(),
+//                             buildProductGridView9(),
+//                           ],
+//                         ),
+//                       ),
+//
+//                       //save button
+//                       Container(
+//                         width: Dimensions.width,
+//                         height: Dimensions.height * 0.06,
+//                         color: Colora.scaffold,
+//                         child: MaterialButton(
+//                           onPressed: (){},
+//                           child: Text(
+//                             'ذخیره',
+//                             style: TextStyle(
+//                                 color: Colora.primaryColor,
+//                                 fontSize: Dimensions.width * 0.038,
+//                                 fontWeight: FontWeight.bold
+//                             ),
+//                           ),
+//                         ),
+//                       ),
+//
+//                     ],
+//                   ),
+//                 ),
+//               )
+//           );
+//         }
+//       )
+//   );
+//
+// }
+
+specialView(styleState) {
   return const SingleChildScrollView(
     child: Column(children: [
       Center(
@@ -1096,7 +1325,7 @@ specialView() {
   );
 }
 
-commentView() {
+commentView(styleState) {
   return SingleChildScrollView(
     child: Column(children: [
       Row(
@@ -1159,7 +1388,7 @@ commentView() {
   );
 }
 
-contactUsView() {
+contactUsView(styleState) {
   return SingleChildScrollView(
     child: Column(
       children: [

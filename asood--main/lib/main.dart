@@ -10,6 +10,7 @@ import 'package:isar/isar.dart';
 
 import 'modules/auth/blocs/login_bloc/login_bloc.dart';
 import 'modules/inquiry/blocs/inquiry/inquiry_bloc.dart';
+import 'modules/market/blocs/bloc/market_bloc.dart';
 import 'modules/vendor/blocs/create_workspace/create_workspace_bloc.dart';
 import 'blocs/map_bloc/map_bloc.dart';
 import 'app/blocs/splash/splash_bloc.dart';
@@ -56,6 +57,9 @@ class Asood extends StatelessWidget {
         BlocProvider<VendorBloc>(
           create: (context) => VendorBloc(),
         ),
+        BlocProvider<MarketBloc>(
+          create: (context) => MarketBloc(),
+        ),
       ],
       child: MaterialApp.router(
         builder: (context, child) {
@@ -78,20 +82,11 @@ class Asood extends StatelessWidget {
         ],
         locale: const Locale('fa', ''),
         title: 'آسود',
-        /*     routes: {
-          "/loginScreen": (context) => LoginScreen(),
-          "/spashScreen": (context) => const SplashScreen(),
-          "/otpScreen": (context) => const OtpScreen(),
-          "/home": (context) => const VendorHomeScreen(title: "home"),
-        }, */
-        //  initialRoute: 'loginPage',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colora.primaryColor),
           useMaterial3: true,
           fontFamily: 'irs'
         ),
-
-        //: const SplashScreen(),
       ),
     );
   }

@@ -6,3 +6,19 @@ sealed class MarketEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class AddTemplateEvent extends MarketEvent {
+  final int template;
+
+  const AddTemplateEvent({
+    required this.template,
+  });
+}
+
+class RemoveTemplateEvent extends MarketEvent {
+  final int index;
+
+  const RemoveTemplateEvent({
+    required this.index,
+  });
+}
