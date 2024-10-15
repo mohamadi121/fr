@@ -8,7 +8,7 @@ import '../constants/constants.dart';
 
 class MapScreen extends StatefulWidget {
 
-  final Function(LatLng) selectedLocation ;
+  final Function(LatLng)? selectedLocation ;
 
   final bool isSelecting;
   final LocationModel initialLocation;
@@ -17,7 +17,7 @@ class MapScreen extends StatefulWidget {
     super.key,
     this.isSelecting = false,
     this.initialLocation = const LocationModel(lat: 35.6783, lon: 51.4161),
-    required this.selectedLocation
+    this.selectedLocation
   });
 
   @override
@@ -31,7 +31,7 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> currentLocation() async{
     var locationData = await Location().getLocation();
     setState(() {
-      widget.selectedLocation(LatLng(locationData.latitude!, locationData.longitude!));
+      widget.selectedLocation!(LatLng(locationData.latitude!, locationData.longitude!));
       mapController.move(LatLng(locationData.latitude!, locationData.longitude!), 16);
     });
   }
@@ -42,7 +42,7 @@ class _MapScreenState extends State<MapScreen> {
 
     setState(() {
       _selectedLocation = position;
-      widget.selectedLocation(position);
+      widget.selectedLocation!(position);
     });
 
   }
@@ -52,12 +52,15 @@ class _MapScreenState extends State<MapScreen> {
     return SizedBox(
       child: Stack(
         children: [
+
           FlutterMap(
             options: MapOptions(
               initialCenter: LatLng(widget.initialLocation.lat, widget.initialLocation.lon),
               initialZoom: 16,
               onTap: (tapPosition, point) {
-                getSelectedLocation(point);
+                if(widget.isSelecting == true){
+                  getSelectedLocation(point);
+                }
               },
             ),
             mapController: mapController,
@@ -69,11 +72,11 @@ class _MapScreenState extends State<MapScreen> {
               ),
               
               MarkerLayer(
-                markers: (_selectedLocation == null)
+                markers: (_selectedLocation == null && widget.isSelecting)
                   ?[]
                   :[
                     Marker(
-                      point: _selectedLocation!,
+                      point: _selectedLocation ?? LatLng(widget.initialLocation.lat, widget.initialLocation.lon),
                       child: Icon(
                         Icons.location_on,
                         color: Colora.primaryColor,
@@ -87,30 +90,32 @@ class _MapScreenState extends State<MapScreen> {
           ),
 
           //current location
-          Positioned(
-              bottom: Dimensions.height * 0.01,
-              right: Dimensions.width * 0.05,
-              width: Dimensions.width * 0.1,
-              height: Dimensions.height * 0.05,
-              child: Container(
+          if(widget.isSelecting == true)...[
+            Positioned(
+                bottom: Dimensions.height * 0.01,
+                right: Dimensions.width * 0.05,
                 width: Dimensions.width * 0.1,
                 height: Dimensions.height * 0.05,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colora.primaryColor
-                ),
-                child: IconButton(
-                  onPressed: () {
-                    currentLocation();
-                  },
-                  icon: Icon(
-                    Icons.my_location,
-                    color: Colora.scaffold,
-                    size: Dimensions.width * 0.05,
+                child: Container(
+                  width: Dimensions.width * 0.1,
+                  height: Dimensions.height * 0.05,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colora.primaryColor
                   ),
-                ),
-              )
-          ),
+                  child: IconButton(
+                    onPressed: () {
+                      currentLocation();
+                    },
+                    icon: Icon(
+                      Icons.my_location,
+                      color: Colora.scaffold,
+                      size: Dimensions.width * 0.05,
+                    ),
+                  ),
+                )
+            )
+          ],
 
           // if(_selectedLocation != null)...[
           //   Positioned(

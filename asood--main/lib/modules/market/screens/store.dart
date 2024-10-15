@@ -14,6 +14,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../models/location_model.dart';
 import '../../../shared/constants/constants.dart';
 import '../../../shared/screens/store_setting_screens/themes_screen/themes_screen.dart';
 import '../../../shared/utils/snack_bar_util.dart';
@@ -21,7 +22,9 @@ import '../../../shared/widgets/comment_messagebox_widget.dart';
 import '../../../shared/widgets/custom_bottom_navbar.dart';
 import '../../../shared/widgets/custom_button.dart';
 import '../../../shared/widgets/custom_textfield.dart';
+import '../../../shared/widgets/map_widget_2.dart';
 import '../../vendor/blocs/vendor/vendor_bloc.dart';
+import '../../vendor/blocs/workspace/workspace_bloc.dart';
 import '../blocs/bloc/market_bloc.dart';
 import '../widgets/store_appbar.dart';
 
@@ -373,602 +376,537 @@ class _StoreScreenState extends State<StoreScreen> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<VendorBloc, VendorState>(
-      builder: (context, state) {
-        return Container(
-          color: state.topColor,
-          child: SafeArea(
-            child: Scaffold(
-              backgroundColor: state.backColor,
-              // appBar: StoreAppBar(
-              //   context: context,
-              //   title: widget.market.name!,
-              //   description: widget.market.name!,
-              //   appbarTools: Positioned(
-              //     right: 0,
-              //     left: 0,
-              //     bottom: 0,
-              //     child: Center(
-              //       child: Container(
-              //         height: 40,
-              //         width: Dimensions.width * .8,
-              //         decoration: BoxDecoration(
-              //           borderRadius: BorderRadius.circular(20),
-              //           color: Colora.primaryColor,
-              //         ),
-              //         child: Center(
-              //           child: Row(
-              //             mainAxisAlignment: MainAxisAlignment.center,
-              //             children: [
-              //           IconButton(
-              //             onPressed: () {
-              //               print("pressed");
-              //             },
-              //             icon: const Icon(
-              //               Icons.edit,
-              //               color: Colors.white,
-              //             ),
-              //           ),
-              //           IconButton(
-              //             onPressed: () {
-              //               print("pressed");
-              //             },
-              //             icon: const Icon(
-              //               Icons.save,
-              //               color: Colors.white,
-              //             ),
-              //           ),
-              //           IconButton(
-              //             onPressed: () {
-              //               print("pressed");
-              //             },
-              //             icon: const Icon(
-              //               Icons.bookmark,
-              //               color: Colors.white,
-              //             ),
-              //           ),
-              //           IconButton(
-              //             onPressed: () {
-              //               print("pressed");
-              //             },
-              //             icon: const Icon(
-              //               Icons.share,
-              //               color: Colors.white,
-              //             ),
-              //           ),
-              //           IconButton(
-              //             onPressed: () {
-              //               print("pressed");
-              //             },
-              //             icon: const Icon(
-              //               Icons.upload_file_outlined,
-              //               color: Colors.white,
-              //             ),
-              //           ),
-              //           IconButton(
-              //             onPressed: () {
-              //               print("pressed");
-              //             },
-              //             icon: const Icon(
-              //               Icons.list_alt,
-              //               color: Colors.white,
-              //             ),
-              //           ),
-              //         ],
-              //           )
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              body: SizedBox(
-                height: Dimensions.height,
-                width: Dimensions.width,
-                child: Stack(
-                  children: [
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        if (didPop) {
+          return;
+        }
+        final NavigatorState navigator = Navigator.of(context);
+        // final bool? shouldPop = await _showBackDialog();
+        const bool shouldPop = true;
+        BlocProvider.of<WorkspaceBloc>(context).add(LoadStores());
+        if (shouldPop ?? false) {
+          navigator.pop();
+        }
+      },
+      child: BlocBuilder<VendorBloc, VendorState>(
+        builder: (context, state) {
+          return Container(
+            color: state.topColor,
+            child: SafeArea(
+              child: Scaffold(
+                backgroundColor: state.backColor,
+                body: SizedBox(
+                  height: Dimensions.height,
+                  width: Dimensions.width,
+                  child: Stack(
+                    children: [
 
-                    //main items
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                      //main items
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
 
-                            SizedBox(
-                              height: Dimensions.height * 0.27,
-                            ),
+                              SizedBox(
+                                height: Dimensions.height * 0.27,
+                              ),
 
-                            //slider
-                            SizedBox(
-                              width: Dimensions.width,
-                              child: CarouselSlider(
-                                options: CarouselOptions(
-                                  onPageChanged: (index, reason) {
-                                    setState(() {
-                                      currentSliderIndex = index;
-                                    });
-                                  },
-                                  aspectRatio: 16 / 9,
-                                  enlargeCenterPage: true,
-                                  enableInfiniteScroll: false,
-                                  disableCenter: false,
-                                  pageSnapping: true,
-                                  autoPlay: false,
-                                ),
-                                items: state.status == VendorStatus.loading
-                                  ?List.generate(1, (index){
-                                    return Container(
-                                      width: Dimensions.width,
-                                      margin: EdgeInsets.symmetric(
-                                          vertical: Dimensions.height * 0.01
-                                      ),
-                                      padding: EdgeInsets.only(
-                                          bottom: Dimensions.height * 0.01
-                                      ),
-                                      decoration: BoxDecoration(
+                              //slider
+                              SizedBox(
+                                width: Dimensions.width,
+                                child: CarouselSlider(
+                                  options: CarouselOptions(
+                                    onPageChanged: (index, reason) {
+                                      setState(() {
+                                        currentSliderIndex = index;
+                                      });
+                                    },
+                                    aspectRatio: 16 / 9,
+                                    enlargeCenterPage: true,
+                                    enableInfiniteScroll: false,
+                                    disableCenter: false,
+                                    pageSnapping: true,
+                                    autoPlay: false,
+                                  ),
+                                  items: state.status == VendorStatus.loading
+                                    ?List.generate(1, (index){
+                                      return Container(
+                                        width: Dimensions.width,
+                                        margin: EdgeInsets.symmetric(
+                                            vertical: Dimensions.height * 0.01
+                                        ),
+                                        padding: EdgeInsets.only(
+                                            bottom: Dimensions.height * 0.01
+                                        ),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(20),
+                                            color: state.topColor,
+                                            boxShadow: const [
+                                              BoxShadow(
+                                                  color: Colors.grey,
+                                                  blurRadius: 5,
+                                                  spreadRadius: 1
+                                              )
+                                            ]
+                                        ),
+                                        child: ClipRRect(
                                           borderRadius: BorderRadius.circular(20),
-                                          color: state.topColor,
-                                          boxShadow: const [
-                                            BoxShadow(
-                                                color: Colors.grey,
-                                                blurRadius: 5,
-                                                spreadRadius: 1
-                                            )
-                                          ]
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(20),
-                                        child: Shimmer.fromColors(
-                                          baseColor: Colors.grey.withOpacity(0.2),
-                                          highlightColor: Colors.black.withOpacity(0.2),
-                                          direction: ShimmerDirection.rtl,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                color: Colors.grey,
-                                                borderRadius: BorderRadius.circular(5)
+                                          child: Shimmer.fromColors(
+                                            baseColor: Colors.grey.withOpacity(0.2),
+                                            highlightColor: Colors.black.withOpacity(0.2),
+                                            direction: ShimmerDirection.rtl,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.grey,
+                                                  borderRadius: BorderRadius.circular(5)
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      )
-                                    );
-                                  })
-                                  :List.generate(
-                                    state.sliderList.length >= sliderLength
-                                      ?state.sliderList.length
-                                      :state.sliderList.length + 1,
-                                    (index) {
-                                      if(index != state.sliderList.length){
-                                        return Container(
-                                          width: Dimensions.width,
-                                          margin: EdgeInsets.symmetric(
-                                              vertical: Dimensions.height * 0.01
-                                          ),
-                                          padding: EdgeInsets.only(
-                                              bottom: Dimensions.height * 0.01
-                                          ),
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(20),
-                                              color: state.topColor,
-                                              boxShadow: const [
-                                                BoxShadow(
-                                                    color: Colors.grey,
-                                                    blurRadius: 5,
-                                                    spreadRadius: 1
-                                                )
-                                              ]
-                                          ),
-                                          child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(20),
-                                              child: Stack(
-                                                alignment: Alignment.center,
-                                                children: [
+                                        )
+                                      );
+                                    })
+                                    :List.generate(
+                                      state.sliderList.length >= sliderLength
+                                        ?state.sliderList.length
+                                        :state.sliderList.length + 1,
+                                      (index) {
+                                        if(index != state.sliderList.length){
+                                          return Container(
+                                            width: Dimensions.width,
+                                            margin: EdgeInsets.symmetric(
+                                                vertical: Dimensions.height * 0.01
+                                            ),
+                                            padding: EdgeInsets.only(
+                                                bottom: Dimensions.height * 0.01
+                                            ),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(20),
+                                                color: state.topColor,
+                                                boxShadow: const [
+                                                  BoxShadow(
+                                                      color: Colors.grey,
+                                                      blurRadius: 5,
+                                                      spreadRadius: 1
+                                                  )
+                                                ]
+                                            ),
+                                            child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(20),
+                                                child: Stack(
+                                                  alignment: Alignment.center,
+                                                  children: [
 
-                                                  //image
-                                                  if(state.sliderList[index].image!.contains('http'))...[
-                                                    CachedNetworkImage(
-                                                      imageUrl: state.sliderList[index].image.toString(),
-                                                      imageBuilder: (context, imageProvider) {
-                                                        return Container(
-                                                          decoration: BoxDecoration(
-                                                            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                                    //image
+                                                    if(state.sliderList[index].image!.contains('http'))...[
+                                                      CachedNetworkImage(
+                                                        imageUrl: state.sliderList[index].image.toString(),
+                                                        imageBuilder: (context, imageProvider) {
+                                                          return Container(
+                                                            decoration: BoxDecoration(
+                                                              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                                            ),
+                                                          );
+                                                        },
+                                                        placeholder: (context, url) => Shimmer.fromColors(
+                                                          baseColor: Colors.grey.withOpacity(0.2),
+                                                          highlightColor: Colors.black.withOpacity(0.2),
+                                                          direction: ShimmerDirection.rtl,
+                                                          child: Container(
+                                                            decoration: BoxDecoration(
+                                                                color: Colors.grey,
+                                                                borderRadius: BorderRadius.circular(5)
+                                                            ),
                                                           ),
-                                                        );
-                                                      },
-                                                      placeholder: (context, url) => Shimmer.fromColors(
-                                                        baseColor: Colors.grey.withOpacity(0.2),
-                                                        highlightColor: Colors.black.withOpacity(0.2),
-                                                        direction: ShimmerDirection.rtl,
-                                                        child: Container(
+                                                        ),
+                                                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                      ),
+                                                    ]
+                                                    else...[
+                                                      Image.file(
+                                                        File(state.sliderList[index].image!),
+                                                        fit: BoxFit.cover,
+                                                      )
+                                                    ],
+
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+
+                                                        //edit
+                                                        Container(
                                                           decoration: BoxDecoration(
-                                                              color: Colors.grey,
-                                                              borderRadius: BorderRadius.circular(5)
+                                                            shape: BoxShape.circle,
+                                                            color: Colora.scaffold_,
+                                                            border: Border.all(
+                                                                color: state.topColor,
+                                                                width: 2
+                                                            )
                                                           ),
-                                                        ),
-                                                      ),
-                                                      errorWidget: (context, url, error) => const Icon(Icons.error),
-                                                    ),
-                                                  ]
-                                                  else...[
-                                                    Image.file(
-                                                      File(state.sliderList[index].image!),
-                                                      fit: BoxFit.cover,
-                                                    )
-                                                  ],
-
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: [
-
-                                                      //edit
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                          shape: BoxShape.circle,
-                                                          color: Colora.scaffold_,
-                                                          border: Border.all(
-                                                              color: state.topColor,
-                                                              width: 2
-                                                          )
-                                                        ),
-                                                        child: IconButton(
-                                                          onPressed: (){},
-                                                          icon: Icon(
-                                                            Icons.edit_rounded,
-                                                            color: state.topColor,
-                                                            size: Dimensions.width * 0.06,
-                                                          )
-                                                        ),
-                                                      ),
-
-                                                      SizedBox(width: Dimensions.width * 0.1,),
-
-                                                      //remove
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                          shape: BoxShape.circle,
-                                                          color: Colora.scaffold_,
-                                                          border: Border.all(
-                                                              color: state.topColor,
-                                                              width: 2
-                                                          )
-                                                        ),
-                                                        child: IconButton(
-                                                            onPressed: (){
-                                                              bloc.add(DeleteSliderEvent(id: state.sliderList[index].id!));
-                                                              state.sliderList.removeAt(index);
-                                                              setState(() {
-                                                                currentSliderIndex = index + 1;
-                                                              });
-                                                            },
+                                                          child: IconButton(
+                                                            onPressed: (){},
                                                             icon: Icon(
-                                                              Icons.delete_rounded,
-                                                              color: Colors.redAccent,
+                                                              Icons.edit_rounded,
+                                                              color: state.topColor,
                                                               size: Dimensions.width * 0.06,
                                                             )
+                                                          ),
                                                         ),
-                                                      )
 
-                                                    ],
-                                                  )
+                                                        SizedBox(width: Dimensions.width * 0.1,),
 
-                                                ],
-                                              ),
-                                            )
-                                        );
-                                      }
-                                      else{
-                                        return Stack(
-                                          children: [
-                                            Container(
-                                                width: Dimensions.width,
-                                                margin: EdgeInsets.symmetric(
-                                                  vertical: Dimensions.height * 0.01
-                                                ),
-                                                padding: EdgeInsets.only(
-                                                  bottom: Dimensions.height * 0.01
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(20),
-                                                  color: state.topColor,
-                                                  boxShadow: const [
-                                                    BoxShadow(
-                                                        color: Colors.grey,
-                                                        blurRadius: 5,
-                                                        spreadRadius: 1
-                                                    )
-                                                  ]
-                                                ),
-                                                child: InkWell(
-                                                  onTap: (){
-                                                    addSliderImage(context);
-                                                  },
-                                                  child: Stack(
-                                                    children: [
-                                                      //image
-                                                      Container(
-                                                        width: Dimensions.width,
-                                                        decoration: BoxDecoration(
-                                                          color: Colora.scaffold,
-                                                          borderRadius: BorderRadius.circular(20),
-                                                        ),
-                                                        child: SvgPicture.asset(
-                                                            'assets/images/logo_svg.svg',
-                                                            colorFilter: ColorFilter.mode(state.topColor.withOpacity(0.7), BlendMode.srcIn)
+                                                        //remove
+                                                        Container(
+                                                          decoration: BoxDecoration(
+                                                            shape: BoxShape.circle,
+                                                            color: Colora.scaffold_,
+                                                            border: Border.all(
+                                                                color: state.topColor,
+                                                                width: 2
+                                                            )
+                                                          ),
+                                                          child: IconButton(
+                                                              onPressed: (){
+                                                                bloc.add(DeleteSliderEvent(id: state.sliderList[index].id!));
+                                                                state.sliderList.removeAt(index);
+                                                                setState(() {
+                                                                  currentSliderIndex = index + 1;
+                                                                });
+                                                              },
+                                                              icon: Icon(
+                                                                Icons.delete_rounded,
+                                                                color: Colors.redAccent,
+                                                                size: Dimensions.width * 0.06,
+                                                              )
+                                                          ),
                                                         )
-                                                        // Image.asset(
-                                                        //     'assets/images/logo.png'
-                                                        // ),
-                                                      ),
 
-                                                      //add
-                                                      Container(
-                                                        width: Dimensions.width,
-                                                        decoration: BoxDecoration(
-                                                          color: Colora.scaffold.withOpacity(0.7),
-                                                          borderRadius: BorderRadius.circular(20),
-                                                        ),
-                                                        margin: EdgeInsets.only(
-                                                          bottom: Dimensions.height * 0.01,
-                                                          left: Dimensions.width * 0.02
-                                                        ),
-                                                        alignment: Alignment.bottomLeft,
-                                                        child: Icon(
-                                                          Icons.add_photo_alternate_rounded,
-                                                          color: state.topColor,
-                                                          size: Dimensions.width * 0.1,
-                                                        ),
+                                                      ],
+                                                    )
 
-                                                      ),
-                                                    ],
+                                                  ],
+                                                ),
+                                              )
+                                          );
+                                        }
+                                        else{
+                                          return Stack(
+                                            children: [
+                                              Container(
+                                                  width: Dimensions.width,
+                                                  margin: EdgeInsets.symmetric(
+                                                    vertical: Dimensions.height * 0.01
                                                   ),
-                                                )
-                                            ),
+                                                  padding: EdgeInsets.only(
+                                                    bottom: Dimensions.height * 0.01
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(20),
+                                                    color: state.topColor,
+                                                    boxShadow: const [
+                                                      BoxShadow(
+                                                          color: Colors.grey,
+                                                          blurRadius: 5,
+                                                          spreadRadius: 1
+                                                      )
+                                                    ]
+                                                  ),
+                                                  child: InkWell(
+                                                    onTap: (){
+                                                      addSliderImage(context);
+                                                    },
+                                                    child: Stack(
+                                                      children: [
+                                                        //image
+                                                        Container(
+                                                          width: Dimensions.width,
+                                                          decoration: BoxDecoration(
+                                                            color: Colora.scaffold,
+                                                            borderRadius: BorderRadius.circular(20),
+                                                          ),
+                                                          child: SvgPicture.asset(
+                                                              'assets/images/logo_svg.svg',
+                                                              colorFilter: ColorFilter.mode(state.topColor.withOpacity(0.7), BlendMode.srcIn)
+                                                          )
+                                                          // Image.asset(
+                                                          //     'assets/images/logo.png'
+                                                          // ),
+                                                        ),
 
-                                            //delete
-                                            // Positioned(
-                                            //   top: Dimensions.height * 0.015,
-                                            //   left: Dimensions.width * 0.01,
-                                            //   child: Container(
-                                            //     decoration: BoxDecoration(
-                                            //       shape: BoxShape.circle,
-                                            //       color: Colors.white,
-                                            //       border: Border.all(
-                                            //         color: Colora.primaryColor,
-                                            //         width: 2
-                                            //       )
-                                            //     ),
-                                            //     child: IconButton(
-                                            //       onPressed: (){},
-                                            //       icon: const Icon(
-                                            //         Icons.delete,
-                                            //         color: Colors.redAccent,
-                                            //       ),
-                                            //     ),
-                                            //   )
-                                            // )
-                                          ],
-                                        );
+                                                        //add
+                                                        Container(
+                                                          width: Dimensions.width,
+                                                          decoration: BoxDecoration(
+                                                            color: Colora.scaffold.withOpacity(0.7),
+                                                            borderRadius: BorderRadius.circular(20),
+                                                          ),
+                                                          margin: EdgeInsets.only(
+                                                            bottom: Dimensions.height * 0.01,
+                                                            left: Dimensions.width * 0.02
+                                                          ),
+                                                          alignment: Alignment.bottomLeft,
+                                                          child: Icon(
+                                                            Icons.add_photo_alternate_rounded,
+                                                            color: state.topColor,
+                                                            size: Dimensions.width * 0.1,
+                                                          ),
+
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                              ),
+
+                                              //delete
+                                              // Positioned(
+                                              //   top: Dimensions.height * 0.015,
+                                              //   left: Dimensions.width * 0.01,
+                                              //   child: Container(
+                                              //     decoration: BoxDecoration(
+                                              //       shape: BoxShape.circle,
+                                              //       color: Colors.white,
+                                              //       border: Border.all(
+                                              //         color: Colora.primaryColor,
+                                              //         width: 2
+                                              //       )
+                                              //     ),
+                                              //     child: IconButton(
+                                              //       onPressed: (){},
+                                              //       icon: const Icon(
+                                              //         Icons.delete,
+                                              //         color: Colors.redAccent,
+                                              //       ),
+                                              //     ),
+                                              //   )
+                                              // )
+                                            ],
+                                          );
+                                        }
                                       }
-                                    }
-                                  ),
+                                    ),
+                                ),
                               ),
-                            ),
 
-                            const SizedBox(
-                              height: 7,
-                            ),
+                              const SizedBox(
+                                height: 7,
+                              ),
 
-                            //buttons
-                            Container(
-                              width: Dimensions.width,
-                              margin: EdgeInsets.only(bottom: Dimensions.height * 0.02),
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    ...List.generate(
-                                    buttonTitles.length,
-                                      (index) => AnimatedContainer(
-                                        duration: const Duration(milliseconds: 500),
-                                        decoration: BoxDecoration(
-                                          color: selectedIndex == index
-                                            ?state.topColor
-                                            :Colora.scaffold,
-                                          borderRadius: BorderRadius.circular(20),
-                                          border: Border.all(
+                              //buttons
+                              Container(
+                                width: Dimensions.width,
+                                margin: EdgeInsets.only(bottom: Dimensions.height * 0.02),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      ...List.generate(
+                                      buttonTitles.length,
+                                        (index) => AnimatedContainer(
+                                          duration: const Duration(milliseconds: 500),
+                                          decoration: BoxDecoration(
                                             color: selectedIndex == index
-                                              ?Colora.scaffold
-                                              :state.topColor,
-                                          )
-                                        ),
-                                        margin: EdgeInsets.symmetric(
-                                          horizontal: Dimensions.width * 0.01
-                                        ),
-                                        child: MaterialButton(
-                                          splashColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                          enableFeedback: false,
-                                          focusColor: Colors.transparent,
-                                          onPressed: (){
-                                            setState(() {
-                                              selectedIndex = index;
-                                            });
-                                          },
-                                          child: Text(
-                                            buttonTitles[index],
-                                            style: TextStyle(
-                                              fontFamily: state.fontFamily,
+                                              ?state.topColor
+                                              :Colora.scaffold,
+                                            borderRadius: BorderRadius.circular(20),
+                                            border: Border.all(
                                               color: selectedIndex == index
-                                                ? state.fontColor
-                                                : state.secondFontColor,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: Dimensions.width * 0.035
+                                                ?Colora.scaffold
+                                                :state.topColor,
+                                            )
+                                          ),
+                                          margin: EdgeInsets.symmetric(
+                                            horizontal: Dimensions.width * 0.01
+                                          ),
+                                          child: MaterialButton(
+                                            splashColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
+                                            enableFeedback: false,
+                                            focusColor: Colors.transparent,
+                                            onPressed: (){
+                                              setState(() {
+                                                selectedIndex = index;
+                                              });
+                                            },
+                                            child: Text(
+                                              buttonTitles[index],
+                                              style: TextStyle(
+                                                fontFamily: state.fontFamily,
+                                                color: selectedIndex == index
+                                                  ? state.fontColor
+                                                  : state.secondFontColor,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: Dimensions.width * 0.035
+                                              ),
                                             ),
                                           ),
-                                        ),
+                                        )
                                       )
-                                    )
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
 
-                            //items
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 7),
-                              child: selectPageView(selectedIndex, state, marketBloc),
-                            )
+                              //items
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 7),
+                                child: selectPageView(selectedIndex, state, marketBloc),
+                              )
 
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
 
-                    //appbar
-                    StoreAppbar2(
-                      id: widget.market.id!,
-                      title: widget.market.name!,
-                      backImage: widget.market.backgroundImg.toString() == 'null' ? '' : widget.market.backgroundImg,
-                      logoImage: widget.market.logoImg.toString() == 'null' ? '' : widget.market.logoImg,
-                      mainColor: state.topColor,
-                      fontColor: state.fontColor,
-                      fontFamily: state.fontFamily,
-                    ),
-
-                    Positioned(
-                      width: Dimensions.width,
-                      height: Dimensions.height * 0.05,
-                      top: Dimensions.height * 0.215,
-                      child: Container(
-                          margin: EdgeInsets.symmetric(
-                              horizontal: Dimensions.width * 0.1
-                          ),
-                          decoration: BoxDecoration(
-                            color: state.topColor,
-                            borderRadius: BorderRadius.circular(30),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.5),
-                                blurRadius: 5,
-                                spreadRadius: 2,
-                                offset: const Offset(0, 2)
-                              )
-                            ]
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              //edit
-                              IconButton(
-                                onPressed: () {
-                                  print("pressed");
-                                },
-                                padding: const EdgeInsets.all(0),
-                                icon: Icon(
-                                  Icons.edit,
-                                  color: state.fontColor,
-                                  size: Dimensions.width * 0.055,
-                                ),
-                              ),
-
-                              //save
-                              IconButton(
-                                onPressed: () {
-                                  print("pressed");
-                                },
-                                icon: Icon(
-                                  Icons.save,
-                                  color: state.fontColor,
-                                  size: Dimensions.width * 0.055,
-                                ),
-                              ),
-
-                              //mark
-                              IconButton(
-                                onPressed: () {
-                                  print("pressed");
-                                },
-                                icon: Icon(
-                                  Icons.bookmark,
-                                  color: state.fontColor,
-                                  size: Dimensions.width * 0.055,
-                                ),
-                              ),
-
-                              //share
-                              IconButton(
-                                onPressed: () {
-                                  print("pressed");
-                                },
-                                icon: Icon(
-                                  Icons.share,
-                                  color: state.fontColor,
-                                  size: Dimensions.width * 0.055,
-                                ),
-                              ),
-
-                              //upload
-                              IconButton(
-                                onPressed: () {
-                                  print("pressed");
-                                },
-                                icon: Icon(
-                                  Icons.upload_file_outlined,
-                                  color: state.fontColor,
-                                  size: Dimensions.width * 0.055,
-                                ),
-                              ),
-
-                              //list
-                              IconButton(
-                                onPressed: () {
-                                  print("pressed");
-                                },
-                                icon: Icon(
-                                  Icons.list_alt,
-                                  color: state.fontColor,
-                                  size: Dimensions.width * 0.055,
-                                ),
-                              ),
-                            ],
-                          )
+                      //appbar
+                      StoreAppbar2(
+                        id: widget.market.id!,
+                        title: widget.market.name!,
+                        backImage: widget.market.backgroundImg.toString() == 'null' ? '' : widget.market.backgroundImg,
+                        logoImage: widget.market.logoImg.toString() == 'null' ? '' : widget.market.logoImg,
+                        mainColor: state.topColor,
+                        fontColor: state.fontColor,
+                        fontFamily: state.fontFamily,
                       ),
-                    ),
 
-                    //bottom settings
-                    Positioned(
-                      bottom: 0,
-                      child: CustomBottomNavigationBar(
-                      marketId: widget.market.id!,
-                      initTopColor: initTopColor,
-                      initBackColor: initBackColor,
-                      initSecondColor: initSecondColor,
-                      initFont: initFont,
-                      initFontColor: initFontColor,
-                      initFontSecondColor: initFontSecondColor,
-                    )
-                    )
+                      Positioned(
+                        width: Dimensions.width,
+                        height: Dimensions.height * 0.05,
+                        top: Dimensions.height * 0.215,
+                        child: Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: Dimensions.width * 0.1
+                            ),
+                            decoration: BoxDecoration(
+                              color: state.topColor,
+                              borderRadius: BorderRadius.circular(30),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  blurRadius: 5,
+                                  spreadRadius: 2,
+                                  offset: const Offset(0, 2)
+                                )
+                              ]
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                //edit
+                                IconButton(
+                                  onPressed: () {
+                                    print("pressed");
+                                  },
+                                  padding: const EdgeInsets.all(0),
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: state.fontColor,
+                                    size: Dimensions.width * 0.055,
+                                  ),
+                                ),
 
-                  ],
+                                //save
+                                IconButton(
+                                  onPressed: () {
+                                    print("pressed");
+                                  },
+                                  icon: Icon(
+                                    Icons.save,
+                                    color: state.fontColor,
+                                    size: Dimensions.width * 0.055,
+                                  ),
+                                ),
+
+                                //mark
+                                IconButton(
+                                  onPressed: () {
+                                    print("pressed");
+                                  },
+                                  icon: Icon(
+                                    Icons.bookmark,
+                                    color: state.fontColor,
+                                    size: Dimensions.width * 0.055,
+                                  ),
+                                ),
+
+                                //share
+                                IconButton(
+                                  onPressed: () {
+                                    print("pressed");
+                                  },
+                                  icon: Icon(
+                                    Icons.share,
+                                    color: state.fontColor,
+                                    size: Dimensions.width * 0.055,
+                                  ),
+                                ),
+
+                                //upload
+                                IconButton(
+                                  onPressed: () {
+                                    print("pressed");
+                                  },
+                                  icon: Icon(
+                                    Icons.upload_file_outlined,
+                                    color: state.fontColor,
+                                    size: Dimensions.width * 0.055,
+                                  ),
+                                ),
+
+                                //list
+                                IconButton(
+                                  onPressed: () {
+                                    print("pressed");
+                                  },
+                                  icon: Icon(
+                                    Icons.list_alt,
+                                    color: state.fontColor,
+                                    size: Dimensions.width * 0.055,
+                                  ),
+                                ),
+                              ],
+                            )
+                        ),
+                      ),
+
+                      //bottom settings
+                      Positioned(
+                        bottom: 0,
+                        child: CustomBottomNavigationBar(
+                        marketId: widget.market.id!,
+                        initTopColor: initTopColor,
+                        initBackColor: initBackColor,
+                        initSecondColor: initSecondColor,
+                        initFont: initFont,
+                        initFontColor: initFontColor,
+                        initFontSecondColor: initFontSecondColor,
+                      )
+                      )
+
+                    ],
+                  ),
                 ),
+                // bottomNavigationBar: CustomBottomNavigationBar(
+                //   marketId: widget.market.id!,
+                //   initTopColor: initTopColor,
+                //   initBackColor: initBackColor,
+                //   initSecondColor: initSecondColor,
+                //   initFont: initFont,
+                //   initFontColor: initFontColor,
+                //   initFontSecondColor: initFontSecondColor,
+                // ),
               ),
-              // bottomNavigationBar: CustomBottomNavigationBar(
-              //   marketId: widget.market.id!,
-              //   initTopColor: initTopColor,
-              //   initBackColor: initBackColor,
-              //   initSecondColor: initSecondColor,
-              //   initFont: initFont,
-              //   initFontColor: initFontColor,
-              //   initFontSecondColor: initFontSecondColor,
-              // ),
             ),
-          ),
-        );
-      }
+          );
+        }
+      ),
     );
   }
 }
@@ -1073,6 +1011,24 @@ productView(styleState, MarketBloc marketBloc) {
         return buildProductGridView7();
       case 8:
         return buildProductGridView8();
+      case 9:
+        return buildProductGridView9();
+      case 10:
+        return buildProductGridView10();
+      case 11:
+        return buildProductGridView11();
+      case 12:
+        return buildProductGridView12();
+      case 13:
+        return buildProductGridView13();
+      case 14:
+        return buildProductGridView14();
+      case 15:
+        return buildProductGridView15();
+      case 16:
+        return buildProductGridView16();
+      case 17:
+        return buildProductGridView17();
       default:
         return const SizedBox.shrink();
     }
@@ -1214,107 +1170,6 @@ productView(styleState, MarketBloc marketBloc) {
   );
 }
 
-// void showTemplates(context){
-//
-//   final PageController _pageController = PageController();
-//   int _currentPage = 0;
-//
-//   showDialog(
-//     // barrierColor: const Color(0x00000000),
-//     barrierDismissible: false,
-//     context: context,
-//     builder: (context) =>
-//       StatefulBuilder(
-//         builder: (context, setState)
-//         {
-//           return AlertDialog(
-//               contentPadding: const EdgeInsets.all(0),
-//               backgroundColor: Colors.transparent,
-//               content: ClipRRect(
-//                 borderRadius: BorderRadius.circular(10),
-//                 child: Container(
-//                   width: Dimensions.width * 0.8,
-//                   height: Dimensions.height * 0.5,
-//                   color: Colora.primaryColor,
-//                   child: Column(
-//                     children: [
-//
-//                       Container(
-//                         width: Dimensions.width,
-//                         height: Dimensions.height * 0.06,
-//                         color: Colora.scaffold,
-//                         padding: EdgeInsets.symmetric(
-//                           vertical: Dimensions.height * 0.02
-//                         ),
-//                         child: Center(
-//                           child: Text(
-//                             'انتخاب قالب',
-//                             style: TextStyle(
-//                               color: Colora.primaryColor,
-//                               fontSize: Dimensions.width * 0.038,
-//                               fontWeight: FontWeight.bold
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//
-//                       Container(
-//                         width: Dimensions.width * 0.8,
-//                         height: Dimensions.height * 0.38,
-//                         padding: EdgeInsets.symmetric(
-//                           horizontal: Dimensions.width * 0.02,
-//                           vertical: Dimensions.height * 0.01
-//                         ),
-//                         child: PageView(
-//                           controller: _pageController,
-//                           onPageChanged: (int page) {
-//                             setState(() {
-//                               _currentPage = page;
-//                             });
-//                           },
-//                           children: [
-//                             buildProductGridView(),
-//                             buildProductGridView2(),
-//                             buildProductGridView3(),
-//                             buildProductGridView4(),
-//                             buildProductGridView5(),
-//                             buildProductGridView6(),
-//                             buildProductGridView7(),
-//                             buildProductGridView8(),
-//                             buildProductGridView9(),
-//                           ],
-//                         ),
-//                       ),
-//
-//                       //save button
-//                       Container(
-//                         width: Dimensions.width,
-//                         height: Dimensions.height * 0.06,
-//                         color: Colora.scaffold,
-//                         child: MaterialButton(
-//                           onPressed: (){},
-//                           child: Text(
-//                             'ذخیره',
-//                             style: TextStyle(
-//                                 color: Colora.primaryColor,
-//                                 fontSize: Dimensions.width * 0.038,
-//                                 fontWeight: FontWeight.bold
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//
-//                     ],
-//                   ),
-//                 ),
-//               )
-//           );
-//         }
-//       )
-//   );
-//
-// }
-
 specialView(styleState) {
   return const SingleChildScrollView(
     child: Column(children: [
@@ -1327,64 +1182,66 @@ specialView(styleState) {
 
 commentView(styleState) {
   return SingleChildScrollView(
-    child: Column(children: [
-      Row(
-        children: [
-          Expanded(
-            flex: 5,
-            child: SizedBox(
-              height: 35,
-              child: CustomTextField(
+    child: Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              flex: 5,
+              child: SizedBox(
+                height: 35,
+                child: CustomTextField(
+                    color: Colora.lightBlue,
+                    controller: TextEditingController(),
+                    hintStyle: const TextStyle(color: Colors.white),
+                    text: 'نام و نام خانوادگی'),
+              ),
+            ),
+            Expanded(
+              flex: 5,
+              child: SizedBox(
+                height: 35,
+                child: CustomTextField(
                   color: Colora.lightBlue,
                   controller: TextEditingController(),
                   hintStyle: const TextStyle(color: Colors.white),
-                  text: 'نام و نام خانوادگی'),
-            ),
-          ),
-          Expanded(
-            flex: 5,
-            child: SizedBox(
-              height: 35,
-              child: CustomTextField(
-                color: Colora.lightBlue,
-                controller: TextEditingController(),
-                hintStyle: const TextStyle(color: Colors.white),
-                text: 'شماره موبایل',
-                keyboardType: TextInputType.number,
+                  text: 'شماره موبایل',
+                  keyboardType: TextInputType.number,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      const SizedBox(height: 7),
-      Container(
-        width: Dimensions.width,
-        child: Stack(
-          children: [
-            CustomTextField(
-                color: Colora.lightBlue,
-                maxLine: 7,
-                hintStyle: const TextStyle(color: Colors.white),
-                controller: TextEditingController(),
-                text: "پیام شما ..."),
-            Positioned(
-                bottom: 10,
-                left: 20,
-                child: CustomButton(
-                  width: 100,
-                  onPress: () {},
-                  text: "ارسال",
-                  color: Colora.primaryColor,
-                )),
           ],
         ),
-      ),
-      const CMBox(
-        senderName: 'میلاد',
-        messageText: 'سلام محصولاتتون عالی هستند',
-        senderImageUrl: 'https://via.placeholder.com/150',
-      ),
-    ]),
+        const SizedBox(height: 7),
+        Container(
+          width: Dimensions.width,
+          child: Stack(
+            children: [
+              CustomTextField(
+                  color: Colora.lightBlue,
+                  maxLine: 7,
+                  hintStyle: const TextStyle(color: Colors.white),
+                  controller: TextEditingController(),
+                  text: "پیام شما ..."),
+              Positioned(
+                  bottom: 10,
+                  left: 20,
+                  child: CustomButton(
+                    width: 100,
+                    onPress: () {},
+                    text: "ارسال",
+                    color: Colora.primaryColor,
+                  )),
+            ],
+          ),
+        ),
+        const CMBox(
+          senderName: 'میلاد',
+          messageText: 'سلام محصولاتتون عالی هستند',
+          senderImageUrl: 'https://via.placeholder.com/150',
+        ),
+      ]
+    ),
   );
 }
 
@@ -1392,98 +1249,195 @@ contactUsView(styleState) {
   return SingleChildScrollView(
     child: Column(
       children: [
-        const SizedBox(
-          height: 7,
-        ),
-        const Row(
+
+        //title
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'راه های ارتباطی:',
-              style: TextStyle(color: Colora.primaryColor),
+            Container(
+              height: 2,
+              width: Dimensions.width * 0.3,
+              color: styleState.topColor,
             ),
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Text("۰۹۱۹۱۲۳۴۵۶۲"),
-                    Icon(Icons.mobile_friendly_rounded),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text("۰۹۱۹۱۲۳۴۵۶۲"),
-                    Icon(Icons.mobile_friendly_rounded),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text("۰۹۱۹۱۲۳۴۵۶۲"),
-                    Icon(Icons.mobile_friendly_rounded),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text("۰۹۱۹۱۲۳۴۵۶۲"),
-                    Icon(Icons.mobile_friendly_rounded),
-                  ],
-                ),
-              ],
-            )
+            SizedBox(
+              width: Dimensions.width * 0.3,
+              child: Center(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      "فروش ابزار یراق",
+                      style: TextStyle(
+                          color: styleState.topColor,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: styleState.fontFamily,
+                          fontSize: Dimensions.width * 0.035
+                      ),
+                    ),
+                  )
+              ),
+            ),
+            Container(
+              height: 2,
+              width: Dimensions.width * 0.3,
+              color: styleState.topColor,
+            ),
           ],
         ),
-        const Align(
-            alignment: Alignment.topRight, child: Text("شبکه های اجتماعی:")),
-        const Align(
+
+        SizedBox(
+          height: Dimensions.height * 0.01,
+        ),
+
+        //contact
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            //title
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                'راه های ارتباطی:',
+                style: TextStyle(
+                    color: styleState.topColor,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: styleState.fontFamily,
+                    fontSize: Dimensions.width * 0.044
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height: Dimensions.height * 0.01,
+            ),
+
+            //phone
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  "۰۹۱۹۱۲۳۴۵۶۲",
+                  style: TextStyle(
+                    color: styleState.fontColor,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: styleState.fontFamily,
+                    fontSize: Dimensions.width * 0.044
+                  ),
+                ),
+                Icon(
+                  Icons.phone,
+                  color: styleState.fontColor,
+                ),
+              ],
+            ),
+          ],
+        ),
+
+        SizedBox(
+          height: Dimensions.height * 0.01,
+        ),
+
+        //social networks
+        Align(
+          alignment: Alignment.centerRight,
+          child: Text(
+            'شبکه‌های اجتماعی:',
+            style: TextStyle(
+                color: styleState.topColor,
+                fontWeight: FontWeight.bold,
+                fontFamily: styleState.fontFamily,
+                fontSize: Dimensions.width * 0.044
+            ),
+          ),
+        ),
+        Align(
           alignment: Alignment.topCenter,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.telegram),
-              Icon(Icons.telegram),
-              Icon(Icons.telegram),
-              Icon(Icons.telegram),
+              IconButton(
+                onPressed: (){},
+                icon: Icon(
+                  Icons.telegram,
+                  color: styleState.fontColor,
+                ),
+              ),
+              IconButton(
+                onPressed: (){},
+                icon: Icon(
+                  Icons.telegram,
+                  color: styleState.fontColor,
+                ),
+              ),
+              IconButton(
+                onPressed: (){},
+                icon: Icon(
+                  Icons.telegram,
+                  color: styleState.fontColor,
+                ),
+              ),
             ],
           ),
         ),
-        const SizedBox(
-          height: 7,
+
+        SizedBox(
+          height: Dimensions.height * 0.01,
         ),
+
+        //map
         Container(
           height: 200,
           width: Dimensions.width,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: Colora.scaffold,
-            border: Border.all(color: Colora.primaryColor, width: 3),
+            border: Border.all(color: styleState.topColor, width: 3),
           ),
-          child: const Center(
-            child: Text("نقشه"),
+          child: Center(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: MapScreen(
+                isSelecting: false,
+                initialLocation: LocationModel(lat: 35.6783, lon: 51.4161),
+              ),
+            )
           ),
         ),
-        const SizedBox(
-          height: 7,
+
+        SizedBox(
+          height: Dimensions.height * 0.01,
         ),
-        const Align(
+
+        //address
+        Align(
           alignment: Alignment.topCenter,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'آدرس:',
+                'آدرس : ',
                 style: TextStyle(
-                    color: Colora.primaryColor,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold),
+                  color: styleState.topColor,
+                  fontFamily: styleState.fontFamily,
+                  fontSize: Dimensions.width * 0.044,
+                  fontWeight: FontWeight.bold
+                ),
               ),
               Text(
                 'زنجان',
-                style: TextStyle(color: Colora.primaryColor, fontSize: 14),
+                style: TextStyle(
+                  color: styleState.fontColor,
+                  fontSize: 12,
+                  fontFamily: styleState.fontFamily
+                ),
               ),
             ],
           ),
-        )
+        ),
+
+        SizedBox(
+          height: Dimensions.height * 0.05,
+        ),
+
       ],
     ),
   );

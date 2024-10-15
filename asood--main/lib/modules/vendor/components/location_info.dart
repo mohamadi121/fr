@@ -491,6 +491,7 @@ class _LocationInfoState extends State<LocationInfo> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: MapScreen(
+                          isSelecting: true,
                           selectedLocation: (mapLocation) {
                             setState(() {
                               location = mapLocation;
