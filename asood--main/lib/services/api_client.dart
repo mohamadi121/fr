@@ -126,6 +126,40 @@ class ApiClient {
     }
   }
 
+  //image upload to server
+  Future<http.Response> patchMultipartData(
+      String uri, Map<String, String> body, List<MultipartBody> multipartBody,
+      {Map<String, String>? headers}) async {
+    headers == null ? await readToken() : null;
+    try {
+      if (kDebugMode) {
+        debugPrint('====> API Call: $uri\nHeader: $_mainHeaders');
+        debugPrint('====> API Body: $body with ${multipartBody.length} files');
+      }
+      http.MultipartRequest request =
+      http.MultipartRequest('PATCH', Uri.parse(appBaseUrl + uri));
+      request.headers.addAll(headers ?? _mainHeaders);
+      for (MultipartBody multipart in multipartBody) {
+        if (multipart.file != null) {
+          Uint8List list = await multipart.file!.readAsBytes();
+          request.files.add(http.MultipartFile(
+            multipart.key,
+            multipart.file!.readAsBytes().asStream(),
+            list.length,
+            filename: '1.png',
+          ));
+        }
+      }
+      request.fields.addAll(body);
+      http.Response response =
+      await http.Response.fromStream(await request.send());
+      print(response.statusCode);
+      return handleResponse(response, uri);
+    } catch (e) {
+      return http.Response(noInternetMessage, 1);
+    }
+  }
+
   //put data to api
   Future<http.Response> putData(String uri, dynamic body,
       {Map<String, String>? headers}) async {

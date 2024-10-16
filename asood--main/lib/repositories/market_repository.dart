@@ -113,6 +113,11 @@ class MarketRepository {
     return await marketApiService.createMarketSlider(marketId, imagesFile);
   }
 
+  //createMarketSlider
+  Future<dynamic> editMarketSlider(sliderId, XFile imagesFile) async {
+    return await marketApiService.editMarketSlider(sliderId, imagesFile);
+  }
+
   //modifyMarketSlider
   Future<dynamic> modifyMarketSlider(body, sliderId) async {
     return await marketApiService.modifyMarketSlider(body, sliderId);
@@ -125,6 +130,11 @@ class MarketRepository {
 
   Future<dynamic> setMarketTheme(int marketId, ThemeModel themeModel) async {
     return await marketApiService.setMarketTheme(marketId, themeModel);
+  }
+
+  //get market comments repository
+  Future<dynamic> getMarketComments(marketId) async {
+    return await marketApiService.getMarketComments(marketId);
   }
 
 }

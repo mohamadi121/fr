@@ -7,6 +7,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../models/comment_model.dart';
 import '../../../../repositories/market_repository.dart';
 import '../../../../services/api_status.dart';
 
@@ -26,6 +27,7 @@ class VendorBloc extends Bloc<VendorEvent, VendorState> {
 
     on<LoadSlider>(_getSlider);
     on<AddSliderEvent>(_setShopSlider);
+    on<EditSliderEvent>(_editShopSlider);
     on<DeleteSliderEvent>(_deleteShopSlider);
 
     on<SelectTopColor>(_selectTopColor);
@@ -37,6 +39,8 @@ class VendorBloc extends Bloc<VendorEvent, VendorState> {
     on<SelectFontFamily>(_selectFontFamily);
 
     on<SelectTheme>(_setMarketTheme);
+
+    on<LoadComments>(_getComments);
   }
 
   //------------- logo -----------------
@@ -165,6 +169,28 @@ class VendorBloc extends Bloc<VendorEvent, VendorState> {
         sliderStatus: VendorStatus.initial,));
   }
 
+  _editShopSlider(EditSliderEvent event, Emitter<VendorState> emit) async {
+    emit(state.copyWith(
+        id: event.id,
+        logoFile: event.sliderImage,
+        sliderStatus: VendorStatus.loading
+    ));
+    var res = await marketRepository.editMarketSlider(
+      event.id,
+      event.sliderImage,
+    );
+    if (res is Success) {
+      // var json = jsonDecode(res.response.toString());
+      emit(state.copyWith(sliderStatus: VendorStatus.success));
+    }
+    else {
+      emit(state.copyWith(
+          sliderStatus: VendorStatus.failure, error: res.error.toString()));
+    }
+    emit(state.copyWith(
+      sliderStatus: VendorStatus.initial,));
+  }
+
   _deleteShopSlider(DeleteSliderEvent event, Emitter<VendorState> emit) async {
     emit(state.copyWith(
         id: event.id,
@@ -250,6 +276,26 @@ class VendorBloc extends Bloc<VendorEvent, VendorState> {
     }
 
     emit(state.copyWith(status: VendorStatus.initial));
+  }
+
+  //------------- slider -----------------
+  _getComments(LoadComments event, Emitter<VendorState> emit) async {
+    emit(state.copyWith(commentStatus: VendorStatus.loading));
+    try {
+      final res = await marketRepository.getMarketComments(event.marketId);
+      if (res is Success) {
+        final json = jsonDecode(res.response.toString());
+        final initList = json['data'] as List;
+        final commentList =
+        initList.map((e) => CommentModel.fromJson(e)).toList();
+        emit(state.copyWith(commentStatus: VendorStatus.success, commentList: commentList));
+      } else {
+        emit(state.copyWith(commentStatus: VendorStatus.failure));
+      }
+    } catch (e) {
+      emit(state.copyWith(commentStatus: VendorStatus.failure));
+    }
+    emit(state.copyWith(commentStatus: VendorStatus.initial));
   }
 
 }

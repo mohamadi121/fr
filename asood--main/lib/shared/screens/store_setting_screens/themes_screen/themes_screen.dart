@@ -9,7 +9,6 @@ import 'package:flutter_svg/svg.dart';
 import '../../../../modules/vendor/blocs/vendor/vendor_bloc.dart';
 import '../../../utils/snack_bar_util.dart';
 import '../../../widgets/default_appbar.dart';
-import '../../../widgets/simple_bot_navbar.dart';
 import '../../../constants/constants.dart';
 
 @RoutePage()
@@ -37,92 +36,97 @@ class _MultiViewSliderScreenState extends State<MultiViewSliderScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colora.primaryColor,
+      // color: Colora.primaryColor,
       child: SafeArea(
         child: Scaffold(
+          backgroundColor: Colors.transparent,
           // bottomNavigationBar: const SimpleBotNavBar(),
           body: Stack(
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+              BlocBuilder<VendorBloc, VendorState>(
+                builder: (context, styleState) => Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
 
-                  SizedBox(
-                    height: Dimensions.height * 0.1,
-                  ),
+                    // SizedBox(
+                    //   height: Dimensions.height * 0.1,
+                    // ),
 
-                  Container(
-                    height: Dimensions.height * 0.35,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Dimensions.width * 0.02
-                    ),
-                    child: PageView(
-                      controller: _pageController,
-                      onPageChanged: (int page) {
-                        setState(() {
-                          _currentPage = page;
-                        });
-                      },
-                      children: [
-                        buildProductGridView0(),
-                        buildProductGridView1(),
-                        buildProductGridView2(),
-                        buildProductGridView3(),
-                        buildProductGridView4(),
-                        buildProductGridView5(),
-                        buildProductGridView6(),
-                        buildProductGridView7(),
-                        buildProductGridView8(),
-                        buildProductGridView9(),
-                        buildProductGridView10(),
-                        buildProductGridView11(),
-                        buildProductGridView12(),
-                        buildProductGridView13(),
-                        buildProductGridView14(),
-                        buildProductGridView15(),
-                        buildProductGridView16(),
-                        buildProductGridView17(),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(
-                    height: 30,
-                  ),
-
-                  buildDotList(),
-
-                  SizedBox(
-                    height: Dimensions.height * 0.05,
-                  ),
-
-                  //save button
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      width: Dimensions.width * 0.3,
-                      height: Dimensions.height * 0.05,
-                      color: Colora.primaryColor,
-                      child: MaterialButton(
-                        onPressed: (){
-                          bloc.add(AddTemplateEvent(template: _currentPage));
-                          showSnackBar(context, "قالب با موفقیت اضافه شد");
+                    Container(
+                      height: Dimensions.height * 0.35,
+                      // padding: EdgeInsets.symmetric(
+                      //   horizontal: Dimensions.width * 0.02
+                      // ),
+                      child: PageView(
+                        controller: _pageController,
+                        onPageChanged: (int page) {
+                          setState(() {
+                            _currentPage = page;
+                          });
                         },
-                        child: Text(
-                          'ذخیره',
-                          style: TextStyle(
-                            color: Colora.scaffold,
-                            fontSize: Dimensions.width * 0.037
+                        children: [
+                          buildProductGridView0(),
+                          buildProductGridView1(),
+                          buildProductGridView2(),
+                          buildProductGridView3(),
+                          buildProductGridView4(),
+                          buildProductGridView5(),
+                          buildProductGridView6(),
+                          buildProductGridView7(),
+                          buildProductGridView8(),
+                          buildProductGridView9(),
+                          buildProductGridView10(),
+                          buildProductGridView11(),
+                          buildProductGridView12(),
+                          buildProductGridView13(),
+                          buildProductGridView14(),
+                          buildProductGridView15(),
+                          buildProductGridView16(),
+                          buildProductGridView17(),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(
+                      height: 10,
+                    ),
+
+                    buildDotList(styleState),
+
+                    SizedBox(
+                      height: Dimensions.height * 0.01,
+                    ),
+
+                    //save button
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        width: Dimensions.width * 0.3,
+                        height: Dimensions.height * 0.05,
+                        color: styleState.secondColor,
+                        child: MaterialButton(
+                          onPressed: (){
+                            bloc.add(AddTemplateEvent(template: _currentPage));
+                            bloc.add(const ShowTemplatesEvent(isShow: false));
+                            // showSnackBar(context, "قالب با موفقیت اضافه شد");
+                          },
+                          child: Text(
+                            'ذخیره',
+                            style: TextStyle(
+                              color: styleState.fontColor,
+                              fontFamily: styleState.fontFamily,
+                              fontSize: Dimensions.width * 0.037
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  )
+                    )
 
-                ],
+                  ],
+                )
               ),
 
-              const NewAppBar(title: 'قالب ها',),
+              // const NewAppBar(title: 'قالب ها',),
 
             ],
           ),
@@ -131,7 +135,7 @@ class _MultiViewSliderScreenState extends State<MultiViewSliderScreen> {
     );
   }
 
-  Widget buildDotList() {
+  Widget buildDotList(styleState) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List<Widget>.generate(18, (index) {
@@ -142,10 +146,10 @@ class _MultiViewSliderScreenState extends State<MultiViewSliderScreen> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: Colora.primaryColor,
+              color: styleState.secondColor,
               width: 2
             ),
-            color: _currentPage == index ? Colora.primaryColor : Colora.scaffold,
+            color: _currentPage == index ? styleState.secondColor : Colora.scaffold,
           ),
         );
       }),

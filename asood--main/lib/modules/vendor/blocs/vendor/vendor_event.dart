@@ -65,6 +65,16 @@ class AddSliderEvent extends VendorEvent {
   });
 }
 
+class EditSliderEvent extends VendorEvent {
+  final int id;
+  final XFile sliderImage;
+
+  const EditSliderEvent({
+    required this.id,
+    required this.sliderImage,
+  });
+}
+
 class DeleteSliderEvent extends VendorEvent {
   final int id;
 
@@ -127,5 +137,13 @@ class SelectTheme extends VendorEvent {
     this.fontColor,
     this.fontSecondaryColor,
 
+  });
+}
+
+//----------------- comments ------------------
+class LoadComments extends VendorEvent {
+  final int marketId;
+  const LoadComments({
+    required this.marketId,
   });
 }

@@ -31,6 +31,9 @@ class VendorState extends Equatable {
   final Color secondFontColor;
   final String fontFamily;
 
+  final List<CommentModel> commentList;
+  final VendorStatus commentStatus;
+
   const VendorState({
     required this.id,
     required this.businessId,
@@ -57,6 +60,9 @@ class VendorState extends Equatable {
     required this.fontColor,
     required this.secondFontColor,
     required this.fontFamily,
+
+    required this.commentList,
+    required this.commentStatus
   });
 
   factory VendorState.initial() {
@@ -77,7 +83,7 @@ class VendorState extends Equatable {
 
       sliderFile: XFile(''),
       sliderStatus: VendorStatus.initial,
-      sliderList: [],
+      sliderList: const [],
 
       topColor: const Color.fromARGB(255, 10, 25, 146),
       backColor: const Color.fromARGB(255, 255, 255, 255),
@@ -86,6 +92,9 @@ class VendorState extends Equatable {
       fontColor: const Color.fromARGB(255, 255, 255, 255),
       secondFontColor: const Color.fromARGB(255, 10, 25, 146),
       fontFamily: '',
+
+      commentList: const [],
+      commentStatus: VendorStatus.initial,
 
     );
   }
@@ -115,6 +124,9 @@ class VendorState extends Equatable {
     Color? fontColor,
     Color? secondFontColor,
     String? fontFamily,
+
+    List<CommentModel>? commentList,
+    VendorStatus? commentStatus,
   }) {
     return VendorState(
       id: id ?? this.id,
@@ -142,6 +154,9 @@ class VendorState extends Equatable {
       fontColor: fontColor ?? this.fontColor,
       secondFontColor: secondFontColor ?? this.secondFontColor,
       fontFamily: fontFamily ?? this.fontFamily,
+
+      commentList: commentList ?? this.commentList,
+      commentStatus: commentStatus ?? this.commentStatus,
 
     );
   }
@@ -177,6 +192,10 @@ class VendorState extends Equatable {
       fontColor,
       secondFontColor,
       fontFamily,
+
+      commentList,
+      commentStatus,
+
     ];
   }
   

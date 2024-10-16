@@ -194,6 +194,19 @@ class MarketApiService {
     }
   }
 
+  //edit new slider by id
+  Future editMarketSlider(sliderId, XFile imagesFile) async {
+    List<MultipartBody> images = [MultipartBody('slider_img', imagesFile)];
+    var uri = 'slider/$sliderId/';
+    var body = <String, String>{};
+    try {
+      http.Response res = await apiClient.patchMultipartData(uri, body, images);
+      return ApiStatus(res);
+    } catch (e) {
+      return CustomApiStatus();
+    }
+  }
+
   //modify slider by slider id
   Future modifyMarketSlider(body, sliderId) async {
     var uri = 'slider/$sliderId';
@@ -229,6 +242,18 @@ class MarketApiService {
     var uri = 'theme/$marketId/';
     try {
       http.Response res = await apiClient.postData(uri, body);
+      return ApiStatus(res);
+    } catch (e) {
+      return CustomApiStatus();
+    }
+  }
+
+  Future getMarketComments(marketId) async {
+    var uri = 'comment/list/$marketId';
+    try {
+      http.Response res = await apiClient.getData(
+        uri,
+      );
       return ApiStatus(res);
     } catch (e) {
       return CustomApiStatus();

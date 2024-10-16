@@ -5,11 +5,13 @@ enum MarketStatus { initial, loading, success, failure }
 class MarketState extends Equatable{
 
   final List templateList;
+  final bool showTemplates;
   final int templateIndex;
 
   const MarketState({
 
     required this.templateList,
+    required this.showTemplates,
     required this.templateIndex,
 
   });
@@ -18,6 +20,7 @@ class MarketState extends Equatable{
     return const MarketState(
 
       templateList: [],
+      showTemplates: false,
       templateIndex : -1,
 
     );
@@ -26,12 +29,14 @@ class MarketState extends Equatable{
   MarketState copyWith({
 
     List? templateList,
+    bool? showTemplates,
     int? templateIndex,
 
   }) {
     return MarketState(
 
       templateList: templateList ?? this.templateList,
+      showTemplates: showTemplates ?? this.showTemplates,
       templateIndex: templateIndex ?? this.templateIndex,
 
     );
@@ -43,6 +48,7 @@ class MarketState extends Equatable{
     return [
 
       templateList,
+      showTemplates,
       templateIndex,
 
     ];

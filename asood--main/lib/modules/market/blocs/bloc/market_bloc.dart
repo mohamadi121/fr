@@ -12,6 +12,7 @@ class MarketBloc extends Bloc<MarketEvent, MarketState> {
 
     on<AddTemplateEvent>(_addTemplate);
     on<RemoveTemplateEvent>(_removeTemplate);
+    on<ShowTemplatesEvent>(_showTemplates);
 
   }
 
@@ -20,7 +21,13 @@ class MarketBloc extends Bloc<MarketEvent, MarketState> {
   }
 
   _removeTemplate(RemoveTemplateEvent event, Emitter<MarketState> emit) {
-    emit(state.copyWith(templateList: state.templateList.removeAt(event.index)));
+    state.templateList.removeAt(event.index);
+    // print(state.templateList);
+    emit(state.copyWith(templateList: state.templateList));
+  }
+
+  _showTemplates(ShowTemplatesEvent event, Emitter<MarketState> emit) {
+    emit(state.copyWith(showTemplates: event.isShow));
   }
 
 }

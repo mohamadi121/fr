@@ -15,6 +15,14 @@ class AddTemplateEvent extends MarketEvent {
   });
 }
 
+class ShowTemplatesEvent extends MarketEvent {
+  final bool isShow;
+
+  const ShowTemplatesEvent({
+    required this.isShow,
+  });
+}
+
 class RemoveTemplateEvent extends MarketEvent {
   final int index;
 

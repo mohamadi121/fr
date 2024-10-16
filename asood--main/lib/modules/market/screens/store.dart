@@ -1,14 +1,10 @@
 import 'dart:io';
 
 import 'package:asood/models/market_model.dart';
-import 'package:asood/models/slider_model.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,8 +16,6 @@ import '../../../shared/screens/store_setting_screens/themes_screen/themes_scree
 import '../../../shared/utils/snack_bar_util.dart';
 import '../../../shared/widgets/comment_messagebox_widget.dart';
 import '../../../shared/widgets/custom_bottom_navbar.dart';
-import '../../../shared/widgets/custom_button.dart';
-import '../../../shared/widgets/custom_textfield.dart';
 import '../../../shared/widgets/map_widget_2.dart';
 import '../../vendor/blocs/vendor/vendor_bloc.dart';
 import '../../vendor/blocs/workspace/workspace_bloc.dart';
@@ -158,9 +152,10 @@ class _StoreScreenState extends State<StoreScreen> {
 
   void loadSlider(){
     bloc.add(LoadSlider(marketId: widget.market.id!));
+    // bloc.add(LoadComments(marketId: widget.market.id!));
   }
 
-  void addSliderImage(context){
+  void sliderImage(context, {bool isEditing = false, int sliderId = 0, String currentImage = ''}){
     String preview = '';
     XFile? image;
     showDialog(
@@ -181,6 +176,7 @@ class _StoreScreenState extends State<StoreScreen> {
                     }
                     else if (state.sliderStatus == VendorStatus.failure) {
                       showSnackBar(context, "مشکلی پیش آمده مجددا تلاش کنید");
+                      Navigator.pop(context);
                     }
                   },
                   builder: (context, state){
@@ -242,16 +238,39 @@ class _StoreScreenState extends State<StoreScreen> {
                                     ),
                                     child: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
-                                        child: preview == ''
-                                          ?Icon(
-                                            Icons.add_photo_alternate_rounded,
-                                            color: Colora.primaryColor,
-                                            size: Dimensions.width * 0.1,
+                                        child: isEditing == true && preview == ''
+                                          ?CachedNetworkImage(
+                                            imageUrl: currentImage,
+                                            imageBuilder: (context, imageProvider) {
+                                              return Container(
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                                ),
+                                              );
+                                            },
+                                            placeholder: (context, url) => Shimmer.fromColors(
+                                              baseColor: Colors.grey.withOpacity(0.2),
+                                              highlightColor: Colors.black.withOpacity(0.2),
+                                              direction: ShimmerDirection.rtl,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey,
+                                                    borderRadius: BorderRadius.circular(5)
+                                                ),
+                                              ),
+                                            ),
+                                            errorWidget: (context, url, error) => const Icon(Icons.error),
                                           )
-                                          :Image.file(
-                                            File(preview),
-                                            fit: BoxFit.cover,
-                                          ),
+                                          :preview == ''
+                                            ?Icon(
+                                              Icons.add_photo_alternate_rounded,
+                                              color: Colora.primaryColor,
+                                              size: Dimensions.width * 0.1,
+                                            )
+                                            :Image.file(
+                                              File(preview),
+                                              fit: BoxFit.cover,
+                                            ),
                                       )
                                   ),
                                 ),
@@ -294,7 +313,12 @@ class _StoreScreenState extends State<StoreScreen> {
                                 :InkWell(
                                   onTap: () async{
                                     if(image != null){
-                                      bloc.add(AddSliderEvent(id: widget.market.id!, sliderImage: image!));
+                                      if(isEditing == false){
+                                        bloc.add(AddSliderEvent(id: widget.market.id!, sliderImage: image!));
+                                      }
+                                      else{
+                                        bloc.add(EditSliderEvent(id: sliderId, sliderImage: image!));
+                                      }
                                     }
                                     else{
                                       showSnackBar(context, "لطفا عکس خود را انتخاب کنید");
@@ -316,7 +340,9 @@ class _StoreScreenState extends State<StoreScreen> {
                                       child: FittedBox(
                                         fit: BoxFit.scaleDown,
                                         child: Text(
-                                          'ذخیره',
+                                          isEditing == true
+                                          ?'ویرایش'
+                                          :'ذخیره',
                                           style: TextStyle(
                                             color: Colora.scaffold,
                                             fontSize: Dimensions.width * 0.033
@@ -551,7 +577,14 @@ class _StoreScreenState extends State<StoreScreen> {
                                                             )
                                                           ),
                                                           child: IconButton(
-                                                            onPressed: (){},
+                                                            onPressed: (){
+                                                              sliderImage(
+                                                                context,
+                                                                sliderId: state.sliderList[index].id!,
+                                                                isEditing: true,
+                                                                currentImage: state.sliderList[index].image.toString()
+                                                              );
+                                                            },
                                                             icon: Icon(
                                                               Icons.edit_rounded,
                                                               color: state.topColor,
@@ -620,7 +653,7 @@ class _StoreScreenState extends State<StoreScreen> {
                                                   ),
                                                   child: InkWell(
                                                     onTap: (){
-                                                      addSliderImage(context);
+                                                      sliderImage(context, isEditing: false);
                                                     },
                                                     child: Stack(
                                                       children: [
@@ -663,29 +696,6 @@ class _StoreScreenState extends State<StoreScreen> {
                                                     ),
                                                   )
                                               ),
-
-                                              //delete
-                                              // Positioned(
-                                              //   top: Dimensions.height * 0.015,
-                                              //   left: Dimensions.width * 0.01,
-                                              //   child: Container(
-                                              //     decoration: BoxDecoration(
-                                              //       shape: BoxShape.circle,
-                                              //       color: Colors.white,
-                                              //       border: Border.all(
-                                              //         color: Colora.primaryColor,
-                                              //         width: 2
-                                              //       )
-                                              //     ),
-                                              //     child: IconButton(
-                                              //       onPressed: (){},
-                                              //       icon: const Icon(
-                                              //         Icons.delete,
-                                              //         color: Colors.redAccent,
-                                              //       ),
-                                              //     ),
-                                              //   )
-                                              // )
                                             ],
                                           );
                                         }
@@ -797,15 +807,15 @@ class _StoreScreenState extends State<StoreScreen> {
                               ]
                             ),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 //edit
-                                IconButton(
-                                  onPressed: () {
+                                InkWell(
+                                  onTap: () {
                                     print("pressed");
                                   },
-                                  padding: const EdgeInsets.all(0),
-                                  icon: Icon(
+                                  // padding: const EdgeInsets.all(0),
+                                  child: Icon(
                                     Icons.edit,
                                     color: state.fontColor,
                                     size: Dimensions.width * 0.055,
@@ -813,11 +823,11 @@ class _StoreScreenState extends State<StoreScreen> {
                                 ),
 
                                 //save
-                                IconButton(
-                                  onPressed: () {
+                                InkWell(
+                                  onTap: () {
                                     print("pressed");
                                   },
-                                  icon: Icon(
+                                  child: Icon(
                                     Icons.save,
                                     color: state.fontColor,
                                     size: Dimensions.width * 0.055,
@@ -825,11 +835,11 @@ class _StoreScreenState extends State<StoreScreen> {
                                 ),
 
                                 //mark
-                                IconButton(
-                                  onPressed: () {
+                                InkWell(
+                                  onTap: () {
                                     print("pressed");
                                   },
-                                  icon: Icon(
+                                  child: Icon(
                                     Icons.bookmark,
                                     color: state.fontColor,
                                     size: Dimensions.width * 0.055,
@@ -837,11 +847,11 @@ class _StoreScreenState extends State<StoreScreen> {
                                 ),
 
                                 //share
-                                IconButton(
-                                  onPressed: () {
+                                InkWell(
+                                  onTap: () {
                                     print("pressed");
                                   },
-                                  icon: Icon(
+                                  child: Icon(
                                     Icons.share,
                                     color: state.fontColor,
                                     size: Dimensions.width * 0.055,
@@ -849,11 +859,11 @@ class _StoreScreenState extends State<StoreScreen> {
                                 ),
 
                                 //upload
-                                IconButton(
-                                  onPressed: () {
+                                InkWell(
+                                  onTap: () {
                                     print("pressed");
                                   },
-                                  icon: Icon(
+                                  child: Icon(
                                     Icons.upload_file_outlined,
                                     color: state.fontColor,
                                     size: Dimensions.width * 0.055,
@@ -861,11 +871,11 @@ class _StoreScreenState extends State<StoreScreen> {
                                 ),
 
                                 //list
-                                IconButton(
-                                  onPressed: () {
+                                InkWell(
+                                  onTap: () {
                                     print("pressed");
                                   },
-                                  icon: Icon(
+                                  child: Icon(
                                     Icons.list_alt,
                                     color: state.fontColor,
                                     size: Dimensions.width * 0.055,
@@ -980,7 +990,7 @@ selectPageView(index, styleState, MarketBloc marketBloc) {
     case 1:
       return specialView(styleState);
     case 2:
-      return commentView(styleState);
+      return commentView();
     case 3:
       return contactUsView(styleState);
     default:
@@ -988,7 +998,6 @@ selectPageView(index, styleState, MarketBloc marketBloc) {
 }
 
 productView(styleState, MarketBloc marketBloc) {
-
 
   Widget templateWidget(int template){
 
@@ -1034,139 +1043,152 @@ productView(styleState, MarketBloc marketBloc) {
     }
   }
 
-  return Column(
-    children: [
+  return BlocBuilder<MarketBloc, MarketState>(
+    builder: (context, state) => Column(
+      children: [
 
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            height: 2,
-            width: Dimensions.width * 0.3,
-            color: styleState.topColor,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              height: 2,
+              width: Dimensions.width * 0.3,
+              color: styleState.topColor,
+            ),
+            SizedBox(
+              width: Dimensions.width * 0.3,
+              child: Center(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    "فروش ابزار یراق",
+                    style: TextStyle(
+                      color: styleState.topColor,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: styleState.fontFamily,
+                      fontSize: Dimensions.width * 0.035
+                    ),
+                  ),
+                )
+              ),
+            ),
+            Container(
+              height: 2,
+              width: Dimensions.width * 0.3,
+              color: styleState.topColor,
+            ),
+          ],
+        ),
+
+        Container(
+          width: Dimensions.width,
+          height: Dimensions.height * 0.07,
+          margin: EdgeInsets.symmetric(
+            vertical: Dimensions.height * 0.01
           ),
-          SizedBox(
-            width: Dimensions.width * 0.3,
-            child: Center(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  "فروش ابزار یراق",
+          decoration: BoxDecoration(
+            color: styleState.secondColor,
+            borderRadius: BorderRadius.circular(10)
+          ),
+          child: MaterialButton(
+            onPressed: (){
+              marketBloc.add(ShowTemplatesEvent(isShow: !state.showTemplates));
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+
+                Text(
+                  'اضافه کردن قالب جدید',
                   style: TextStyle(
-                    color: styleState.topColor,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: styleState.fontFamily,
-                    fontSize: Dimensions.width * 0.035
+                    color: styleState.fontColor,
+                    fontFamily: styleState.fontFamily
                   ),
                 ),
-              )
+
+                SizedBox(width: Dimensions.width * 0.01,),
+
+                Icon(
+                  Icons.add_box,
+                  color: styleState.fontColor,
+                )
+              ],
             ),
           ),
-          Container(
-            height: 2,
-            width: Dimensions.width * 0.3,
-            color: styleState.topColor,
-          ),
+        ),
+
+        //all templates
+        if(state.showTemplates == true)...[
+          SizedBox(
+            width: Dimensions.width,
+            height: Dimensions.height * 0.45,
+            child: const MultiViewSliderScreen(),
+          )
         ],
-      ),
 
-      // Container(
-      //   width: Dimensions.width,
-      //   height: Dimensions.height * 0.07,
-      //   margin: EdgeInsets.symmetric(
-      //     vertical: Dimensions.height * 0.01
-      //   ),
-      //   decoration: BoxDecoration(
-      //     color: styleState.topColor,
-      //     borderRadius: BorderRadius.circular(10)
-      //   ),
-      //   child: MaterialButton(
-      //     onPressed: (){
-      //       // showTemplates(context);
-      //     },
-      //     child: Row(
-      //       mainAxisAlignment: MainAxisAlignment.center,
-      //       children: [
-      //
-      //         Text(
-      //           'اضافه کردن قالب جدید',
-      //           style: TextStyle(
-      //             color: styleState.fontColor,
-      //             fontFamily: styleState.fontFamily
-      //           ),
-      //         ),
-      //
-      //         SizedBox(width: Dimensions.width * 0.01,),
-      //
-      //         Icon(
-      //           Icons.add_box,
-      //           color: styleState.fontColor,
-      //         )
-      //       ],
-      //     ),
-      //   ),
-      // ),
+        //selected templates
+        BlocBuilder<MarketBloc, MarketState>(
+          builder: (context, state) {
+            if(state.templateList.isEmpty){
 
-      BlocBuilder<MarketBloc, MarketState>(
-        builder: (context, state) {
-          if(state.templateList.isEmpty){
+              return const Center(child: Text(''),);
 
-            return const Center(child: Text(''),);
+            }
+            else{
+              return ListView.builder(
+                itemCount: state.templateList.length,
+                shrinkWrap: true,
+                reverse: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
 
-          }
-          else{
-            return  ListView.builder(
-              itemCount: state.templateList.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
+                  return Column(
+                    children: [
 
-                return Column(
-                  children: [
-
-                    Container(
-                      width: Dimensions.width,
-                      margin: EdgeInsets.symmetric(
-                        vertical: Dimensions.height * 0.0
+                      Container(
+                        width: Dimensions.width,
+                        margin: EdgeInsets.symmetric(
+                          vertical: Dimensions.height * 0.0
+                        ),
+                        child: templateWidget(state.templateList[index]),
                       ),
-                      child: templateWidget(state.templateList[index]),
-                    ),
 
-                    // Container(
-                    //   height: Dimensions.height * 0.05,
-                    //   width: Dimensions.width,
-                    //   child: Row(
-                    //     children: [
-                    //       IconButton(
-                    //         onPressed: (){
-                    //           marketBloc.add(RemoveTemplateEvent(index: index));
-                    //           // state.templateList.removeAt(index);
-                    //         },
-                    //         icon: Icon(
-                    //           Icons.delete_rounded,
-                    //           color: Colors.redAccent,
-                    //         )
-                    //       )
-                    //     ],
-                    //   ),
-                    // )
+                      // SizedBox(
+                      //   height: Dimensions.height * 0.05,
+                      //   width: Dimensions.width,
+                      //   child: Row(
+                      //     children: [
+                      //       IconButton(
+                      //         onPressed: (){
+                      //           marketBloc.add(RemoveTemplateEvent(index: index));
+                      //           // state.templateList.removeAt(index);
+                      //         },
+                      //         icon: const Icon(
+                      //           Icons.delete_rounded,
+                      //           color: Colors.redAccent,
+                      //         )
+                      //       )
+                      //     ],
+                      //   ),
+                      // )
 
-                  ],
-                );
+                    ],
+                  );
 
-              },
-            );
-          }
+                },
+              );
+            }
 
-        },
-      ),
+          },
+        ),
 
-      SizedBox(
-        height: Dimensions.height * 0.05,
-      )
+        SizedBox(
+          height: Dimensions.height * 0.05,
+        )
 
 
-    ]
+      ]
+    )
   );
 }
 
@@ -1180,61 +1202,62 @@ specialView(styleState) {
   );
 }
 
-commentView(styleState) {
+commentView() {
+
   return SingleChildScrollView(
     child: Column(
       children: [
-        Row(
-          children: [
-            Expanded(
-              flex: 5,
-              child: SizedBox(
-                height: 35,
-                child: CustomTextField(
-                    color: Colora.lightBlue,
-                    controller: TextEditingController(),
-                    hintStyle: const TextStyle(color: Colors.white),
-                    text: 'نام و نام خانوادگی'),
-              ),
-            ),
-            Expanded(
-              flex: 5,
-              child: SizedBox(
-                height: 35,
-                child: CustomTextField(
-                  color: Colora.lightBlue,
-                  controller: TextEditingController(),
-                  hintStyle: const TextStyle(color: Colors.white),
-                  text: 'شماره موبایل',
-                  keyboardType: TextInputType.number,
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 7),
-        Container(
-          width: Dimensions.width,
-          child: Stack(
-            children: [
-              CustomTextField(
-                  color: Colora.lightBlue,
-                  maxLine: 7,
-                  hintStyle: const TextStyle(color: Colors.white),
-                  controller: TextEditingController(),
-                  text: "پیام شما ..."),
-              Positioned(
-                  bottom: 10,
-                  left: 20,
-                  child: CustomButton(
-                    width: 100,
-                    onPress: () {},
-                    text: "ارسال",
-                    color: Colora.primaryColor,
-                  )),
-            ],
-          ),
-        ),
+        // Row(
+        //   children: [
+        //     Expanded(
+        //       flex: 5,
+        //       child: SizedBox(
+        //         height: 35,
+        //         child: CustomTextField(
+        //             color: Colora.lightBlue,
+        //             controller: TextEditingController(),
+        //             hintStyle: const TextStyle(color: Colors.white),
+        //             text: 'نام و نام خانوادگی'),
+        //       ),
+        //     ),
+        //     Expanded(
+        //       flex: 5,
+        //       child: SizedBox(
+        //         height: 35,
+        //         child: CustomTextField(
+        //           color: Colora.lightBlue,
+        //           controller: TextEditingController(),
+        //           hintStyle: const TextStyle(color: Colors.white),
+        //           text: 'شماره موبایل',
+        //           keyboardType: TextInputType.number,
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
+        // const SizedBox(height: 7),
+        // Container(
+        //   width: Dimensions.width,
+        //   child: Stack(
+        //     children: [
+        //       CustomTextField(
+        //           color: Colora.lightBlue,
+        //           maxLine: 7,
+        //           hintStyle: const TextStyle(color: Colors.white),
+        //           controller: TextEditingController(),
+        //           text: "پیام شما ..."),
+        //       Positioned(
+        //           bottom: 10,
+        //           left: 20,
+        //           child: CustomButton(
+        //             width: 100,
+        //             onPress: () {},
+        //             text: "ارسال",
+        //             color: Colora.primaryColor,
+        //           )),
+        //     ],
+        //   ),
+        // ),
         const CMBox(
           senderName: 'میلاد',
           messageText: 'سلام محصولاتتون عالی هستند',
@@ -1408,30 +1431,27 @@ contactUsView(styleState) {
         ),
 
         //address
-        Align(
-          alignment: Alignment.topCenter,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'آدرس : ',
-                style: TextStyle(
-                  color: styleState.topColor,
-                  fontFamily: styleState.fontFamily,
-                  fontSize: Dimensions.width * 0.044,
-                  fontWeight: FontWeight.bold
-                ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'آدرس : ',
+              style: TextStyle(
+                color: styleState.topColor,
+                fontFamily: styleState.fontFamily,
+                fontSize: Dimensions.width * 0.044,
+                fontWeight: FontWeight.bold
               ),
-              Text(
-                'زنجان',
-                style: TextStyle(
-                  color: styleState.fontColor,
-                  fontSize: 12,
-                  fontFamily: styleState.fontFamily
-                ),
+            ),
+            Text(
+              'زنجان',
+              style: TextStyle(
+                color: styleState.fontColor,
+                fontSize: 12,
+                fontFamily: styleState.fontFamily
               ),
-            ],
-          ),
+            ),
+          ],
         ),
 
         SizedBox(

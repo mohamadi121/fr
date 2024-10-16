@@ -699,7 +699,7 @@ void changeColor(
                 ?Alignment.bottomCenter
                 :Alignment.topCenter,
               content: SizedBox(
-                height: Dimensions.height * 0.53,
+                height: Dimensions.height * 0.45,
                 child: Column(
                   children: [
 
