@@ -1,22 +1,28 @@
 part of 'workspace_bloc.dart';
 
-enum Status { initial, loading, success, failure }
+enum WorkspaceStatus { initial, loading, success, failure }
 
 class WorkspaceState extends Equatable {
-  final Status status;
+  final WorkspaceStatus status;
   final List<MarketModel> storesList;
-  final int? selectedmarket;
+  final int? selectedMarket;
+
+  final int activeTabIndex;
 
   const WorkspaceState({
     required this.status,
     required this.storesList,
-    this.selectedmarket,
+    this.selectedMarket,
+
+    required this.activeTabIndex,
+
   });
 
   factory WorkspaceState.initial() {
     return const WorkspaceState(
-      status: Status.initial,
+      status: WorkspaceStatus.initial,
       storesList: [],
+      activeTabIndex: 0
     );
   }
 
@@ -24,14 +30,19 @@ class WorkspaceState extends Equatable {
   List<Object> get props => [status, storesList];
 
   WorkspaceState copyWith({
-    Status? status,
+    WorkspaceStatus? status,
     List<MarketModel>? storesList,
-    int? selectedmarket,
+    int? selectedMarket,
+
+    int? activeTabIndex,
   }) {
     return WorkspaceState(
       status: status ?? this.status,
       storesList: storesList ?? this.storesList,
-      selectedmarket: selectedmarket ?? this.selectedmarket,
+      selectedMarket: selectedMarket ?? this.selectedMarket,
+
+      activeTabIndex : activeTabIndex ?? this.activeTabIndex,
+
     );
   }
 }

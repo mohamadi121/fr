@@ -112,7 +112,7 @@ class ApiClient {
             multipart.key,
             multipart.file!.readAsBytes().asStream(),
             list.length,
-            filename: '1.png',
+            filename: 'asood.png',
           ));
         }
       }
@@ -146,7 +146,7 @@ class ApiClient {
             multipart.key,
             multipart.file!.readAsBytes().asStream(),
             list.length,
-            filename: '1.png',
+            filename: 'asood.png',
           ));
         }
       }

@@ -1,14 +1,11 @@
-// ignore_for_file: avoid_unnecessary_containers, sized_box_for_whitespace
-
 import 'package:asood/modules/market/blocs/bloc/market_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../../modules/market/screens/add_product.dart';
 import '../../../../modules/vendor/blocs/vendor/vendor_bloc.dart';
-import '../../../utils/snack_bar_util.dart';
-import '../../../widgets/default_appbar.dart';
 import '../../../constants/constants.dart';
 
 @RoutePage()
@@ -136,34 +133,60 @@ class _MultiViewSliderScreenState extends State<MultiViewSliderScreen> {
   }
 
   Widget buildDotList(styleState) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List<Widget>.generate(18, (index) {
-        return Container(
-          width: 10,
-          height: 10,
-          margin: const EdgeInsets.symmetric(horizontal: 5),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: styleState.secondColor,
-              width: 2
+    return Expanded(
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 18,
+        shrinkWrap: true,
+        itemBuilder: (context, index) => SizedBox(
+          width: Dimensions.width * 0.05,
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 5),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: styleState.secondColor,
+                  width: 2
+                ),
+                color: _currentPage == index ? styleState.secondColor : Colora.scaffold,
+              ),
             ),
-            color: _currentPage == index ? styleState.secondColor : Colora.scaffold,
           ),
-        );
-      }),
+        ),
+      ),
     );
+
+    //   Row(
+    //   mainAxisAlignment: MainAxisAlignment.center,
+    //   children: List<Widget>.generate(18, (index) {
+    //     return Container(
+    //       width: 10,
+    //       height: 10,
+    //       margin: const EdgeInsets.symmetric(horizontal: 5),
+    //       decoration: BoxDecoration(
+    //         shape: BoxShape.circle,
+    //         border: Border.all(
+    //           color: styleState.secondColor,
+    //           width: 2
+    //         ),
+    //         color: _currentPage == index ? styleState.secondColor : Colora.scaffold,
+    //       ),
+    //     );
+    //   }),
+    // );
   }
 }
 
-Widget buildProductGridView0() {
+Widget buildProductGridView0({isSelected = false}) {
   return SizedBox(
     width: Dimensions.width,
     height: Dimensions.height * 0.35,
     child: BlocBuilder<VendorBloc, VendorState>(
       builder: (context, styleState) => Row(
         children: [
+
           Expanded(
             child: Column(
               children: [
@@ -185,57 +208,66 @@ Widget buildProductGridView0() {
                           )
                         ]
                     ),
-                    child: Column(
-                      children: [
+                    child: InkWell(
 
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            height: Dimensions.height * 0.115,
-                            color: Colors.white,
-                            child: SvgPicture.asset(
-                                'assets/images/logo_svg.svg',
-                                colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                      onTap: (){
+                        if(isSelected == true){
+                          print('2');
+                        }
+                      },
+
+                      child: Column(
+                        children: [
+
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              height: Dimensions.height * 0.115,
+                              color: Colors.white,
+                              child: SvgPicture.asset(
+                                  'assets/images/logo_svg.svg',
+                                  colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                              ),
                             ),
                           ),
-                        ),
 
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: Dimensions.width * 0.01,
-                              vertical: Dimensions.height * 0.005
-                          ),
-                          child: Text(
-                            'عنوان محصول',
-                            softWrap: true,
-                            maxLines: 1,
-                            style: TextStyle(
-                                color: styleState.fontColor,
-                                fontFamily: styleState.fontFamily,
-                                fontWeight: FontWeight.bold,
-                                fontSize: Dimensions.width * 0.02
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Dimensions.width * 0.01,
+                                vertical: Dimensions.height * 0.005
+                            ),
+                            child: Text(
+                              'عنوان محصول',
+                              softWrap: true,
+                              maxLines: 1,
+                              style: TextStyle(
+                                  color: styleState.fontColor,
+                                  fontFamily: styleState.fontFamily,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Dimensions.width * 0.02
+                              ),
                             ),
                           ),
-                        ),
 
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: Dimensions.width * 0.01,
-                              vertical: Dimensions.height * 0.003
-                          ),
-                          child: Text(
-                            '120.000 تومان',
-                            softWrap: true,
-                            maxLines: 1,
-                            style: TextStyle(
-                                color: styleState.fontColor,
-                                fontFamily: styleState.fontFamily,
-                                fontSize: Dimensions.width * 0.017
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Dimensions.width * 0.01,
+                                vertical: Dimensions.height * 0.003
+                            ),
+                            child: Text(
+                              '120.000 تومان',
+                              softWrap: true,
+                              maxLines: 1,
+                              style: TextStyle(
+                                  color: styleState.fontColor,
+                                  fontFamily: styleState.fontFamily,
+                                  fontSize: Dimensions.width * 0.017
+                              ),
                             ),
                           ),
-                        ),
 
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -258,57 +290,66 @@ Widget buildProductGridView0() {
                           )
                         ]
                     ),
-                    child: Column(
-                      children: [
+                    child: InkWell(
 
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            height: Dimensions.height * 0.115,
-                            color: Colors.white,
-                            child: SvgPicture.asset(
-                                'assets/images/logo_svg.svg',
-                                colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                      onTap: (){
+                        if(isSelected == true){
+                          print('3');
+                        }
+                      },
+
+                      child: Column(
+                        children: [
+
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              height: Dimensions.height * 0.115,
+                              color: Colors.white,
+                              child: SvgPicture.asset(
+                                  'assets/images/logo_svg.svg',
+                                  colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                              ),
                             ),
                           ),
-                        ),
 
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: Dimensions.width * 0.01,
-                              vertical: Dimensions.height * 0.005
-                          ),
-                          child: Text(
-                            'عنوان محصول',
-                            softWrap: true,
-                            maxLines: 1,
-                            style: TextStyle(
-                                color: styleState.fontColor,
-                                fontFamily: styleState.fontFamily,
-                                fontWeight: FontWeight.bold,
-                                fontSize: Dimensions.width * 0.02
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Dimensions.width * 0.01,
+                                vertical: Dimensions.height * 0.005
+                            ),
+                            child: Text(
+                              'عنوان محصول',
+                              softWrap: true,
+                              maxLines: 1,
+                              style: TextStyle(
+                                  color: styleState.fontColor,
+                                  fontFamily: styleState.fontFamily,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Dimensions.width * 0.02
+                              ),
                             ),
                           ),
-                        ),
 
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: Dimensions.width * 0.01,
-                              vertical: Dimensions.height * 0.003
-                          ),
-                          child: Text(
-                            '120.000 تومان',
-                            softWrap: true,
-                            maxLines: 1,
-                            style: TextStyle(
-                                color: styleState.fontColor,
-                                fontFamily: styleState.fontFamily,
-                                fontSize: Dimensions.width * 0.017
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Dimensions.width * 0.01,
+                                vertical: Dimensions.height * 0.003
+                            ),
+                            child: Text(
+                              '120.000 تومان',
+                              softWrap: true,
+                              maxLines: 1,
+                              style: TextStyle(
+                                  color: styleState.fontColor,
+                                  fontFamily: styleState.fontFamily,
+                                  fontSize: Dimensions.width * 0.017
+                              ),
                             ),
                           ),
-                        ),
 
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -334,75 +375,92 @@ Widget buildProductGridView0() {
                 )
               ]
             ),
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Stack(
-                    children: [
-                      Container(
-                        height: Dimensions.height * 0.275,
-                        color: Colors.white,
-                        child: SvgPicture.asset(
-                            'assets/images/logo_svg.svg',
-                            colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
-                        ),
+            child: InkWell(
+              onTap: (){
+                if(isSelected == true){
+                  print('1');
+
+                  // context.router.push(const TakhfifRoute());
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddProduct(),
                       ),
-                      // Positioned(
-                      //   bottom: Dimensions.height * 0.01,
-                      //   left: Dimensions.width * 0.2,
-                      //   child: Container(
-                      //     decoration: BoxDecoration(
-                      //       color: Colora.lightBlue,
-                      //       shape: BoxShape.circle
-                      //     ),
-                      //     child: Icon(
-                      //       Icons.add_shopping_cart_rounded
-                      //     ),
-                      //   )
-                      // ),
-                    ],
-                  ),
-                ),
+                    );
 
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: Dimensions.width * 0.01,
-                      vertical: Dimensions.height * 0.007
-                  ),
-                  child: Text(
-                    'عنوان محصول',
-                    softWrap: true,
-                    maxLines: 1,
-                    style: TextStyle(
-                        color: styleState.fontColor,
-                        fontFamily: styleState.fontFamily,
-                        fontWeight: FontWeight.bold,
-                        fontSize: Dimensions.width * 0.025
+                }
+              },
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: Dimensions.height * 0.275,
+                          color: Colors.white,
+                          child: SvgPicture.asset(
+                              'assets/images/logo_svg.svg',
+                              colorFilter: ColorFilter.mode(styleState.secondColor, BlendMode.srcIn)
+                          ),
+                        ),
+                        // Positioned(
+                        //   bottom: Dimensions.height * 0.01,
+                        //   left: Dimensions.width * 0.2,
+                        //   child: Container(
+                        //     decoration: BoxDecoration(
+                        //       color: Colora.lightBlue,
+                        //       shape: BoxShape.circle
+                        //     ),
+                        //     child: Icon(
+                        //       Icons.add_shopping_cart_rounded
+                        //     ),
+                        //   )
+                        // ),
+                      ],
                     ),
                   ),
-                ),
 
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: Dimensions.width * 0.01,
-                      vertical: Dimensions.height * 0.005
-                  ),
-                  child: Text(
-                    '120.000 تومان',
-                    softWrap: true,
-                    maxLines: 1,
-                    style: TextStyle(
-                        color: styleState.fontColor,
-                        fontFamily: styleState.fontFamily,
-                        fontSize: Dimensions.width * 0.017
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: Dimensions.width * 0.01,
+                        vertical: Dimensions.height * 0.007
+                    ),
+                    child: Text(
+                      'عنوان محصول',
+                      softWrap: true,
+                      maxLines: 1,
+                      style: TextStyle(
+                          color: styleState.fontColor,
+                          fontFamily: styleState.fontFamily,
+                          fontWeight: FontWeight.bold,
+                          fontSize: Dimensions.width * 0.025
+                      ),
                     ),
                   ),
-                ),
 
-              ],
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: Dimensions.width * 0.01,
+                        vertical: Dimensions.height * 0.005
+                    ),
+                    child: Text(
+                      '120.000 تومان',
+                      softWrap: true,
+                      maxLines: 1,
+                      style: TextStyle(
+                          color: styleState.fontColor,
+                          fontFamily: styleState.fontFamily,
+                          fontSize: Dimensions.width * 0.017
+                      ),
+                    ),
+                  ),
+
+                ],
+              ),
             ),
           ),
+
         ],
       ),
     )

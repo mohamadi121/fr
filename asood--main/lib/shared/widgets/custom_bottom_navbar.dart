@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
+import '../../modules/market/blocs/bloc/market_bloc.dart';
 import '../../modules/vendor/blocs/vendor/vendor_bloc.dart';
 import '../screens/store_setting_screens/color_setting_screen/color_setting_screen.dart';
 import '../../modules/market/screens/edit_store.dart';
@@ -50,12 +51,14 @@ class CustomBottomNavigationBar extends StatefulWidget {
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 
   late VendorBloc bloc;
+  late MarketBloc marketBloc;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     bloc = BlocProvider.of<VendorBloc>(context);
+    marketBloc = BlocProvider.of<MarketBloc>(context);
   }
 
   @override
@@ -65,6 +68,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         showBottomSheet(
           context,
           bloc,
+          marketBloc,
 
           widget.marketId,
 
@@ -122,7 +126,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 
 void showBottomSheet(
   BuildContext context,
-  bloc,
+  bloc, marketBloc,
   marketId,
   initTopColor, initBackColor, initSecondColor,
   initFont, initFontColor, initFontSecondColor
@@ -168,9 +172,11 @@ void showBottomSheet(
 
                   //shopping cart
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      context.router.push(const ShoppingCartRoute());
+                    },
                     icon: const Icon(
-                      Icons.add_shopping_cart,
+                      Icons.shopping_cart_rounded,
                       color: Colors.white,
                     )
                   ),
@@ -271,7 +277,9 @@ void showBottomSheet(
                   //view
                   IconButton(
                       onPressed: () {
-                        context.router.push(const MultiViewSliderRoute());
+                        marketBloc.add(const ShowTemplatesEvent(isShow: true));
+                        Navigator.pop(context);
+                        // context.router.push(const MultiViewSliderRoute());
                         /*   Navigator.push(
                           context,
                           MaterialPageRoute(

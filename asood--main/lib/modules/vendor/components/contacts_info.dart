@@ -9,8 +9,6 @@ import '../../../shared/widgets/custom_switch.dart';
 import '../../../shared/widgets/custom_textfield.dart';
 import '../../../shared/widgets/row_widget_title_widget.dart';
 
-// import 'package:flutter_map/flutter_map.dart';
-
 class ContactsInfo extends StatefulWidget {
   const ContactsInfo({required this.bloc, super.key});
 

@@ -14,7 +14,7 @@ class CustomTextField extends StatefulWidget {
     this.maxLine = 1,
     this.color = Colora.scaffold,
     this.hintStyle = const TextStyle(
-        color: Colora.borderTag, fontSize: 13, fontFamily: 'irans'),
+        color: Colora.borderTag, fontSize: 13, fontFamily: 'irs'),
     this.style,
     this.align = TextAlign.start,
     this.prefixIcon,

@@ -173,7 +173,7 @@ class _CreateWorkSpaceScreenState extends State<CreateWorkSpaceScreen>
     bool isActive = state.activeTabIndex == tabIndex; // Check if tab is active
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 2.0),
+      padding: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 7.0),
       margin: const EdgeInsets.symmetric(vertical: 10.0),
       width: Dimensions.width,
       decoration: BoxDecoration(
@@ -189,7 +189,7 @@ class _CreateWorkSpaceScreenState extends State<CreateWorkSpaceScreen>
           child: Text(
             label,
             style: TextStyle(
-              color: isActive ? Colors.white : Colors.black
+              color: isActive ? Colors.white : Colora.primaryColor
             )
           ),
         ),

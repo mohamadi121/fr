@@ -1003,7 +1003,7 @@ productView(styleState, MarketBloc marketBloc) {
 
     switch (template) {
       case 0:
-        return buildProductGridView0();
+        return buildProductGridView0(isSelected: true);
       case 1:
         return buildProductGridView1();
       case 2:
@@ -1080,42 +1080,42 @@ productView(styleState, MarketBloc marketBloc) {
           ],
         ),
 
-        Container(
-          width: Dimensions.width,
-          height: Dimensions.height * 0.07,
-          margin: EdgeInsets.symmetric(
-            vertical: Dimensions.height * 0.01
-          ),
-          decoration: BoxDecoration(
-            color: styleState.secondColor,
-            borderRadius: BorderRadius.circular(10)
-          ),
-          child: MaterialButton(
-            onPressed: (){
-              marketBloc.add(ShowTemplatesEvent(isShow: !state.showTemplates));
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-
-                Text(
-                  'اضافه کردن قالب جدید',
-                  style: TextStyle(
-                    color: styleState.fontColor,
-                    fontFamily: styleState.fontFamily
-                  ),
-                ),
-
-                SizedBox(width: Dimensions.width * 0.01,),
-
-                Icon(
-                  Icons.add_box,
-                  color: styleState.fontColor,
-                )
-              ],
-            ),
-          ),
-        ),
+        // Container(
+        //   width: Dimensions.width,
+        //   height: Dimensions.height * 0.07,
+        //   margin: EdgeInsets.symmetric(
+        //     vertical: Dimensions.height * 0.01
+        //   ),
+        //   decoration: BoxDecoration(
+        //     color: styleState.secondColor,
+        //     borderRadius: BorderRadius.circular(10)
+        //   ),
+        //   child: MaterialButton(
+        //     onPressed: (){
+        //       marketBloc.add(ShowTemplatesEvent(isShow: !state.showTemplates));
+        //     },
+        //     child: Row(
+        //       mainAxisAlignment: MainAxisAlignment.center,
+        //       children: [
+        //
+        //         Text(
+        //           'اضافه کردن قالب جدید',
+        //           style: TextStyle(
+        //             color: styleState.fontColor,
+        //             fontFamily: styleState.fontFamily
+        //           ),
+        //         ),
+        //
+        //         SizedBox(width: Dimensions.width * 0.01,),
+        //
+        //         Icon(
+        //           Icons.add_box,
+        //           color: styleState.fontColor,
+        //         )
+        //       ],
+        //     ),
+        //   ),
+        // ),
 
         //all templates
         if(state.showTemplates == true)...[

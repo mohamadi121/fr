@@ -174,11 +174,11 @@ class NewAppBar extends StatelessWidget {
       height: Dimensions.height * 0.11,
       width: Dimensions.width,
       decoration: const BoxDecoration(
-          color: Colora.primaryColor,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(40),
-            bottomRight: Radius.circular(40)
-          )
+        color: Colora.primaryColor,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(40),
+          bottomRight: Radius.circular(40)
+        )
       ),
       child: Stack(
         children: [
@@ -189,8 +189,8 @@ class NewAppBar extends StatelessWidget {
             width: Dimensions.width,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(40),
-                  bottomRight: Radius.circular(40)
+                bottomLeft: Radius.circular(40),
+                bottomRight: Radius.circular(40)
               ),
               image: DecorationImage(
                 image: AssetImage('assets/images/home_app_bar.png'),
@@ -204,11 +204,11 @@ class NewAppBar extends StatelessWidget {
             height: Dimensions.height * 0.1,
             width: Dimensions.width,
             decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(40),
-                    bottomRight: Radius.circular(40)
-                ),
-                color: Colora.primaryColor.withOpacity(0.6)
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(40),
+                bottomRight: Radius.circular(40)
+              ),
+              color: Colora.primaryColor.withOpacity(0.6)
             ),
           ),
 
@@ -273,9 +273,9 @@ class NewAppBar extends StatelessWidget {
 
           //title
           Positioned(
-              right: Dimensions.width * 0.25,
-              left: Dimensions.width * 0.25,
-              child: SizedBox(
+            right: Dimensions.width * 0.25,
+            left: Dimensions.width * 0.25,
+            child: SizedBox(
                 width: Dimensions.width * 0.5,
                 height: Dimensions.height * 0.11,
                 child: Column(

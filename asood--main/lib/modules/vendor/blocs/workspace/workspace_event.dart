@@ -8,6 +8,12 @@ sealed class WorkspaceEvent extends Equatable {
   List<Object> get props => [];
 }
 
+//change tabview
+class ChangeTabView extends WorkspaceEvent {
+  final int activeTabIndex;
+  const ChangeTabView({required this.activeTabIndex});
+}
+
 class LoadStores extends WorkspaceEvent {}
 
 class SelectMarket extends WorkspaceEvent {

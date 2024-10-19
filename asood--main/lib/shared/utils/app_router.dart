@@ -1,3 +1,4 @@
+import 'package:asood/modules/cart/screen/shopping_cart.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
@@ -66,5 +67,6 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: StoresRoute.page, path: "/stores"),
         AutoRoute(page: JobManagementRoute.page, path: "/job_management"),
         AutoRoute(page: MultiViewSliderRoute.page, path: "/multi_view_slider"),
+        AutoRoute(page: ShoppingCartRoute.page, path: "/shopping_cart"),
       ];
 }

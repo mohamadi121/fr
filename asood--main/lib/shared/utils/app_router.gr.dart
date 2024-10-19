@@ -93,6 +93,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: LoginScreen(key: args.key),
       );
     },
+    ShoppingCartRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ShoppingCart(),
+      );
+    },
     MultiViewSliderRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -404,6 +410,20 @@ class LoginRouteArgs {
   String toString() {
     return 'LoginRouteArgs{key: $key}';
   }
+}
+
+/// generated route for
+/// [ShoppingCart]
+class ShoppingCartRoute extends PageRouteInfo<void> {
+  const ShoppingCartRoute({List<PageRouteInfo>? children})
+      : super(
+    ShoppingCartRoute.name,
+    initialChildren: children,
+  );
+
+  static const String name = 'ShoppingCartRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

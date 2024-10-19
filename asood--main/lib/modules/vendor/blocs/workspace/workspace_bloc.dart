@@ -15,8 +15,10 @@ class WorkspaceBloc extends Bloc<WorkspaceEvent, WorkspaceState> {
   final MarketRepository repo = MarketRepository();
 
   WorkspaceBloc() : super(WorkspaceState.initial()) {
+
     on<LoadStores>(_getStores);
-    // on<SelectMarket>(_selectMarket);
+    on<ChangeTabView>(_changeActiveTab);
+    on<SelectMarket>(_selectMarket);
     on<GetProducts>(_getProducts);
     on<ContactUs>(_contactUs);
     on<GetComments>(_getComments);
@@ -30,8 +32,12 @@ class WorkspaceBloc extends Bloc<WorkspaceEvent, WorkspaceState> {
     on<EditeWorkSpaceInfo>(_editeWorkSpaceInfo);
   }
 
+  _changeActiveTab(ChangeTabView event, Emitter<WorkspaceState> emit) async {
+    emit(state.copyWith(activeTabIndex: event.activeTabIndex));
+  }
+
   _getStores(LoadStores event, Emitter<WorkspaceState> emit) async {
-    emit(state.copyWith(status: Status.loading));
+    emit(state.copyWith(status: WorkspaceStatus.loading));
     try {
       final res = await repo.getMarketList();
       if (res is Success) {
@@ -39,148 +45,148 @@ class WorkspaceBloc extends Bloc<WorkspaceEvent, WorkspaceState> {
         final marketList = json['data'] as List;
         final storesList =
             marketList.map((e) => MarketModel.fromJson(e)).toList();
-        emit(state.copyWith(status: Status.success, storesList: storesList));
+        emit(state.copyWith(status: WorkspaceStatus.success, storesList: storesList));
       } else {
-        emit(state.copyWith(status: Status.failure));
+        emit(state.copyWith(status: WorkspaceStatus.failure));
       }
     } catch (e) {
-      emit(state.copyWith(status: Status.failure));
+      emit(state.copyWith(status: WorkspaceStatus.failure));
     }
   }
 
   _selectMarket(SelectMarket event, Emitter<WorkspaceState> emit) {
-    emit(state.copyWith(selectedmarket: event.marketId));
+    emit(state.copyWith(selectedMarket: event.marketId));
   }
 
   _getProducts(GetProducts event, Emitter<WorkspaceState> emit) {
-    emit(state.copyWith(status: Status.loading));
+    emit(state.copyWith(status: WorkspaceStatus.loading));
     try {
       final res = Success();
       if (res is Success) {
-        emit(state.copyWith(status: Status.success));
+        emit(state.copyWith(status: WorkspaceStatus.success));
       }
     } catch (e) {
-      emit(state.copyWith(status: Status.failure));
+      emit(state.copyWith(status: WorkspaceStatus.failure));
     }
   }
 
   _contactUs(ContactUs event, Emitter<WorkspaceState> emit) {
-    emit(state.copyWith(status: Status.loading));
+    emit(state.copyWith(status: WorkspaceStatus.loading));
     try {
       final res = Success();
       if (res is Success) {
-        emit(state.copyWith(status: Status.success));
+        emit(state.copyWith(status: WorkspaceStatus.success));
       }
     } catch (e) {
-      emit(state.copyWith(status: Status.failure));
+      emit(state.copyWith(status: WorkspaceStatus.failure));
     }
   }
 
   _getComments(GetComments event, Emitter<WorkspaceState> emit) {
-    emit(state.copyWith(status: Status.loading));
+    emit(state.copyWith(status: WorkspaceStatus.loading));
     try {
       final res = Success();
       if (res is Success) {
-        emit(state.copyWith(status: Status.success));
+        emit(state.copyWith(status: WorkspaceStatus.success));
       }
     } catch (e) {
-      emit(state.copyWith(status: Status.failure));
+      emit(state.copyWith(status: WorkspaceStatus.failure));
     }
   }
 
   _getSpecialProducts(GetSpecialProducts event, Emitter<WorkspaceState> emit) {
-    emit(state.copyWith(status: Status.loading));
+    emit(state.copyWith(status: WorkspaceStatus.loading));
     try {
       final res = Success();
       if (res is Success) {
-        emit(state.copyWith(status: Status.success));
+        emit(state.copyWith(status: WorkspaceStatus.success));
       }
     } catch (e) {
-      emit(state.copyWith(status: Status.failure));
+      emit(state.copyWith(status: WorkspaceStatus.failure));
     }
   }
 
   _getDiscounts(GetDiscounts event, Emitter<WorkspaceState> emit) {
-    emit(state.copyWith(status: Status.loading));
+    emit(state.copyWith(status: WorkspaceStatus.loading));
     try {
       final res = Success();
       if (res is Success) {
-        emit(state.copyWith(status: Status.success));
+        emit(state.copyWith(status: WorkspaceStatus.success));
       }
     } catch (e) {
-      emit(state.copyWith(status: Status.failure));
+      emit(state.copyWith(status: WorkspaceStatus.failure));
     }
   }
 
   _deleteDiscount(DeleteDiscount event, Emitter<WorkspaceState> emit) {
-    emit(state.copyWith(status: Status.loading));
+    emit(state.copyWith(status: WorkspaceStatus.loading));
     try {
       final res = Success();
       if (res is Success) {
-        emit(state.copyWith(status: Status.success));
+        emit(state.copyWith(status: WorkspaceStatus.success));
       }
     } catch (e) {
-      emit(state.copyWith(status: Status.failure));
+      emit(state.copyWith(status: WorkspaceStatus.failure));
     }
   }
 
   _createDiscount(CreateDiscount event, Emitter<WorkspaceState> emit) {
-    emit(state.copyWith(status: Status.loading));
+    emit(state.copyWith(status: WorkspaceStatus.loading));
     try {
       final res = Success();
       if (res is Success) {
-        emit(state.copyWith(status: Status.success));
+        emit(state.copyWith(status: WorkspaceStatus.success));
       }
     } catch (e) {
-      emit(state.copyWith(status: Status.failure));
+      emit(state.copyWith(status: WorkspaceStatus.failure));
     }
   }
 
   _changeColorAndFont(ChangeColorAndFont event, Emitter<WorkspaceState> emit) {
-    emit(state.copyWith(status: Status.loading));
+    emit(state.copyWith(status: WorkspaceStatus.loading));
     try {
       final res = Success();
       if (res is Success) {
-        emit(state.copyWith(status: Status.success));
+        emit(state.copyWith(status: WorkspaceStatus.success));
       }
     } catch (e) {
-      emit(state.copyWith(status: Status.failure));
+      emit(state.copyWith(status: WorkspaceStatus.failure));
     }
   }
 
   _editeWorkSpaceInfo(EditeWorkSpaceInfo event, Emitter<WorkspaceState> emit) {
-    emit(state.copyWith(status: Status.loading));
+    emit(state.copyWith(status: WorkspaceStatus.loading));
     try {
       final res = Success();
       if (res is Success) {
-        emit(state.copyWith(status: Status.success));
+        emit(state.copyWith(status: WorkspaceStatus.success));
       }
     } catch (e) {
-      emit(state.copyWith(status: Status.failure));
+      emit(state.copyWith(status: WorkspaceStatus.failure));
     }
   }
 
   _changeProductTheme(ChangeProductTheme event, Emitter<WorkspaceState> emit) {
-    emit(state.copyWith(status: Status.loading));
+    emit(state.copyWith(status: WorkspaceStatus.loading));
     try {
       final res = Success();
       if (res is Success) {
-        emit(state.copyWith(status: Status.success));
+        emit(state.copyWith(status: WorkspaceStatus.success));
       }
     } catch (e) {
-      emit(state.copyWith(status: Status.failure));
+      emit(state.copyWith(status: WorkspaceStatus.failure));
     }
   }
 
   _changeThemeColors(ChangeThemeColors event, Emitter<WorkspaceState> emit) {
-    emit(state.copyWith(status: Status.loading));
+    emit(state.copyWith(status: WorkspaceStatus.loading));
     try {
       final res = Success();
       if (res is Success) {
-        emit(state.copyWith(status: Status.success));
+        emit(state.copyWith(status: WorkspaceStatus.success));
       }
     } catch (e) {
-      emit(state.copyWith(status: Status.failure));
+      emit(state.copyWith(status: WorkspaceStatus.failure));
     }
   }
 }
