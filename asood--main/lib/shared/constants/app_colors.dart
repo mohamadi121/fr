@@ -7,7 +7,7 @@ abstract class Colora {
   };
   static const primaryColor = Color.fromARGB(255, 10, 25, 146); //bottom colors
   static const lightBlue =
-      Color.fromARGB(255, 37, 55, 197); //blue text fileds colors
+      Color.fromARGB(255, 37, 55, 197); //blue text fields colors
   static const borderAvatar = Color.fromARGB(255, 64, 90, 235);
   static const borderTag = Color.fromARGB(255, 8, 23, 136);
   static const backgroundDialog = Color.fromARGB(200, 9, 24, 143);

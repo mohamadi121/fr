@@ -18,6 +18,11 @@ class WorkspaceBloc extends Bloc<WorkspaceEvent, WorkspaceState> {
 
     on<LoadStores>(_getStores);
     on<ChangeTabView>(_changeActiveTab);
+
+    on<ShowInvoice>(_changeInvoiceView);
+    on<InvoiceOption>(_invoiceOptionView);
+    on<InvoiceConfirm>(_invoiceConfirmView);
+
     on<SelectMarket>(_selectMarket);
     on<GetProducts>(_getProducts);
     on<ContactUs>(_contactUs);
@@ -34,6 +39,18 @@ class WorkspaceBloc extends Bloc<WorkspaceEvent, WorkspaceState> {
 
   _changeActiveTab(ChangeTabView event, Emitter<WorkspaceState> emit) async {
     emit(state.copyWith(activeTabIndex: event.activeTabIndex));
+  }
+
+  _changeInvoiceView(ShowInvoice event, Emitter<WorkspaceState> emit) async {
+    emit(state.copyWith(showInvoice: event.isShow));
+  }
+
+  _invoiceOptionView(InvoiceOption event, Emitter<WorkspaceState> emit) async {
+    emit(state.copyWith(invoiceOption: event.option));
+  }
+
+  _invoiceConfirmView(InvoiceConfirm event, Emitter<WorkspaceState> emit) async {
+    emit(state.copyWith(invoiceConfirm: event.isConfirm));
   }
 
   _getStores(LoadStores event, Emitter<WorkspaceState> emit) async {

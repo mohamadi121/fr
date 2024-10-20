@@ -2,13 +2,19 @@
 
 import 'package:flutter/material.dart';
 
+import '../../modules/vendor/blocs/workspace/workspace_bloc.dart';
 import '../constants/constants.dart';
 import 'custom_button.dart';
 
 class OrderCard extends StatefulWidget {
-  const OrderCard({super.key, required this.index});
+  const OrderCard({
+    super.key,
+    required this.index,
+    this.bloc
+  });
 
   final int index;
+  final WorkspaceBloc? bloc;
 
   @override
   State<OrderCard> createState() => _OrderCardState();
@@ -139,6 +145,7 @@ class _OrderCardState extends State<OrderCard> {
           if (isOrderMenuVisible)
             OrderCardMenu(
               isOrderMenuVisible: isOrderMenuVisible,
+              bloc: widget.bloc!,
             ),
         ],
       ),
@@ -150,9 +157,11 @@ class OrderCardMenu extends StatelessWidget {
   const OrderCardMenu({
     super.key,
     required this.isOrderMenuVisible,
+    required this.bloc
   });
 
   final bool isOrderMenuVisible;
+  final WorkspaceBloc bloc;
 
   @override
   Widget build(BuildContext context) {
@@ -214,7 +223,9 @@ class OrderCardMenu extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               CustomButton(
-                onPress: () {},
+                onPress: () {
+                  bloc.add(const ShowInvoice(isShow: true));
+                },
                 text: 'تایید پرداخت',
                 width: 100,
                 color: Colors.green,
