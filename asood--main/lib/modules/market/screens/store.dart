@@ -402,7 +402,6 @@ class _StoreScreenState extends State<StoreScreen> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -767,7 +766,7 @@ class _StoreScreenState extends State<StoreScreen> {
                               //items
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 7),
-                                child: selectPageView(selectedIndex, state, marketBloc),
+                                child: selectPageView(selectedIndex, widget.market.id!, state, marketBloc),
                               )
 
                             ],
@@ -983,10 +982,10 @@ class _ScrollableButtonListState extends State<ScrollableButtonList> {
   }
 }*/
 
-selectPageView(index, styleState, MarketBloc marketBloc) {
+selectPageView(index, int marketId, styleState, MarketBloc marketBloc) {
   switch (index) {
     case 0:
-      return productView(styleState, marketBloc);
+      return productView(marketId, styleState, marketBloc);
     case 1:
       return specialView(styleState);
     case 2:
@@ -997,13 +996,13 @@ selectPageView(index, styleState, MarketBloc marketBloc) {
   }
 }
 
-productView(styleState, MarketBloc marketBloc) {
+productView(int marketId, styleState, MarketBloc marketBloc) {
 
   Widget templateWidget(int template){
 
     switch (template) {
       case 0:
-        return buildProductGridView0(isSelected: true);
+        return buildProductGridView0(isSelected: true, marketId: marketId);
       case 1:
         return buildProductGridView1();
       case 2:

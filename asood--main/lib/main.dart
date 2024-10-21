@@ -1,3 +1,4 @@
+import 'package:asood/modules/market/blocs/add_product/add_product_bloc.dart';
 import 'package:asood/modules/vendor/blocs/vendor/vendor_bloc.dart';
 import 'package:asood/shared/constants/constants.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +60,9 @@ class Asood extends StatelessWidget {
         ),
         BlocProvider<MarketBloc>(
           create: (context) => MarketBloc(),
+        ),
+        BlocProvider<AddProductBloc>(
+          create: (context) => AddProductBloc(),
         ),
       ],
       child: MaterialApp.router(

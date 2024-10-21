@@ -30,7 +30,7 @@ class MarketRepository {
     if (res is Success) {
       final json = jsonDecode(res.response.toString());
       final marketBase = MarketBaseModel.fromJson(json);
-      await isar.create(marketBase);
+      // await isar.create(marketBase);
       SecureStorage().writeSecureStorage('market_id', json['data']['market'].toString());
       SecureStorage().writeSecureStorage('marketActiveTabIndex', '1');
     }

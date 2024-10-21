@@ -179,7 +179,7 @@ class _MultiViewSliderScreenState extends State<MultiViewSliderScreen> {
   }
 }
 
-Widget buildProductGridView0({isSelected = false}) {
+Widget buildProductGridView0({isSelected = false, int marketId = 0}) {
   return SizedBox(
     width: Dimensions.width,
     height: Dimensions.height * 0.35,
@@ -378,13 +378,14 @@ Widget buildProductGridView0({isSelected = false}) {
             child: InkWell(
               onTap: (){
                 if(isSelected == true){
-                  print('1');
+                  // print('1');
+                  print(marketId);
 
                   // context.router.push(const TakhfifRoute());
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AddProduct(),
+                        builder: (context) => AddProduct(marketId: marketId,),
                       ),
                     );
 

@@ -32,7 +32,7 @@ class ProductApiService {
   }
 
 // create product
-  Future createProduct(Product product) async {
+  Future createProduct(ProductModel product) async {
     var uri = 'product/user/create/';
     try {
       http.Response res = await apiClient.postData(uri, product.toJson());
