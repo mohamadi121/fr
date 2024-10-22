@@ -14,7 +14,9 @@ import '../../../shared/utils/app_router.dart';
 import '../../../shared/widgets/default_appbar.dart';
 import '../../../shared/widgets/item_box_with_title.dart';
 import '../../../shared/widgets/simple_itembox.dart';
+import '../../customer/screens/customer_dashboard_screen.dart';
 import 'create_workspace.dart';
+import 'dashboard.dart';
 
 Map dummyData = {
   "firstMenu": [
@@ -45,8 +47,16 @@ Map dummyData = {
       "image": Container(),
       "page": const CreateWorkSpaceScreen()
     },
-    {"title": "رهیابی خرید", "image": Container()},
-    {"title": "رهیابی فروش", "image": Container()},
+    {
+      "title": "رهیابی خرید",
+      "image": Container(),
+      "page": const CustomerDashboardScreen()
+    },
+    {
+      "title": "رهیابی فروش",
+      "image": Container(),
+      "page": const VendorDashboardScreen()
+    },
     {
       "title": "اشتراک گذاری",
       "image": const Icon(

@@ -10,16 +10,16 @@ import '../models/market_base.dart';
 import '../models/market_contact_model.dart';
 import '../services/Secure_Storage.dart';
 import '../services/api_status.dart';
-import '../services/isar_service.dart';
+// import '../services/isar_service.dart';
 import '../services/market_api_service.dart';
 
 class MarketRepository {
-  late final IsarObjectService isar;
+  // late final IsarObjectService isar;
 
   final MarketApiService marketApiService = MarketApiService();
   MarketRepository() {
-    isar = IsarObjectService<MarketBaseModel>(MarketBaseModelSchema);
-    print(isar);
+    // isar = IsarObjectService<MarketBaseModel>(MarketBaseModelSchema);
+    // print(isar);
   }
 
   Future<dynamic> createMarketBase(String type, String businessId, String name,

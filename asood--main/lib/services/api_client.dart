@@ -14,8 +14,8 @@ import 'package:http/http.dart' as http;
 import 'error_response.dart';
 
 class ApiClient {
-  final IsarObjectService<KeyValue> keyValueService =
-      IsarObjectService(KeyValueSchema);
+  // final IsarObjectService<KeyValue> keyValueService =
+  //     IsarObjectService(KeyValueSchema);
   final String appBaseUrl;
 
   static const String noInternetMessage = 'عدم برقراری ارتباط با سرور';
@@ -85,7 +85,7 @@ class ApiClient {
             headers: headers ?? _mainHeaders,
           )
           .timeout(Duration(seconds: timeoutInSeconds));
-      print(response.statusCode);
+      debugPrint('====> API Status Code: ${response.statusCode}');
       return handleResponse(response, uri);
     } catch (e) {
       return http.Response(noInternetMessage, 1);

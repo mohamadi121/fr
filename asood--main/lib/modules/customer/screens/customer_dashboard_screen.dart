@@ -46,49 +46,76 @@ class _CustomerDashboardScreenState extends State<CustomerDashboardScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: DefaultAppBar(
-        context: context,
-      ),
-      body: Container(
-        width: Dimensions.width,
-        margin: const EdgeInsets.only(
-          top: 10.0,
-          bottom: 10.0,
-        ),
-        child: SafeArea(
-          child: Column(
+    return Container(
+      color: Colora.primaryColor,
+      child: SafeArea(
+        child: Scaffold(
+          body: Stack(
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: TabBar(
-                  controller: _tabController,
-                  indicator: null,
-                  indicatorColor: Colors.transparent, // Remove indicator color
-                  tabs: [
-                    buildTab('لیست فروشگاه‌ها', 0),
-                    buildTab('درخواست جدید', 1),
-                    buildTab('آمار و خرید', 2),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
+
+              SingleChildScrollView(
+                child: Column(
                   children: [
-                    // Content of Tab 1
-                    buildTabStoreList(),
 
-                    // Content of Tab 2
-                    buildTabOrderList(),
+                    SizedBox(
+                      height: Dimensions.height * 0.11,
+                    ),
 
-                    // Content of Tab 3
-                    buildTabStatList(),
+                    // tab bar
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: TabBar(
+                        controller: _tabController,
+                        indicator: null,
+                        indicatorPadding: EdgeInsets.zero,
+                        indicatorSize: TabBarIndicatorSize.label,
+
+                        padding: EdgeInsets.zero,
+                        dividerHeight: 0,
+                        isScrollable: false,
+
+                        indicatorColor:
+                        Colors.transparent, // Remove indicator color
+                        tabs: [
+                          buildTab('لیست فروشگاه‌ها', 0),
+                          buildTab('درخواست جدید', 1),
+                          buildTab('آمار و خرید', 2),
+                        ],
+                      ),
+                    ),
+
+
+                    SizedBox(
+                      height: Dimensions.height * .795,
+                      child: TabBarView(
+                        controller: _tabController,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+
+                          // buildTabStoreList(state),
+                          buildTabStoreList(),
+
+                          // buildTabOrderList(bloc),
+                          buildTabOrderList(),
+
+                          Container(
+                            width: Dimensions.width,
+                            height: Dimensions.height,
+                            color: Colors.greenAccent,
+                          ),
+
+                        ],
+                      ),
+                    ),
+
                   ],
                 ),
               ),
+
+              const NewAppBar(title: 'رهیابی خرید'),
+
             ],
           ),
         ),
@@ -98,24 +125,26 @@ class _CustomerDashboardScreenState extends State<CustomerDashboardScreen>
 
   Widget buildTab(String label, int tabIndex) {
     bool isActive = _activeTabIndex == tabIndex; // Check if tab is active
-
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-      // margin: EdgeInsets.only(right: 10.0),
+      padding: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 7.0),
+      margin: const EdgeInsets.symmetric(vertical: 10.0),
+      width: Dimensions.width,
       decoration: BoxDecoration(
-        color: isActive
-            ? Colors.white
-            : Colors.purple, // White when active, purple otherwise
-        borderRadius: BorderRadius.circular(50), // Border radius for each tab
-        border: isActive
-            ? Border.all(color: Colors.purple) // Purple border when active
-            : null, // No border otherwise
+          color: isActive
+              ? Colora.primaryColor
+              : Colors.white,
+          borderRadius: BorderRadius.circular(50),
+          border: Border.all(color: Colora.primaryColor, width: 2)
       ),
       child: Align(
         alignment: Alignment.center,
         child: FittedBox(
-          child: Text(label,
-              style: TextStyle(color: isActive ? Colors.black : Colors.white)),
+          child: Text(
+              label,
+              style: TextStyle(
+                  color: isActive ? Colors.white : Colora.primaryColor
+              )
+          ),
         ),
       ),
     );

@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'package:isar/isar.dart';
+// import 'package:isar/isar.dart';
 
 import 'modules/auth/blocs/login_bloc/login_bloc.dart';
 import 'modules/inquiry/blocs/inquiry/inquiry_bloc.dart';
@@ -20,7 +20,7 @@ import 'repositories/user_repository.dart';
 import 'shared/utils/app_router.dart';
 
 void main() async {
-  await Isar.initializeIsarCore();
+  // await Isar.initializeIsarCore();
 
   runApp(Asood());
 }

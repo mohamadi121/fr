@@ -46,7 +46,36 @@ class _AddProductState extends State<AddProduct> {
     return Container(
       color: Colora.primaryColor,
       child: SafeArea(
-        child: BlocBuilder<AddProductBloc ,AddProductState>(
+        child: BlocConsumer<AddProductBloc ,AddProductState>(
+          listener: (context, state) {
+            if(state.status == AddProductStatus.success){
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  backgroundColor: Colora.borderAvatar,
+                  content: Text(
+                    "با موفقیت ثبت شد",
+                    style: TextStyle(
+                        color: Colora.scaffold
+                    ),
+                  ),
+                ),
+              );
+            }
+            if(state.status == AddProductStatus.failure){
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  backgroundColor: Colora.borderAvatar,
+                  content: Text(
+                    "خطا در برقراری ارتباط",
+                    style: TextStyle(
+                        color: Colora.scaffold
+                    ),
+                  ),
+                ),
+              );
+            }
+          },
           builder: (context, state) => Scaffold(
             body: Stack(
               children: [
@@ -2116,7 +2145,7 @@ class _AddProductState extends State<AddProduct> {
                                               description: description.text,
                                               technicalDetail: technicalDescription.text,
                                               stock: stock.text.isEmpty ? 0 : int.parse(stock.text),
-                                              price: price.text.isEmpty ? 0 : double.parse(price.text),
+                                              price: price.text.isEmpty ? 0 : int.parse(price.text),
                                               // requiredProduct:0,
                                               // giftProduct:0,
                                               isMarketer: state.isMarketer,
@@ -2137,7 +2166,9 @@ class _AddProductState extends State<AddProduct> {
                                         }
 
                                       },
-                                      child: Text(
+                                      child: state.status == AddProductStatus.loading
+                                      ?const CircularProgressIndicator(color: Colora.primaryColor,)
+                                      :Text(
                                         'ثبت اطلاعات',
                                         style: TextStyle(
                                             color: Colora.primaryColor,

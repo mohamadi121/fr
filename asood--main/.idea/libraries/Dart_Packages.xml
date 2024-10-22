@@ -198,34 +198,6 @@
             </list>
           </value>
         </entry>
-        <entry key="connectivity">
-          <value>
-            <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/connectivity-3.0.6/lib" />
-            </list>
-          </value>
-        </entry>
-        <entry key="connectivity_for_web">
-          <value>
-            <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/connectivity_for_web-0.4.0+1/lib" />
-            </list>
-          </value>
-        </entry>
-        <entry key="connectivity_macos">
-          <value>
-            <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/connectivity_macos-0.2.1+2/lib" />
-            </list>
-          </value>
-        </entry>
-        <entry key="connectivity_platform_interface">
-          <value>
-            <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/connectivity_platform_interface-2.0.1/lib" />
-            </list>
-          </value>
-        </entry>
         <entry key="convert">
           <value>
             <list>
@@ -818,13 +790,6 @@
           <value>
             <list>
               <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/isar-3.1.0/lib" />
-            </list>
-          </value>
-        </entry>
-        <entry key="isar_flutter_libs">
-          <value>
-            <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/isar_flutter_libs-3.1.0/lib" />
             </list>
           </value>
         </entry>
@@ -1496,7 +1461,7 @@
         <entry key="xxh3">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/xxh3-1.0.1/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/xxh3-1.1.0/lib" />
             </list>
           </value>
         </entry>
@@ -1538,10 +1503,6 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/clock-1.1.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/code_builder-4.10.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/collection-1.18.0/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/connectivity-3.0.6/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/connectivity_for_web-0.4.0+1/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/connectivity_macos-0.2.1+2/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/connectivity_platform_interface-2.0.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/convert-3.1.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/convex_bottom_bar-3.2.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/cross_file-0.3.4+2/lib" />
@@ -1623,7 +1584,6 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/intl_phone_field-3.2.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/io-1.0.4/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/isar-3.1.0/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/isar_flutter_libs-3.1.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/isar_generator-3.1.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/js-0.6.7/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/js_wrapping-0.7.4/lib" />
@@ -1718,7 +1678,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/wkt_parser-2.0.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/xdg_directories-0.2.0+3/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/xml-6.5.0/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/xxh3-1.0.1/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/xxh3-1.1.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/yaml-3.1.2/lib" />
       <root url="file://$USER_HOME$/Flutter/development/flutter/bin/cache/pkg/sky_engine/lib" />
       <root url="file://$USER_HOME$/Flutter/development/flutter/packages/flutter/lib" />

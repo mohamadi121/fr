@@ -64,7 +64,7 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
   }
 
   _addNewProduct(AddNewProductEvent event, Emitter<AddProductState> emit) async{
-
+    emit(state.copyWith(status: AddProductStatus.loading));
     ProductModel product = ProductModel(
       market: event.market,
       name: event.name,
@@ -85,22 +85,40 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
         product,
       );
       if (res is Success) {
-        var json = jsonDecode(res.response.toString());
-        emit(state.copyWith(status: AddProductStatus.success));
+        // var json = jsonDecode(res.response.toString());
+        emit(state.copyWith(
+          productSalePrice: '',
+          productSaleType: '',
+          productExtra: false,
+          productType: false,
+          discountType: -1,
+          isMarketer: false,
+          productGift: false,
+          productPrice: false,
+          productPosition: '',
+          productTag: '',
+          productStock: false,
+          status: AddProductStatus.success
+        ));
       } else {
         emit(state.copyWith(
           status: AddProductStatus.failure,
-            // error: res.error.toString()
         ));
         if (kDebugMode) {
           print('add product error is ${res.error.toString()}');
         }
       }
     } catch (e) {
+      emit(state.copyWith(
+        status: AddProductStatus.failure,
+      ));
       if (kDebugMode) {
         print('add product error is $e');
-      }}
-
+      }
+    }
+    emit(state.copyWith(
+      status: AddProductStatus.initial,
+    ));
   }
 
 }

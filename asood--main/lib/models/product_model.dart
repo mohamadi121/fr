@@ -4,12 +4,12 @@ class ProductModel {
   String? description;
   String? technicalDetail;
   int? stock;
-  double? price;
+  int? price;
   int? requiredProduct;
   int? giftProduct;
   bool? isMarketer;
   String? sellType;
-  double? shipCost;
+  int? shipCost;
   String? shipCostPayType;
   // int? subCategory;
   // String? keywords;
@@ -70,6 +70,7 @@ class ProductModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['market'] = market;
     data['name'] = name;
     data['description'] = description;
     data['technical_detail'] = technicalDetail;

@@ -56,7 +56,6 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: DefaultAppBar(context: context, title: 'لیست فروشگاه های من',),
       body: BlocConsumer<WorkspaceBloc, WorkspaceState>(
       listener: (context, state) {
           // _tabController.index = state.activeTabIndex;
@@ -149,57 +148,14 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
                                   height: Dimensions.height * 0.11,
                                 ),
 
-                                // tab bar
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: TabBar(
-                                    controller: _tabController,
-                                    indicator: null,
-                                    indicatorPadding: EdgeInsets.zero,
-                                    indicatorSize: TabBarIndicatorSize.label,
+                                buildTabStoreList(state),
 
-                                    padding: EdgeInsets.zero,
-                                    dividerHeight: 0,
-                                    isScrollable: false,
-
-                                    indicatorColor:
-                                    Colors.transparent, // Remove indicator color
-                                    tabs: [
-                                      buildTab(state, 'لیست فروشگاه‌ها', 0),
-                                      buildTab(state, 'درخواست جدید', 1),
-                                      buildTab(state, 'آمار و خرید', 2),
-                                    ],
-                                  ),
-                                ),
-
-                                SizedBox(
-                                  height: Dimensions.height * .795,
-                                  child: TabBarView(
-                                    controller: _tabController,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    children: [
-
-                                      buildTabStoreList(state),
-
-                                      buildTabOrderList(bloc),
-
-                                      Container(
-                                        width: Dimensions.width,
-                                        height: Dimensions.height,
-                                        color: Colors.greenAccent,
-                                      ),
-
-                                    ],
-                                  ),
-                                ),
                               ],
                             ),
                         ),
                     ),
 
-                    const NewAppBar(title: 'داشبورد فروشگاه‌'),
+                    const NewAppBar(title: 'لیست فروشگاه‌های من‌'),
 
                     // invoice
                     if(state.showInvoice == true)...[
@@ -285,34 +241,6 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
           );
       }),
     );
-  }
-
-  Widget buildTab(WorkspaceState state, String label, int tabIndex) {
-    bool isActive = activeTabIndex == tabIndex;
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 7.0),
-      margin: const EdgeInsets.symmetric(vertical: 10.0),
-      width: Dimensions.width,
-      decoration: BoxDecoration(
-        color: isActive
-          ? Colora.primaryColor
-          : Colors.white,
-        borderRadius: BorderRadius.circular(50),
-        border: Border.all(color: Colora.primaryColor, width: 2)
-      ),
-      child: Align(
-        alignment: Alignment.center,
-        child: FittedBox(
-          child: Text(
-            label,
-            style: TextStyle(
-                color: isActive ? Colors.white : Colora.primaryColor
-            )
-          ),
-        ),
-      ),
-    );
-
   }
 
   Widget buildTabStoreList(WorkspaceState state) {

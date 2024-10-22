@@ -14,8 +14,8 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final IsarObjectService _isarService =
-      IsarObjectService<KeyValue>(KeyValueSchema);
+  // final IsarObjectService _isarService =
+  //     IsarObjectService<KeyValue>(KeyValueSchema);
   final UserRepository userRepo;
   LoginBloc({required this.userRepo}) : super(LoginState.initial()) {
     on<SendOtp>((event, emit) async {

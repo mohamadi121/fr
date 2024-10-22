@@ -80,12 +80,12 @@ class AddNewProductEvent extends AddProductEvent{
   final String? description;
   final String? technicalDetail;
   final int? stock;
-  final double? price;
+  final int? price;
   final int? requiredProduct;
   final int? giftProduct;
   final bool? isMarketer;
   final String? sellType;
-  final double? shipCost;
+  final int? shipCost;
   final String? shipCostPayType;
 
   const AddNewProductEvent({

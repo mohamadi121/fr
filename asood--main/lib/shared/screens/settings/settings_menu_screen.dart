@@ -143,14 +143,14 @@ class SettingsPageScreen extends StatelessWidget {
                   const SizedBox(height: 10),
                   CustomButton(
                     onPress: () async{
-                      final IsarObjectService _isarService =
-                      IsarObjectService<KeyValue>(KeyValueSchema);
-                      print(await _isarService.getValueByKey('token'));
-                      // KeyValue token = KeyValue(
-                      //   key: "token",
-                      //   value: json["data"]["token"],
-                      // );
-                      await _isarService.delete(1);
+                      // final IsarObjectService _isarService =
+                      // IsarObjectService<KeyValue>(KeyValueSchema);
+                      // print(await _isarService.getValueByKey('token'));
+                      // // KeyValue token = KeyValue(
+                      // //   key: "token",
+                      // //   value: json["data"]["token"],
+                      // // );
+                      // await _isarService.delete(1);
                     },
                     text: 'خروج'
                   ),
