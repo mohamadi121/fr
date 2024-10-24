@@ -711,55 +711,57 @@ class _StoreScreenState extends State<StoreScreen> {
                               Container(
                                 width: Dimensions.width,
                                 margin: EdgeInsets.only(bottom: Dimensions.height * 0.02),
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: [
-                                      ...List.generate(
-                                      buttonTitles.length,
-                                        (index) => AnimatedContainer(
-                                          duration: const Duration(milliseconds: 500),
-                                          decoration: BoxDecoration(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    ...List.generate(
+                                    buttonTitles.length,
+                                      (index) => AnimatedContainer(
+                                        duration: const Duration(milliseconds: 500),
+                                        width: Dimensions.width * 0.22,
+                                        decoration: BoxDecoration(
+                                          color: selectedIndex == index
+                                            ?state.topColor
+                                            :Colora.scaffold,
+                                          borderRadius: BorderRadius.circular(20),
+                                          border: Border.all(
                                             color: selectedIndex == index
-                                              ?state.topColor
-                                              :Colora.scaffold,
-                                            borderRadius: BorderRadius.circular(20),
-                                            border: Border.all(
+                                              ?Colora.scaffold
+                                              :state.topColor,
+                                          )
+                                        ),
+                                        margin: EdgeInsets.symmetric(
+                                          horizontal: Dimensions.width * 0.01
+                                        ),
+                                        alignment: Alignment.center,
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: Dimensions.height * 0.01
+                                        ),
+                                        child: InkWell(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          enableFeedback: false,
+                                          focusColor: Colors.transparent,
+                                          onTap: (){
+                                            setState(() {
+                                              selectedIndex = index;
+                                            });
+                                          },
+                                          child: Text(
+                                            buttonTitles[index],
+                                            style: TextStyle(
+                                              fontFamily: state.fontFamily,
                                               color: selectedIndex == index
-                                                ?Colora.scaffold
-                                                :state.topColor,
-                                            )
-                                          ),
-                                          margin: EdgeInsets.symmetric(
-                                            horizontal: Dimensions.width * 0.01
-                                          ),
-                                          child: MaterialButton(
-                                            splashColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            enableFeedback: false,
-                                            focusColor: Colors.transparent,
-                                            onPressed: (){
-                                              setState(() {
-                                                selectedIndex = index;
-                                              });
-                                            },
-                                            child: Text(
-                                              buttonTitles[index],
-                                              style: TextStyle(
-                                                fontFamily: state.fontFamily,
-                                                color: selectedIndex == index
-                                                  ? state.fontColor
-                                                  : state.secondFontColor,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: Dimensions.width * 0.035
-                                              ),
+                                                ? state.fontColor
+                                                : state.secondFontColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: Dimensions.width * 0.035
                                             ),
                                           ),
-                                        )
+                                        ),
                                       )
-                                    ],
-                                  ),
+                                    )
+                                  ],
                                 ),
                               ),
 

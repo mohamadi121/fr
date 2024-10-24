@@ -301,6 +301,7 @@ class _BasicInfoState extends State<BasicInfo> {
             Container(
               width: Dimensions.width,
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              margin: EdgeInsets.only(bottom: Dimensions.height * 0.04),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   color: Colora.primaryColor),
@@ -364,23 +365,39 @@ class _BasicInfoState extends State<BasicInfo> {
                     text: "کد ملی",
                     keyboardType: TextInputType.number,
                   ),
-                  const Text(
-                    "کد ملی صرفا جهت تخصیص آگهی به شما میباشد",
-                    style: TextStyle(color: Colors.white),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "کد ملی صرفا جهت تخصیص آگهی به شما میباشد",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                  Padding(
+                  Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: CustomButton(
-                      onPress: () => category(),
-                      text: selectedCategoryName,
-                      color: Colors.white,
-                      textColor: Colora.primaryColor,
-                      height: Dimensions.height * 0.05,
-                      fontWeight: FontWeight.bold,
+                    margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                    width: Dimensions.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(Dimensions.twenty),
+                      color: Colora.scaffold
+                    ),
+                    child: MaterialButton(
+                      onPressed: () => category(),
+                      child: Text(
+                        selectedCategoryName,
+                        style: const TextStyle(
+                          color: Colora.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      // text: selectedCategoryName,
+                      // color: Colors.white,
+                      // textColor: Colora.primaryColor,
+                      // height: Dimensions.height * 0.05,
+                      // fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(
-                    height: 7,
+                    height: 10,
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -491,9 +508,6 @@ class _BasicInfoState extends State<BasicInfo> {
                             : null
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
                   ),
                 ],
               ),

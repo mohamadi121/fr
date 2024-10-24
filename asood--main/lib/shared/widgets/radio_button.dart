@@ -18,7 +18,10 @@ SizedBox radioButton({
         fillColor: MaterialStateProperty.all(Colors.white),
         title: Text(
           title,
-          style: ATextStyle.appTitle,
+          style: TextStyle(
+            fontSize: Dimensions.width * 0.04,
+            color: Colora.scaffold
+          ),
         ),
         value: value,
         groupValue: groupValue,

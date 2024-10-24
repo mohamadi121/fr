@@ -15,6 +15,7 @@ import '../../../shared/widgets/default_appbar.dart';
 import '../../../shared/widgets/item_box_with_title.dart';
 import '../../../shared/widgets/simple_itembox.dart';
 import '../../customer/screens/customer_dashboard_screen.dart';
+import '../../business_card/screens/create_business_card.dart';
 import 'create_workspace.dart';
 import 'dashboard.dart';
 
@@ -29,7 +30,11 @@ Map dummyData = {
       "title": "کسب درآمد از آسود",
       "image": Container(),
     },
-    {"title": "کارت ویزیت", "image": Container()},
+    {
+      "title": "کارت ویزیت",
+      "image": Container(),
+      "page": const CreateBusinessCard(),
+    },
     {
       "title": "استعلام بها",
       "image": Container(),
@@ -146,7 +151,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
                               ),
 
                               SizedBox(
-                                height: Dimensions.height * 0.1,
+                                height: Dimensions.height * 0.15,
                               )
                             ],
                           ),
@@ -166,10 +171,29 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
           bottomNavigationBar: Stack(
             children: [
               CustomPaint(
-                size: Size(Dimensions.width, Dimensions.height * 0.1),
+                size: Size(Dimensions.width, Dimensions.height * 0.15),
                 // size: const Size(400, 90),
                 painter: CurvedPainter(),
               ),
+              Positioned(
+                bottom: 0,
+                width: Dimensions.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: Dimensions.height * 0.01),
+                      child: const Text(
+                        'خانه',
+                        style: TextStyle(
+                          color: Colora.scaffold,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              )
               // Positioned(
               //     bottom: Dimensions.height * .029,
               //     left: Dimensions.width * .12,
@@ -193,14 +217,14 @@ class DashboardAdditionalWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(6.0),
+      margin: const EdgeInsets.all(0),
       padding: const EdgeInsets.all(6.0),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: Deco.kshadow,
         borderRadius: BorderRadius.circular(20.0),
       ),
-      height: Dimensions.height * 0.43,
+      height: Dimensions.height * 0.46,
       child: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
         child: Column(
@@ -209,7 +233,7 @@ class DashboardAdditionalWidget extends StatelessWidget {
             Align(
               alignment: Alignment.centerRight,
               child: Container(
-                margin: const EdgeInsets.only(right: 20, bottom: 10),
+                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Text(
                   "امکانات:",
                   style: ATextStyle.lightBlue16
@@ -220,16 +244,16 @@ class DashboardAdditionalWidget extends StatelessWidget {
 
             //items
             Container(
-              height: Dimensions.height * .43,
-              width: Dimensions.width * .65,
-              padding: EdgeInsets.only(top: Dimensions.height * 0.02),
+              height: Dimensions.height * .45,
+              width: Dimensions.width * .7,
+              // padding: EdgeInsets.only(top: Dimensions.height * 0.02),
               child: GridView.count(
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: 3,
                 shrinkWrap: true,
                 cacheExtent: 2,
                 childAspectRatio: 1,
-                crossAxisSpacing: 0,
+                crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
                 children: [
                   ...List.generate(
@@ -278,7 +302,7 @@ class DashboardServicesWidget extends StatelessWidget {
         boxShadow: Deco.kshadow,
         borderRadius: BorderRadius.circular(20.0),
       ),
-      height: MediaQuery.of(context).size.height * 0.38,
+      height: MediaQuery.of(context).size.height * 0.41,
       child: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
         child: Column(
@@ -287,7 +311,7 @@ class DashboardServicesWidget extends StatelessWidget {
             Align(
               alignment: Alignment.centerRight,
               child: Container(
-                  margin: const EdgeInsets.only(right: 20, bottom: 20),
+                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Text(
                     "کسب وکار:",
                     style: ATextStyle.lightBlue16
@@ -296,36 +320,31 @@ class DashboardServicesWidget extends StatelessWidget {
             ),
 
             Container(
-              height: Dimensions.height * .38,
-              width: Dimensions.width * .7,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
+              height: Dimensions.height * .4,
+              width: Dimensions.width * .8,
+              child: GridView.count(
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 3,
+                shrinkWrap: true,
+                cacheExtent: 2,
+                childAspectRatio: 3 / 4,
+                crossAxisSpacing: 20,
+                mainAxisSpacing: 15,
                 children: [
-                  GridView.count(
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 3,
-                    shrinkWrap: true,
-                    cacheExtent: 2,
-                    childAspectRatio: 3 / 4,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 11,
-                    children: [
-                      ...List.generate(
-                        dummyData["firstMenu"].length,
-                        (index) => SimpleItemBox(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        dummyData["firstMenu"][index]["page"]));
-                          },
-                          title: dummyData["firstMenu"][index]["title"],
-                          child: dummyData["firstMenu"][index]["image"],
-                        ),
-                      )
-                    ],
-                  ),
+                  ...List.generate(
+                    dummyData["firstMenu"].length,
+                    (index) => SimpleItemBox(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    dummyData["firstMenu"][index]["page"]));
+                      },
+                      title: dummyData["firstMenu"][index]["title"],
+                      child: dummyData["firstMenu"][index]["image"],
+                    ),
+                  )
                 ],
               ),
             ),
@@ -345,22 +364,23 @@ class DashboardCarouselWidget extends StatefulWidget {
 }
 
 class _DashboardCarouselWidgetState extends State<DashboardCarouselWidget> {
-  int currenSlaiderIndex = 0;
+  int currentSliderIndex = 0;
+  int sliderLength = 5;
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.30,
+      height: MediaQuery.of(context).size.height * 0.33,
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
       ),
-      child: Stack(
+      child: Column(
         children: [
           CarouselSlider(
             options: CarouselOptions(
               onPageChanged: (index, reason) {
                 setState(() {
-                  currenSlaiderIndex = index;
+                  currentSliderIndex = index;
                 });
               },
               aspectRatio: 16 / 9,
@@ -373,18 +393,18 @@ class _DashboardCarouselWidgetState extends State<DashboardCarouselWidget> {
               autoPlay: true,
             ),
             items: List.generate(
-              5,
+              sliderLength,
               (index) => Container(
                 decoration: BoxDecoration(
                   border: const Border(
                     bottom: BorderSide(
-                    width: 10.0,
+                    width: 13.0,
                       color: Colora.primaryColor
                   )),
                   borderRadius: BorderRadius.circular(30.0),
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(15),
                   child: Image.asset(
                     'assets/images/tools-that-you-should-have.jpg',
                     fit: BoxFit.cover,
@@ -393,6 +413,32 @@ class _DashboardCarouselWidgetState extends State<DashboardCarouselWidget> {
               ),
             ),
           ),
+
+          //indicator
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: sliderLength,
+              itemBuilder: (context, index) => Container(
+              width: 15,
+              height: 15,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: index == currentSliderIndex
+                  ?Colora.primaryColor
+                  :Colora.scaffold,
+                border: Border.all(
+                    color: Colora.primaryColor,
+                    width: 2
+                )
+              ),
+                margin: EdgeInsets.symmetric(
+                  horizontal: Dimensions.width * 0.01
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );

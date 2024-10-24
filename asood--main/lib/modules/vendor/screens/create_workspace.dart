@@ -114,12 +114,12 @@ class _CreateWorkSpaceScreenState extends State<CreateWorkSpaceScreen>
                                 indicator: null,
                                 indicatorPadding: EdgeInsets.zero,
                                 indicatorSize: TabBarIndicatorSize.label,
-                
-                
+                                labelPadding: EdgeInsets.zero,
+
                                 padding: EdgeInsets.zero,
                                 dividerHeight: 0,
                                 isScrollable: false,
-                
+
                                 indicatorColor:
                                     Colors.transparent, // Remove indicator color
                                 tabs: [
@@ -173,9 +173,9 @@ class _CreateWorkSpaceScreenState extends State<CreateWorkSpaceScreen>
     bool isActive = state.activeTabIndex == tabIndex; // Check if tab is active
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 7.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 7.0),
       margin: const EdgeInsets.symmetric(vertical: 10.0),
-      width: Dimensions.width,
+      width: Dimensions.width * 0.3,
       decoration: BoxDecoration(
         color: isActive
           ? Colora.primaryColor

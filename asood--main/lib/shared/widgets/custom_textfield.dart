@@ -101,6 +101,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               textDirection: TextDirection.rtl,
               controller: widget.controller,
               keyboardType: widget.keyboardType,
+              textInputAction: TextInputAction.next,
               focusNode: _focusNode,
               style: widget.style ??
               TextStyle(
@@ -109,7 +110,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     : Colora.borderTag,
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
-                fontFamily: 'irans'
+                fontFamily: 'irs'
               ),
               maxLines: widget.maxLine,
               textAlign: widget.align,

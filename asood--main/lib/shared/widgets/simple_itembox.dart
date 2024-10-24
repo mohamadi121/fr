@@ -27,7 +27,7 @@ class SimpleItemBox extends StatelessWidget {
           ),
           decoration: BoxDecoration(
               color: boxColor ?? Colora.lightBlue,
-              borderRadius: BorderRadius.circular(12)),
+              borderRadius: BorderRadius.circular(8)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -41,10 +41,10 @@ class SimpleItemBox extends StatelessWidget {
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14
+                  fontSize: Dimensions.width * 0.038
                 ),
               ),
             ],
