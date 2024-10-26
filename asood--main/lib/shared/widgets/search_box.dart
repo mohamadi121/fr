@@ -16,10 +16,10 @@ class SearchBoxWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(0),
       child: CustomTextField(
         controller: TextEditingController(),
-        text: 'جستجو',
+        text: 'جستجوی مخاطب',
         style: TextStyle(color: color),
         suffixIcon: Icon(Icons.search, color: color), // Set icon color to white
         color: backgroundColor,

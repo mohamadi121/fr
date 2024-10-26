@@ -16,6 +16,7 @@ import '../../../shared/widgets/item_box_with_title.dart';
 import '../../../shared/widgets/simple_itembox.dart';
 import '../../customer/screens/customer_dashboard_screen.dart';
 import '../../business_card/screens/create_business_card.dart';
+import '../../panel/screens/inbox.dart';
 import 'create_workspace.dart';
 import 'dashboard.dart';
 
@@ -70,7 +71,11 @@ Map dummyData = {
         color: Colors.white,
       )
     },
-    {"title": "پیام کوتاه", "image": Container()},
+    {
+      "title": "پیام کوتاه",
+      "image": Container(),
+      "page": const PanelInboxScreen()
+    },
     {"title": "علاقه مندی", "image": Container()},
     {"title": "راهنما", "image": Container()},
     {"title": "پشتیبانی", "image": Container()},

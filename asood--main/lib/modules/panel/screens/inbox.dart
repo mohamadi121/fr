@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_declarations
 
+import 'package:asood/shared/constants/constants.dart';
 import 'package:asood/shared/widgets/search_box.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +15,44 @@ class PanelInboxScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: DefaultAppBar(context: context),
-      body: const SafeArea(
-        child: InboxScreen(),
+    return Container(
+      color: Colora.primaryColor,
+      child: SafeArea(
+        child: Scaffold(
+          // appBar: DefaultAppBar(context: context, title: 'لیست پیامک‌ها',),
+          body: Stack(
+            children: [
+
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+
+                    //for appbar
+                    SizedBox(
+                      height: Dimensions.height * 0.12,
+                    ),
+
+                    ListView.builder(
+                      itemCount: 10,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) =>
+                        (index != 9)
+                          ?const MessageCardWidget()
+                          :const SimpleBotNavBar(),
+                    ),
+
+                  ],
+                ),
+              ),
+
+              const NewAppBar(title: 'لیست پیامک‌ها'),
+
+            ],
+          ),
+          // bottomNavigationBar: const SimpleBotNavBar(),
+        ),
       ),
-      bottomNavigationBar: const SimpleBotNavBar(),
     );
   }
 }

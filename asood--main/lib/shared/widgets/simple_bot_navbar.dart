@@ -10,13 +10,16 @@ class SimpleBotNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 85.0, // Adjust the height as needed
+      height: 85.0,
       child: CustomPaint(
         painter: HalfCirclePainter(),
         child: Container(
+          margin: EdgeInsets.only(
+            top: Dimensions.height * 0.04
+          ),
           child: const Center(
             child: Text(
-              "Asud @ 2024",
+              "Asud @ 2021",
               style: TextStyle(color: Colora.scaffold),
             ),
           ),

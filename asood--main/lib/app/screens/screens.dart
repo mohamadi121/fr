@@ -13,7 +13,7 @@ class ScreensListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(context: context),
+      appBar: DefaultAppBar(context: context, title: 'لیست صفحات',),
       body: SafeArea(
         child: Container(
           margin: const EdgeInsets.all(20),

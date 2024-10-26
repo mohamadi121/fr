@@ -1,3 +1,4 @@
+import 'package:asood/shared/constants/constants.dart';
 import 'package:asood/shared/widgets/custom_textfield.dart';
 import 'package:asood/shared/widgets/search_box.dart';
 import 'package:auto_route/auto_route.dart';
@@ -18,40 +19,58 @@ class PanelConfigScreen extends StatefulWidget {
 class _PanelConfigScreenState extends State<PanelConfigScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: DefaultAppBar(context: context),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: [
-                const SelectPanel(),
-                const SizedBox(height: 20),
-                const SendBulkMessage(),
-                const SizedBox(height: 20),
-                const SelectContacts(),
-                const SizedBox(height: 20),
-                const SetMessage(),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                        width: 150,
-                        margin: const EdgeInsets.all(10.0),
-                        child: CustomButton(
-                          onPress: () {},
-                          text: "ذخیره",
-                        ))
-                  ],
+    return Container(
+      color: Colora.primaryColor,
+      child: SafeArea(
+        child: Scaffold(
+          // appBar: DefaultAppBar(context: context, title: '',),
+          body: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+
+                      SizedBox(
+                        height: Dimensions.height * 0.11,
+                      ),
+                      const SelectPanel(),
+                      const SizedBox(height: 10),
+                      const SendBulkMessage(),
+                      const SizedBox(height: 10),
+                      const SelectContacts(),
+                      const SizedBox(height: 10),
+                      const SetMessage(),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            width: 150,
+                            margin: const EdgeInsets.all(10.0),
+                            child: CustomButton(
+                              onPress: () {},
+                              text: "ذخیره",
+                              textColor: Colora.scaffold,
+                              fontWeight: FontWeight.bold,
+                              color: Colora.primaryColor,
+                            ))
+                        ],
+                      ),
+                      const SimpleBotNavBar(),
+                    ],
+                  ),
                 ),
-              ],
-            ),
+              ),
+
+              const NewAppBar(title: 'پنل پیامک'),
+
+            ],
           ),
+          // bottomNavigationBar: const SimpleBotNavBar(),
         ),
       ),
-      bottomNavigationBar: const SimpleBotNavBar(),
     );
   }
 }
@@ -72,7 +91,7 @@ class _SelectPanelState extends State<SelectPanel> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Colors.indigo[400],
+        color: Colora.primaryColor,
       ),
       child: Column(
         children: [
@@ -80,9 +99,10 @@ class _SelectPanelState extends State<SelectPanel> {
             child: Text(
               'انتخاب پنل',
               style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+                color: Colora.scaffold,
+                fontSize: 22,
+                fontWeight: FontWeight.bold
+              ),
             ),
           ),
           const Divider(
@@ -92,21 +112,26 @@ class _SelectPanelState extends State<SelectPanel> {
           const SizedBox(height: 20),
           const Text(
             'شما می‌توانید پنل مورد نیاز جهت ارسال پیام را انتخاب کنید:',
-            style: TextStyle(color: Colors.white),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colora.scaffold,
+              fontSize: 10,
+              fontWeight: FontWeight.bold
+            ),
           ),
           selectPanelType(),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CustomButton(
                 onPress: () {},
                 text: 'انتخاب',
-                width: 100,
+                width: Dimensions.width * 0.4,
               ),
               CustomButton(
                 onPress: () {},
                 text: 'انصراف',
-                width: 100,
+                width: Dimensions.width * 0.4,
               ),
             ],
           ),
@@ -119,27 +144,84 @@ class _SelectPanelState extends State<SelectPanel> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Colors.indigo[300],
+        color: Colora.lightBlue,
       ),
-      margin: const EdgeInsets.all(20),
+      margin: const EdgeInsets.symmetric(vertical: 20),
+      padding: EdgeInsets.symmetric(
+        vertical: Dimensions.height * 0.01,
+        horizontal: Dimensions.width * 0.05
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          radioButton(
-            title: 'پنل آسود',
-            groupValue: _groupValue,
-            value: 'firstOption',
-            onChanged: (value) =>
-                setState(() => _groupValue = value ?? _groupValue),
+          const Padding(
+            padding: EdgeInsets.only(top: 5.0),
+            child: Text(
+              'پنل آسود',
+              style: TextStyle(
+                  color: Colora.scaffold,
+                  fontSize: 14
+              ),
+            ),
           ),
-          radioButton(
-            title: 'پنل شخصی',
-            groupValue: _groupValue,
-            value: 'secondOption',
-            onChanged: (value) =>
-                setState(() => _groupValue = value ?? _groupValue),
+          Expanded(
+            child: Radio(
+              visualDensity: const VisualDensity(
+                horizontal: VisualDensity.minimumDensity,
+                vertical: VisualDensity.minimumDensity,
+              ),
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              fillColor:const WidgetStatePropertyAll(Colora.scaffold),
+
+              groupValue: _groupValue,
+              value: 'firstOption',
+              onChanged: (value) =>
+                  setState(() => _groupValue = value ?? _groupValue),
+            ),
           ),
+
+          SizedBox(width: Dimensions.width * 0.1,),
+          // radioButton(
+          //   title: 'پنل آسود',
+          //
+          //   groupValue: _groupValue,
+          //   value: 'firstOption',
+          //   onChanged: (value) =>
+          //       setState(() => _groupValue = value ?? _groupValue),
+          // ),
+          const Padding(
+            padding: EdgeInsets.only(top: 5.0),
+            child: Text(
+              'پنل شخصی',
+              style: TextStyle(
+                  color: Colora.scaffold,
+                  fontSize: 14
+              ),
+            ),
+          ),
+          Expanded(
+            child: Radio(
+              visualDensity: const VisualDensity(
+                horizontal: VisualDensity.minimumDensity,
+                vertical: VisualDensity.minimumDensity,
+              ),
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              fillColor:const WidgetStatePropertyAll(Colora.scaffold),
+
+              groupValue: _groupValue,
+              value: 'firstOption',
+              onChanged: (value) =>
+                  setState(() => _groupValue = value ?? _groupValue),
+            ),
+          ),
+          // radioButton(
+          //   title: 'پنل شخصی',
+          //   groupValue: _groupValue,
+          //   value: 'secondOption',
+          //   onChanged: (value) =>
+          //       setState(() => _groupValue = value ?? _groupValue),
+          // ),
         ],
       ),
     );
@@ -155,21 +237,25 @@ class SendBulkMessage extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Colors.indigo[600],
+        color: Colora.primaryColor,
       ),
       child: Column(
         children: [
           const Text(
-            'شما می‌توانید در اینجا پیام انبوه برای گروهی خاص یا مخاطبین خود ارسال نمایید:',
-            style: TextStyle(color: Colors.white),
+            'شما می‌توانید در اینجا پیام انبوه برای گروهی خاص یا مخاطبین خود ارسال نمایید : ',
+            textAlign: TextAlign.justify,
+            style: TextStyle(
+              color: Colora.scaffold,
+              fontSize: 12
+            ),
           ),
           const SizedBox(height: 20),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CustomButton(
                 onPress: () {},
-                width: 150,
+                width: Dimensions.width * 0.4,
                 text: 'ارسال از اکسل',
               ),
               CustomButton(
@@ -181,8 +267,13 @@ class SendBulkMessage extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           const Text(
-              'لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد ',
-              style: TextStyle(color: Colors.white)),
+            'با استفاده از دکمه‌های فوق می‌توانید از میان متن پیام‌های موجود متن مورد نظر خود را ارسال نمایید.',
+            textAlign: TextAlign.justify,
+            style: TextStyle(
+              color: Colora.scaffold,
+              fontSize: 10
+            )
+          ),
         ],
       ),
     );
@@ -216,33 +307,93 @@ class _SelectContactsState extends State<SelectContacts> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Colors.indigo[800],
+        color: Colora.primaryColor,
       ),
       child: Column(
         children: [
-          const SearchBoxWidget(),
-          const SizedBox(height: 20),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: contacts.length,
-            itemBuilder: (context, index) {
-              return CheckboxListTile(
-                title: Text(
-                  contacts[index],
-                  style: const TextStyle(color: Colors.white),
-                ),
-                value: _isChecked[index],
-                onChanged: (bool? value) {
-                  setState(() {
-                    _isChecked[index] = value!;
-                  });
-                },
-                controlAffinity: ListTileControlAffinity.leading,
-              );
-            },
+          Container(
+            width: Dimensions.width,
+            decoration: BoxDecoration(
+              color: Colora.primaryColor,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            padding: const EdgeInsets.symmetric(
+              vertical: 5
+            ),
+            child: const SearchBoxWidget(
+              backgroundColor: Colora.lightBlue,
+            )
+          ),
+          Container(
+            margin: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colora.lightBlue,
+            ),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: contacts.length,
+              padding: const EdgeInsets.all(20),
+              itemBuilder: (context, index) {
+                return  CheckboxListTile(
+                  title: Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'حمید احمدی',
+                          style: TextStyle(
+                              color: Colora.scaffold,
+                              fontSize: Dimensions.width * 0.035
+                          ),
+                        ),
+                        Text(
+                          '09123931774',
+                          style: TextStyle(
+                              color: Colora.scaffold,
+                              fontSize: Dimensions.width * 0.035
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  value: _isChecked[index],
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isChecked[index] = value!;
+                    });
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  side: const BorderSide(
+                      color: Colora.scaffold
+                  ),
+                  fillColor: const WidgetStatePropertyAll(Colora.scaffold),
+                  activeColor: Colora.scaffold,
+                  checkColor: Colora.primaryColor,
+                  contentPadding: EdgeInsets.zero,
+                  controlAffinity: ListTileControlAffinity.leading,
+                );
+                  CheckboxListTile(
+                  title: Text(
+                    contacts[index],
+                    style: const TextStyle(color: Colora.scaffold),
+                  ),
+                  value: _isChecked[index],
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isChecked[index] = value!;
+                    });
+                  },
+                  controlAffinity: ListTileControlAffinity.leading,
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -259,15 +410,15 @@ class SetMessage extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Colors.indigo[700],
+        color: Colora.primaryColor,
       ),
       child: Column(
         children: [
           const Center(
             child: Text(
-              'متن پیام',
+              'متن پیامک',
               style: TextStyle(
-                  color: Colors.white,
+                  color: Colora.scaffold,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),
             ),
@@ -279,28 +430,34 @@ class SetMessage extends StatelessWidget {
           const Text(
             'لطفا متن پیام خود را در این قسمت وارد نمایید:',
             style: TextStyle(
-              color: Colors.white,
+              color: Colora.scaffold,
+              fontSize: 15,
+              fontWeight: FontWeight.bold
             ),
           ),
           const SizedBox(height: 10),
-          CustomTextField(
-            controller: TextEditingController(),
-            text: 'متن پیام',
-            maxLine: 8,
-          ),
+          // CustomTextField(
+          //   controller: TextEditingController(),
+          //   text: 'متن پیام',
+          //   maxLine: 8,
+          // ),
           const SizedBox(height: 10),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            CustomButton(
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CustomButton(
+                onPress: () {},
+                width: Dimensions.width * 0.4,
+                text: 'لغو',
+              ),
+              CustomButton(
               onPress: () {},
-              width: 150,
-              text: 'انصراف',
+                width: Dimensions.width * 0.4,
+              text: 'ثبت',
+              textColor: Colora.scaffold,
+              fontWeight: FontWeight.bold,
             ),
-            CustomButton(
-              onPress: () {},
-              width: 150,
-              text: 'تایید',
-            ),
-          ]),
+            ]
+          ),
         ],
       ),
     );
