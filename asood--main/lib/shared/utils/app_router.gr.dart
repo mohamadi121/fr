@@ -99,6 +99,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const ShoppingCart(),
       );
     },
+    ChatListRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ChatList(),
+      );
+    },
     MultiViewSliderRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -422,6 +428,20 @@ class ShoppingCartRoute extends PageRouteInfo<void> {
   );
 
   static const String name = 'ShoppingCartRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ChatList]
+class ChatListRoute extends PageRouteInfo<void> {
+  const ChatListRoute({List<PageRouteInfo>? children})
+      : super(
+    ChatListRoute.name,
+    initialChildren: children,
+  );
+
+  static const String name = 'ChatListRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

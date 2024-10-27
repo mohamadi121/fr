@@ -164,7 +164,9 @@ void showBottomSheet(
 
                   //messenger
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        context.router.push(const ChatListRoute());
+                      },
                       icon: const Icon(
                         Icons.messenger_outline,
                         color: Colors.white,

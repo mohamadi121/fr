@@ -812,7 +812,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                         width: Dimensions.width * 0.25,
                         padding: const EdgeInsets.symmetric(
                             vertical: 2,
-                            horizontal: 10
+                            horizontal: 5
                         ),
                         decoration: BoxDecoration(
                             color: Colora.primaryColor,

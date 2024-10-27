@@ -97,22 +97,27 @@ class ProfileDialog extends StatelessWidget {
         children: [
 
           //profile
-          Container(
-            height: Dimensions.height * 0.05,
-            margin: EdgeInsets.symmetric(
-              vertical: Dimensions.height * 0.01
-            ),
-            decoration: BoxDecoration(
-              color: Colora.primaryColor,
-              borderRadius: BorderRadius.circular(30)
-            ),
-            child: Center(
-              child: Text(
-                'پروفایل',
-                style: TextStyle(
-                  color: Colora.scaffold,
-                  fontWeight: FontWeight.bold,
-                  fontSize: Dimensions.width * 0.035
+          InkWell(
+            onTap: (){
+              context.router.push(const VendorProfileRoute());
+            },
+            child: Container(
+              height: Dimensions.height * 0.05,
+              margin: EdgeInsets.symmetric(
+                vertical: Dimensions.height * 0.01
+              ),
+              decoration: BoxDecoration(
+                color: Colora.primaryColor,
+                borderRadius: BorderRadius.circular(30)
+              ),
+              child: Center(
+                child: Text(
+                  'پروفایل',
+                  style: TextStyle(
+                    color: Colora.scaffold,
+                    fontWeight: FontWeight.bold,
+                    fontSize: Dimensions.width * 0.035
+                  ),
                 ),
               ),
             ),

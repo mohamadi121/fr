@@ -7,6 +7,7 @@ import '../../app/screens/splash.dart';
 import '../../models/market_model.dart';
 import '../../modules/auth/pages/login_screen.dart';
 import '../../modules/auth/screens/otp_screen.dart';
+import '../../modules/chat/screen/chat_list.dart';
 import '../../modules/customer/screens/customer_dashboard_screen.dart';
 import '../../modules/inquiry/screens/fee_inquiry.dart';
 import '../../modules/inquiry/screens/inquiry_details.dart';
@@ -23,7 +24,7 @@ import '../../modules/panel/screens/inbox.dart';
 import '../../modules/vendor/screens/create_workspace.dart';
 import '../../modules/vendor/screens/dashboard.dart';
 import '../../modules/vendor/screens/home.dart';
-import '../../modules/vendor/screens/profile.dart';
+import '../../modules/profile/screens/profile.dart';
 import '../../modules/vendor/screens/stores.dart';
 import '../screens/job_management/job_management_screen.dart';
 import '../screens/settings/settings_menu_screen.dart';
@@ -68,5 +69,6 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: JobManagementRoute.page, path: "/job_management"),
         AutoRoute(page: MultiViewSliderRoute.page, path: "/multi_view_slider"),
         AutoRoute(page: ShoppingCartRoute.page, path: "/shopping_cart"),
+        AutoRoute(page: ChatListRoute.page, path: "/chat_list"),
       ];
 }

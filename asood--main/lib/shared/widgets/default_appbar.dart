@@ -214,7 +214,7 @@ class NewAppBar extends StatelessWidget {
 
           //user profile image
           Positioned(
-            top: 20,
+            top: Dimensions.height * 0.02,
             right: 10,
             width: Dimensions.width * 0.1,
             child: SizedBox(
@@ -256,7 +256,7 @@ class NewAppBar extends StatelessWidget {
 
           //menu button
           Positioned(
-            top: 20,
+            top: Dimensions.height * 0.02,
             left: 10,
             width: Dimensions.width * 0.1,
             child: IconButton(
