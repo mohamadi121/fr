@@ -17,6 +17,7 @@ import '../../../shared/widgets/simple_itembox.dart';
 import '../../customer/screens/customer_dashboard_screen.dart';
 import '../../business_card/screens/create_business_card.dart';
 import '../../panel/screens/inbox.dart';
+import '../../product/screens/product.dart';
 import 'create_workspace.dart';
 import 'dashboard.dart';
 
@@ -51,7 +52,7 @@ Map dummyData = {
     {
       "title": "امور مالی",
       "image": Container(),
-      "page": const CreateWorkSpaceScreen()
+      "page": const ProductScreen()
     },
     {
       "title": "رهیابی خرید",
