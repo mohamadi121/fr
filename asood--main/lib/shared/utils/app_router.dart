@@ -7,7 +7,7 @@ import '../../app/screens/splash.dart';
 import '../../models/market_model.dart';
 import '../../modules/auth/pages/login_screen.dart';
 import '../../modules/auth/screens/otp_screen.dart';
-import '../../modules/chat/screen/chat_list.dart';
+import '../../modules/chat/screens/chat_list.dart';
 import '../../modules/customer/screens/customer_dashboard_screen.dart';
 import '../../modules/inquiry/screens/fee_inquiry.dart';
 import '../../modules/inquiry/screens/inquiry_details.dart';

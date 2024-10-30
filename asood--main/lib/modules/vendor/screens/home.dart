@@ -14,6 +14,7 @@ import '../../../shared/utils/app_router.dart';
 import '../../../shared/widgets/default_appbar.dart';
 import '../../../shared/widgets/item_box_with_title.dart';
 import '../../../shared/widgets/simple_itembox.dart';
+import '../../bank_card/screens/bank_card_list.dart';
 import '../../customer/screens/customer_dashboard_screen.dart';
 import '../../business_card/screens/create_business_card.dart';
 import '../../panel/screens/inbox.dart';
@@ -52,7 +53,7 @@ Map dummyData = {
     {
       "title": "امور مالی",
       "image": Container(),
-      "page": const ProductScreen()
+      "page": const BankCardList()
     },
     {
       "title": "رهیابی خرید",
@@ -70,7 +71,8 @@ Map dummyData = {
         Icons.share,
         size: 60,
         color: Colors.white,
-      )
+      ),
+      "page": const ProductScreen()
     },
     {
       "title": "پیام کوتاه",
