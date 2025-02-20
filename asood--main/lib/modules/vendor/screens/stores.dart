@@ -21,7 +21,6 @@ class StoresScreen extends StatefulWidget {
 }
 
 class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderStateMixin {
-
   late WorkspaceBloc bloc;
 
   bool switchValue = false;
@@ -39,7 +38,7 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
     _tabController.addListener(_onTabChanged);
   }
 
-  void _onTabChanged() async{
+  void _onTabChanged() async {
     setState(() {
       activeTabIndex = _tabController.index;
     });
@@ -56,189 +55,159 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<WorkspaceBloc, WorkspaceState>(
-      listener: (context, state) {
-          // _tabController.index = state.activeTabIndex;
-          // _tabController.index > state.activeTabIndex
-          //   ? _tabController.index = state.activeTabIndex
-          //   : null;
-          // if (state.status == WorkspaceStatus.success) {
-          //   _tabController.index = state.activeTabIndex;
-          // }
-          if (state.status == WorkspaceStatus.failure) {
-            showSnackBar(context, "مشکلی در بارگذاری پیش آمده , مجدد تلاش کنید!");
-          }
-      },
-      builder: (context, state) {
+      body: BlocConsumer<WorkspaceBloc, WorkspaceState>(listener: (context, state) {
+        // _tabController.index = state.activeTabIndex;
+        // _tabController.index > state.activeTabIndex
+        //   ? _tabController.index = state.activeTabIndex
+        //   : null;
+        // if (state.status == WorkspaceStatus.success) {
+        //   _tabController.index = state.activeTabIndex;
+        // }
+        if (state.status == WorkspaceStatus.failure) {
+          showSnackBar(context, "مشکلی در بارگذاری پیش آمده , مجدد تلاش کنید!");
+        }
+      }, builder: (context, state) {
         return Container(
-            color: Colora.primaryColor,
-            child: SafeArea(
+          color: Colora.primaryColor,
+          child: SafeArea(
               child: Scaffold(
-                body: Stack(
-                  children: [
-
-                    SizedBox(
-                      height: Dimensions.height,
-                      width: Dimensions.width,
-                      child: state.status == WorkspaceStatus.loading
-                        ? Column(
-                          children: [
-
-                            SizedBox(
-                              height: Dimensions.height * 0.11,
+                  body: Stack(
+            children: [
+              SizedBox(
+                height: Dimensions.height,
+                width: Dimensions.width,
+                child: state.status == WorkspaceStatus.loading
+                    ? Column(
+                        children: [
+                          SizedBox(
+                            height: Dimensions.height * 0.11,
+                          ),
+                          ListView.builder(
+                            itemCount: 5,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) => Container(
+                              height: Dimensions.height * 0.14,
+                              width: Dimensions.width,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colora.lightBlue.withOpacity(0.3),
+                              ),
+                              margin: const EdgeInsets.all(8.0),
+                              child: Shimmer.fromColors(
+                                baseColor: Colors.grey.withOpacity(0.2),
+                                highlightColor: Colors.black.withOpacity(0.2),
+                                direction: ShimmerDirection.rtl,
+                                child: Container(
+                                  decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(20)),
+                                ),
+                              ),
                             ),
-                            
-                            ListView.builder(
-                              itemCount: 5,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) => Container(
-                                height: Dimensions.height * 0.14,
-                                width: Dimensions.width,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colora.lightBlue.withOpacity(0.3),
-                                ),
-                                margin: const EdgeInsets.all(8.0),
-                                child: Shimmer.fromColors(
-                                  baseColor: Colors.grey.withOpacity(0.2),
-                                  highlightColor: Colors.black.withOpacity(0.2),
-                                  direction: ShimmerDirection.rtl,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey,
-                                        borderRadius: BorderRadius.circular(20)
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        )
-                        :state.status == WorkspaceStatus.failure
-                          ?Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children:[
-                              Text(
-                                'مشکلی در بارگذاری پیش آمده , مجدد تلاش کنید!',
-                                style: TextStyle(
-                                  color: Colora.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Dimensions.width * 0.04
-                                ),
-                              ),
-
-                              SizedBox(
-                                height:  Dimensions.height * 0.05,
-                              ),
-
-                              ElevatedButton(
-                                onPressed: (){
+                          )
+                        ],
+                      )
+                    : state.status == WorkspaceStatus.failure
+                        ? Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                            Text(
+                              'مشکلی در بارگذاری پیش آمده , مجدد تلاش کنید!',
+                              style: TextStyle(color: Colora.primaryColor, fontWeight: FontWeight.bold, fontSize: Dimensions.width * 0.04),
+                            ),
+                            SizedBox(
+                              height: Dimensions.height * 0.05,
+                            ),
+                            ElevatedButton(
+                                onPressed: () {
                                   bloc.add(LoadStores());
                                 },
-                                child: const Text('تلاش مجدد')
-                              )
-
-                            ]
-                          )
-                          :SingleChildScrollView(
+                                child: const Text('تلاش مجدد'))
+                          ])
+                        : SingleChildScrollView(
                             child: Column(
                               children: [
-
                                 SizedBox(
                                   height: Dimensions.height * 0.11,
                                 ),
-
                                 buildTabStoreList(state),
-
                               ],
                             ),
-                        ),
-                    ),
+                          ),
+              ),
 
-                    const NewAppBar(title: 'لیست فروشگاه‌های من‌'),
+              const NewAppBar(title: 'لیست فروشگاه‌های من‌'),
 
-                    // invoice
-                    if(state.showInvoice == true)...[
-                      invoice(bloc, state)
-                    ],
+              // invoice
+              if (state.showInvoice == true) ...[invoice(bloc, state)],
 
-                    if(state.invoiceConfirm == true)...[
-                      confirmInvoice(bloc)
-                    ]
+              if (state.invoiceConfirm == true) ...[confirmInvoice(bloc)]
 
-
-                    //header buttons
-                    // Positioned(
-                    //   top: Dimensions.height * 0.08,
-                    //   width: Dimensions.width,
-                    //   height: Dimensions.height * 0.05,
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.center,
-                    //     children: [
-                    //
-                    //       //add new shop
-                    //       Container(
-                    //         width: Dimensions.width * 0.35,
-                    //         height: Dimensions.height * 0.05,
-                    //         decoration: BoxDecoration(
-                    //           color: Colora.primaryColor,
-                    //           borderRadius: BorderRadius.circular(20),
-                    //           boxShadow: [
-                    //             BoxShadow(
-                    //               color: Colors.grey.withOpacity(0.4),
-                    //               spreadRadius: 3,
-                    //               blurRadius: 5,
-                    //               offset: const Offset(0, 5)
-                    //             )
-                    //           ]
-                    //         ),
-                    //         alignment: AlignmentDirectional.center,
-                    //         child: const Text(
-                    //           'ثبت فروشگاه جدید',
-                    //           style: TextStyle(
-                    //             color: Colora.scaffold,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //
-                    //       SizedBox(
-                    //         width: Dimensions.width * 0.05,
-                    //       ),
-                    //
-                    //       //shop reports
-                    //       Container(
-                    //         width: Dimensions.width * 0.35,
-                    //         height: Dimensions.height * 0.05,
-                    //         decoration: BoxDecoration(
-                    //             color: Colora.primaryColor,
-                    //             borderRadius: BorderRadius.circular(20),
-                    //             boxShadow: [
-                    //               BoxShadow(
-                    //                   color: Colors.grey.withOpacity(0.4),
-                    //                   spreadRadius: 3,
-                    //                   blurRadius: 5,
-                    //                   offset: const Offset(0, 5)
-                    //               )
-                    //             ]
-                    //         ),
-                    //         alignment: AlignmentDirectional.center,
-                    //         child: const Text(
-                    //           'گزارشات فروشگاه',
-                    //           style: TextStyle(
-                    //             color: Colora.scaffold,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //
-                    //     ],
-                    //   ),
-                    // ),
-
-                  ],
-                )
-              )
-            ),
-          );
+              //header buttons
+              // Positioned(
+              //   top: Dimensions.height * 0.08,
+              //   width: Dimensions.width,
+              //   height: Dimensions.height * 0.05,
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //
+              //       //add new shop
+              //       Container(
+              //         width: Dimensions.width * 0.35,
+              //         height: Dimensions.height * 0.05,
+              //         decoration: BoxDecoration(
+              //           color: Colora.primaryColor,
+              //           borderRadius: BorderRadius.circular(20),
+              //           boxShadow: [
+              //             BoxShadow(
+              //               color: Colors.grey.withOpacity(0.4),
+              //               spreadRadius: 3,
+              //               blurRadius: 5,
+              //               offset: const Offset(0, 5)
+              //             )
+              //           ]
+              //         ),
+              //         alignment: AlignmentDirectional.center,
+              //         child: const Text(
+              //           'ثبت فروشگاه جدید',
+              //           style: TextStyle(
+              //             color: Colora.scaffold,
+              //           ),
+              //         ),
+              //       ),
+              //
+              //       SizedBox(
+              //         width: Dimensions.width * 0.05,
+              //       ),
+              //
+              //       //shop reports
+              //       Container(
+              //         width: Dimensions.width * 0.35,
+              //         height: Dimensions.height * 0.05,
+              //         decoration: BoxDecoration(
+              //             color: Colora.primaryColor,
+              //             borderRadius: BorderRadius.circular(20),
+              //             boxShadow: [
+              //               BoxShadow(
+              //                   color: Colors.grey.withOpacity(0.4),
+              //                   spreadRadius: 3,
+              //                   blurRadius: 5,
+              //                   offset: const Offset(0, 5)
+              //               )
+              //             ]
+              //         ),
+              //         alignment: AlignmentDirectional.center,
+              //         child: const Text(
+              //           'گزارشات فروشگاه',
+              //           style: TextStyle(
+              //             color: Colora.scaffold,
+              //           ),
+              //         ),
+              //       ),
+              //
+              //     ],
+              //   ),
+              // ),
+            ],
+          ))),
+        );
       }),
     );
   }
@@ -290,7 +259,10 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
           child: ListView.builder(
             itemCount: 10,
             itemBuilder: (context, index) {
-              return OrderCard(index: index, bloc: bloc,);
+              return OrderCard(
+                index: index,
+                bloc: bloc,
+              );
             },
           ),
         ),
@@ -302,114 +274,69 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
     return Container(
       width: Dimensions.width,
       height: Dimensions.height,
-      padding: EdgeInsets.symmetric(
-          horizontal: Dimensions.width * 0.05,
-          vertical: Dimensions.height * 0.05
-      ),
+      padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.05, vertical: Dimensions.height * 0.05),
       color: Colora.primaryColor.withOpacity(0.6),
       child: Container(
-        decoration: BoxDecoration(
-            color: Colora.scaffold,
-            borderRadius: BorderRadius.circular(26)
-        ),
-        padding: EdgeInsets.symmetric(
-            vertical: Dimensions.height * 0.02,
-            horizontal: Dimensions.width * 0.03
-        ),
+        decoration: BoxDecoration(color: Colora.scaffold, borderRadius: BorderRadius.circular(26)),
+        padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.02, horizontal: Dimensions.width * 0.03),
         child: SingleChildScrollView(
           child: Column(
             children: [
-
               //header
               Container(
                 height: Dimensions.height * 0.06,
-                margin: EdgeInsets.only(
-                    bottom: Dimensions.height * 0.01
-                ),
-                decoration: BoxDecoration(
-                    color: Colora.primaryColor,
-                    borderRadius: BorderRadius.circular(26)
-                ),
+                margin: EdgeInsets.only(bottom: Dimensions.height * 0.01),
+                decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(26)),
                 alignment: Alignment.center,
                 child: const Text(
                   'درخواست شماره ۹۱ - نقدی',
-                  style: TextStyle(
-                      color: Colora.scaffold,
-                      fontSize: 17
-                  ),
+                  style: TextStyle(color: Colora.scaffold, fontSize: 17),
                 ),
               ),
 
               //name
               Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: Dimensions.height * 0.01
-                ),
+                padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                 child: const Text(
                   'گیرنده : محمد رضا محمدی',
-                  style: TextStyle(
-                      color: Colora.primaryColor,
-                      fontSize: 16
-                  ),
+                  style: TextStyle(color: Colora.primaryColor, fontSize: 16),
                 ),
               ),
 
               //phone
               Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: Dimensions.height * 0.01
-                ),
+                padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                 child: const Text(
                   'شماره موبایل : ۰۹۱۲۳۹۳۱۷۷۴',
-                  style: TextStyle(
-                      color: Colora.primaryColor,
-                      fontSize: 16
-                  ),
+                  style: TextStyle(color: Colora.primaryColor, fontSize: 16),
                 ),
               ),
 
               //address
               Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: Dimensions.height * 0.01
-                ),
+                padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                 child: const Text(
                   'آدرس : تهران ، احمد آباد',
-                  style: TextStyle(
-                      color: Colora.primaryColor,
-                      fontSize: 16
-                  ),
+                  style: TextStyle(color: Colora.primaryColor, fontSize: 16),
                 ),
               ),
 
               //invoice
               Container(
-                decoration: BoxDecoration(
-                    color: Colora.scaffold_,
-                    borderRadius: BorderRadius.circular(26)
-                ),
+                decoration: BoxDecoration(color: Colora.scaffold_, borderRadius: BorderRadius.circular(26)),
                 child: Column(
                   children: [
-
                     Container(
                       height: Dimensions.height * 0.06,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: Dimensions.width * 0.03
-                      ),
-                      decoration: BoxDecoration(
-                          color: Colora.primaryColor,
-                          borderRadius: BorderRadius.circular(26)
-                      ),
+                      padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.03),
+                      decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(26)),
                       alignment: Alignment.center,
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
                             'نام کالا',
-                            style: TextStyle(
-                                color: Colora.scaffold,
-                                fontSize: 14
-                            ),
+                            style: TextStyle(color: Colora.scaffold, fontSize: 14),
                           ),
                           VerticalDivider(
                             color: Colora.scaffold_,
@@ -419,10 +346,7 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
                           ),
                           Text(
                             'تعداد',
-                            style: TextStyle(
-                                color: Colora.scaffold,
-                                fontSize: 14
-                            ),
+                            style: TextStyle(color: Colora.scaffold, fontSize: 14),
                           ),
                           VerticalDivider(
                             color: Colora.scaffold_,
@@ -432,10 +356,7 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
                           ),
                           Text(
                             'قیمت',
-                            style: TextStyle(
-                                color: Colora.scaffold,
-                                fontSize: 14
-                            ),
+                            style: TextStyle(color: Colora.scaffold, fontSize: 14),
                           ),
                           VerticalDivider(
                             color: Colora.scaffold_,
@@ -445,10 +366,7 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
                           ),
                           Text(
                             'میلغ کل',
-                            style: TextStyle(
-                                color: Colora.scaffold,
-                                fontSize: 14
-                            ),
+                            style: TextStyle(color: Colora.scaffold, fontSize: 14),
                           ),
                         ],
                       ),
@@ -462,31 +380,19 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
                         children: [
                           Text(
                             'تعمیر دریل',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 14
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 14),
                           ),
                           Text(
                             '1',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 14
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 14),
                           ),
                           Text(
                             '۲۰۰.۰۰۰',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 14
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 14),
                           ),
                           Text(
                             '200.000',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 14
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 14),
                           ),
                         ],
                       ),
@@ -503,27 +409,17 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height * 0.01
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                           child: const Text(
                             'مبلغ کل       :   ',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 12
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height * 0.01
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                           child: const Text(
                             '۲۰۰.۰۰۰ تومان',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 12
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                           ),
                         ),
                       ],
@@ -534,27 +430,17 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height * 0.01
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                           child: const Text(
                             'مبلغ تخفیف :   ',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 12
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height * 0.01
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                           child: const Text(
                             '۲۰۰.۰۰۰ تومان',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 12
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                           ),
                         ),
                       ],
@@ -565,27 +451,17 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height * 0.01
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                           child: const Text(
                             'هزینه کرایه   :   ',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 12
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height * 0.01
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                           child: const Text(
                             '۲۰۰.۰۰۰ تومان',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 12
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                           ),
                         ),
                       ],
@@ -596,32 +472,21 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height * 0.01
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                           child: const Text(
                             'مبلغ نهایی    :   ',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 12
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height * 0.01
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                           child: const Text(
                             '۲۰۰.۰۰۰ تومان',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 12
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                           ),
                         ),
                       ],
                     ),
-
                   ],
                 ),
               ),
@@ -630,14 +495,12 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
               Align(
                 alignment: Alignment.centerRight,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: Dimensions.height * 0.01
-                  ),
+                  padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                   child: const Text(
                     '// هدیه : تعمیر دریل',
                     style: TextStyle(
-                        color: Colora.primaryColor,
-                        fontSize: 11,
+                      color: Colora.primaryColor,
+                      fontSize: 11,
                     ),
                   ),
                 ),
@@ -645,24 +508,13 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
 
               //payment method
               Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: Dimensions.width * 0.05
-                ),
-                decoration: BoxDecoration(
-                    color: Colora.scaffold_,
-                    borderRadius: BorderRadius.circular(26)
-                ),
+                margin: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.05),
+                decoration: BoxDecoration(color: Colora.scaffold_, borderRadius: BorderRadius.circular(26)),
                 child: Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: Dimensions.height * 0.01,
-                        horizontal: Dimensions.width * 0.05
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colora.primaryColor,
-                        borderRadius: BorderRadius.circular(26)
-                      ),
+                      padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01, horizontal: Dimensions.width * 0.05),
+                      decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(26)),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -670,10 +522,7 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
                             padding: const EdgeInsets.only(top: 5.0),
                             child: Text(
                               'تحویل خریدار',
-                              style: TextStyle(
-                                  color: Colora.scaffold,
-                                  fontSize: Dimensions.width * 0.03
-                              ),
+                              style: TextStyle(color: Colora.scaffold, fontSize: Dimensions.width * 0.03),
                             ),
                           ),
                           Expanded(
@@ -684,11 +533,9 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
                               ),
                               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               controlAffinity: ListTileControlAffinity.trailing,
-
                               contentPadding: EdgeInsets.zero,
                               dense: true,
-                              fillColor:const WidgetStatePropertyAll(Colora.scaffold),
-
+                              fillColor: MaterialStateProperty.all(Colora.scaffold),
                               value: 1,
                               groupValue: state.invoiceOption,
                               onChanged: (value) {
@@ -696,15 +543,11 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
                               },
                             ),
                           ),
-
                           Padding(
                             padding: const EdgeInsets.only(top: 5.0),
                             child: Text(
                               'تحویل پیک',
-                              style: TextStyle(
-                                  color: Colora.scaffold,
-                                  fontSize: Dimensions.width * 0.03
-                              ),
+                              style: TextStyle(color: Colora.scaffold, fontSize: Dimensions.width * 0.03),
                             ),
                           ),
                           Expanded(
@@ -718,7 +561,7 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
 
                               contentPadding: EdgeInsets.zero,
                               dense: true,
-                              fillColor:const WidgetStatePropertyAll(Colora.scaffold),
+                              fillColor: MaterialStateProperty.all(Colora.scaffold),
 
                               value: 2, // Assign a value of 1 to this option
                               groupValue: state.invoiceOption,
@@ -727,71 +570,42 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
                               },
                             ),
                           ),
-
                         ],
                       ),
                     ),
-
-                    if(state.invoiceOption == 1 || state.invoiceOption == 2)...[
-
+                    if (state.invoiceOption == 1 || state.invoiceOption == 2) ...[
                       //name
                       Container(
                         height: Dimensions.height * 0.07,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: Dimensions.width * 0.04,
-                            vertical: Dimensions.height * 0.01
-                        ),
+                        padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.04, vertical: Dimensions.height * 0.01),
                         child: TextField(
-
                           decoration: InputDecoration(
                               fillColor: Colora.scaffold,
                               filled: true,
                               enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(26),
-                                  borderSide: const BorderSide(color: Colora.primaryColor, width: 2)
-                              ),
+                                  borderRadius: BorderRadius.circular(26), borderSide: const BorderSide(color: Colora.primaryColor, width: 2)),
                               border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(26),
-                                  borderSide: const BorderSide(color: Colora.primaryColor, width: 2)
-                              ),
+                                  borderRadius: BorderRadius.circular(26), borderSide: const BorderSide(color: Colora.primaryColor, width: 2)),
                               hintText: 'مشخصات :',
-                              hintStyle: const TextStyle(
-                                  color: Colora.primaryColor,
-                                  fontSize: 13
-                              )
-                          ),
-
+                              hintStyle: const TextStyle(color: Colora.primaryColor, fontSize: 13)),
                         ),
                       ),
 
                       //phone
-                      if(state.invoiceOption == 2)...[
+                      if (state.invoiceOption == 2) ...[
                         Container(
                           height: Dimensions.height * 0.07,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: Dimensions.width * 0.04,
-                              vertical: Dimensions.height * 0.01
-                          ),
+                          padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.04, vertical: Dimensions.height * 0.01),
                           child: TextField(
-
                             decoration: InputDecoration(
                                 fillColor: Colora.scaffold,
                                 filled: true,
                                 enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(26),
-                                    borderSide: const BorderSide(color: Colora.primaryColor, width: 2)
-                                ),
+                                    borderRadius: BorderRadius.circular(26), borderSide: const BorderSide(color: Colora.primaryColor, width: 2)),
                                 border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(26),
-                                    borderSide: const BorderSide(color: Colora.primaryColor, width: 2)
-                                ),
+                                    borderRadius: BorderRadius.circular(26), borderSide: const BorderSide(color: Colora.primaryColor, width: 2)),
                                 hintText: 'تلفن :',
-                                hintStyle: const TextStyle(
-                                    color: Colora.primaryColor,
-                                    fontSize: 13
-                                )
-                            ),
-
+                                hintStyle: const TextStyle(color: Colora.primaryColor, fontSize: 13)),
                           ),
                         ),
                       ],
@@ -799,42 +613,26 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
                       //description
                       Container(
                         height: Dimensions.height * 0.07,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: Dimensions.width * 0.04,
-                            vertical: Dimensions.height * 0.01
-                        ),
+                        padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.04, vertical: Dimensions.height * 0.01),
                         child: TextField(
-
                           decoration: InputDecoration(
                               fillColor: Colora.scaffold,
                               filled: true,
                               enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(26),
-                                  borderSide: const BorderSide(color: Colora.primaryColor, width: 2)
-                              ),
+                                  borderRadius: BorderRadius.circular(26), borderSide: const BorderSide(color: Colora.primaryColor, width: 2)),
                               border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(26),
-                                  borderSide: const BorderSide(color: Colora.primaryColor, width: 2)
-                              ),
+                                  borderRadius: BorderRadius.circular(26), borderSide: const BorderSide(color: Colora.primaryColor, width: 2)),
                               hintText: 'توضیحات :',
-                              hintStyle: const TextStyle(
-                                  color: Colora.primaryColor,
-                                  fontSize: 13
-                              )
-                          ),
-
+                              hintStyle: const TextStyle(color: Colora.primaryColor, fontSize: 13)),
                         ),
                       ),
                     ],
-
                   ],
                 ),
               ),
 
               SizedBox(
-                height: state.invoiceOption == 1 || state.invoiceOption == 2
-                  ?Dimensions.height * 0.04
-                  :Dimensions.height * 0.18,
+                height: state.invoiceOption == 1 || state.invoiceOption == 2 ? Dimensions.height * 0.04 : Dimensions.height * 0.18,
               ),
 
               Row(
@@ -843,21 +641,14 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
                   //cancel
                   Container(
                     // width: Dimensions.width * 0.3,
-                    decoration: BoxDecoration(
-                        color: Colora.lightBlue,
-                        borderRadius: BorderRadius.circular(26)
-                    ),
+                    decoration: BoxDecoration(color: Colora.lightBlue, borderRadius: BorderRadius.circular(26)),
                     child: MaterialButton(
-                      onPressed: (){
+                      onPressed: () {
                         bloc.add(const ShowInvoice(isShow: false));
                       },
                       child: const Text(
                         'لغو',
-                        style: TextStyle(
-                            color: Colora.scaffold_,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold
-                        ),
+                        style: TextStyle(color: Colora.scaffold_, fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -865,21 +656,14 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
                   //cancel
                   Container(
                     // width: Dimensions.width * 0.3,
-                    decoration: BoxDecoration(
-                        color: Colora.lightBlue,
-                        borderRadius: BorderRadius.circular(26)
-                    ),
+                    decoration: BoxDecoration(color: Colora.lightBlue, borderRadius: BorderRadius.circular(26)),
                     child: MaterialButton(
-                      onPressed: (){
+                      onPressed: () {
                         bloc.add(const ShowInvoice(isShow: false));
                       },
                       child: const Text(
                         'انصراف',
-                        style: TextStyle(
-                            color: Colora.scaffold_,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold
-                        ),
+                        style: TextStyle(color: Colora.scaffold_, fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -887,28 +671,19 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
                   //confirm
                   Container(
                     // width: Dimensions.width * 0.3,
-                    decoration: BoxDecoration(
-                        color: Colora.lightBlue,
-                        borderRadius: BorderRadius.circular(26)
-                    ),
+                    decoration: BoxDecoration(color: Colora.lightBlue, borderRadius: BorderRadius.circular(26)),
                     child: MaterialButton(
-                      onPressed: (){
+                      onPressed: () {
                         bloc.add(const InvoiceConfirm(isConfirm: true));
                       },
                       child: const Text(
                         'تایید',
-                        style: TextStyle(
-                            color: Colora.scaffold_,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold
-                        ),
+                        style: TextStyle(color: Colora.scaffold_, fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
-
                 ],
               )
-
             ],
           ),
         ),
@@ -916,111 +691,68 @@ class _StoresScreenState extends State<StoresScreen> with SingleTickerProviderSt
     );
   }
 
-  Widget confirmInvoice(WorkspaceBloc bloc){
+  Widget confirmInvoice(WorkspaceBloc bloc) {
     return Container(
       width: Dimensions.width,
       height: Dimensions.height,
-      padding: EdgeInsets.symmetric(
-          horizontal: Dimensions.width * 0.05,
-          vertical: Dimensions.height * 0.33
-      ),
+      padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.05, vertical: Dimensions.height * 0.33),
       color: Colora.primaryColor.withOpacity(0.7),
       child: Container(
-        decoration: BoxDecoration(
-            color: Colora.scaffold,
-            borderRadius: BorderRadius.circular(26)
-        ),
-        padding: EdgeInsets.symmetric(
-            vertical: Dimensions.height * 0.02,
-            horizontal: Dimensions.width * 0.03
-        ),
+        decoration: BoxDecoration(color: Colora.scaffold, borderRadius: BorderRadius.circular(26)),
+        padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.02, horizontal: Dimensions.width * 0.03),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-
             const Text(
               'تایید دریافت وجه',
-              style: TextStyle(
-                  color: Colora.primaryColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22
-              ),
+              style: TextStyle(color: Colora.primaryColor, fontWeight: FontWeight.bold, fontSize: 22),
             ),
-
             const Divider(
               color: Colora.primaryColor,
               thickness: 2,
             ),
-
             const Text(
               'فروشنده محترم آیا وجه سفارش را کامل دریافت نموده‌اید ؟',
               textAlign: TextAlign.justify,
-              style: TextStyle(
-                  height: 1.5,
-                  color: Colora.primaryColor,
-                  fontSize: 20
-              ),
+              style: TextStyle(height: 1.5, color: Colora.primaryColor, fontSize: 20),
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Container(
-                  margin: EdgeInsets.only(
-                      top: Dimensions.height * 0.02
-                  ),
-                  padding: EdgeInsets.symmetric(
-                      horizontal: Dimensions.width * 0.04
-                  ),
-                  decoration: BoxDecoration(
-                      color: Colora.primaryColor,
-                      borderRadius: BorderRadius.circular(26)
-                  ),
+                  margin: EdgeInsets.only(top: Dimensions.height * 0.02),
+                  padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.04),
+                  decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(26)),
                   child: MaterialButton(
-                    onPressed: (){
+                    onPressed: () {
                       bloc.add(const InvoiceConfirm(isConfirm: false));
                     },
                     child: Text(
                       'بازگشت',
-                      style: TextStyle(
-                          color: Colora.scaffold,
-                          fontSize: Dimensions.width * 0.05
-                      ),
+                      style: TextStyle(color: Colora.scaffold, fontSize: Dimensions.width * 0.05),
                     ),
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(
-                      top: Dimensions.height * 0.02
-                  ),
-                  padding: EdgeInsets.symmetric(
-                      horizontal: Dimensions.width * 0.04
-                  ),
-                  decoration: BoxDecoration(
-                      color: Colora.primaryColor,
-                      borderRadius: BorderRadius.circular(26)
-                  ),
+                  margin: EdgeInsets.only(top: Dimensions.height * 0.02),
+                  padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.04),
+                  decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(26)),
                   child: MaterialButton(
-                    onPressed: (){
+                    onPressed: () {
                       bloc.add(const InvoiceConfirm(isConfirm: false));
                       bloc.add(const ShowInvoice(isShow: false));
                     },
                     child: Text(
                       'بله',
-                      style: TextStyle(
-                          color: Colora.scaffold,
-                          fontSize: Dimensions.width * 0.05
-                      ),
+                      style: TextStyle(color: Colora.scaffold, fontSize: Dimensions.width * 0.05),
                     ),
                   ),
                 ),
               ],
             )
-
           ],
         ),
       ),
     );
   }
-
 }

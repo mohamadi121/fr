@@ -14,7 +14,6 @@ class ShoppingCart extends StatefulWidget {
 }
 
 class _ShoppingCartState extends State<ShoppingCart> {
-
   bool showInvoice = false;
   bool showFinalMessage = false;
 
@@ -26,12 +25,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
         child: Scaffold(
           body: Stack(
             children: [
-
               //products
               SingleChildScrollView(
                 child: Column(
                   children: [
-
                     SizedBox(
                       height: Dimensions.height * 0.11,
                     ),
@@ -49,64 +46,41 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
                     //buttons
                     Container(
-                      margin: EdgeInsets.symmetric(
-                        vertical: Dimensions.height * 0.02
-                      ),
-                      
+                      margin: EdgeInsets.symmetric(vertical: Dimensions.height * 0.02),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-
                           Container(
-                            decoration: BoxDecoration(
-                              color: Colora.primaryColor,
-                              borderRadius: BorderRadius.circular(32)
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: Dimensions.width * 0.07
-                            ),
+                            decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(32)),
+                            padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.07),
                             child: MaterialButton(
-                              onPressed: (){},
+                              onPressed: () {},
                               child: const Text(
                                 'بازگشت',
-                                style: TextStyle(
-                                  color: Colora.scaffold,
-                                  fontSize: 20
-                                ),
+                                style: TextStyle(color: Colora.scaffold, fontSize: 20),
                               ),
                             ),
                           ),
-
                           Container(
-                            decoration: BoxDecoration(
-                                color: Colora.primaryColor,
-                                borderRadius: BorderRadius.circular(32)
-                            ),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: Dimensions.width * 0.03
-                            ),
+                            decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(32)),
+                            padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.03),
                             child: MaterialButton(
-                              onPressed: (){
+                              onPressed: () {
                                 setState(() {
                                   showInvoice = true;
                                 });
                               },
                               child: const Text(
                                 'تکمیل خرید',
-                                style: TextStyle(
-                                    color: Colora.scaffold,
-                                    fontSize: 20
-                                ),
+                                style: TextStyle(color: Colora.scaffold, fontSize: 20),
                               ),
                             ),
                           ),
                         ],
                       ),
-                      
                     ),
-                    
-                    const SimpleBotNavBar()
 
+                    const SimpleBotNavBar()
                   ],
                 ),
               ),
@@ -114,118 +88,73 @@ class _ShoppingCartState extends State<ShoppingCart> {
               const NewAppBar(title: 'سبد خرید‌'),
 
               // invoice
-              if(showInvoice == true)...[
+              if (showInvoice == true) ...[
                 Container(
                   width: Dimensions.width,
                   height: Dimensions.height,
-                  padding: EdgeInsets.symmetric(
-                      horizontal: Dimensions.width * 0.05,
-                      vertical: Dimensions.height * 0.05
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.05, vertical: Dimensions.height * 0.05),
                   color: Colora.primaryColor.withOpacity(0.6),
                   child: Container(
-                    decoration: BoxDecoration(
-                        color: Colora.scaffold,
-                        borderRadius: BorderRadius.circular(26)
-                    ),
-                    padding: EdgeInsets.symmetric(
-                        vertical: Dimensions.height * 0.02,
-                        horizontal: Dimensions.width * 0.03
-                    ),
+                    decoration: BoxDecoration(color: Colora.scaffold, borderRadius: BorderRadius.circular(26)),
+                    padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.02, horizontal: Dimensions.width * 0.03),
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-
                           //header
                           Container(
                             height: Dimensions.height * 0.06,
-                            margin: EdgeInsets.only(
-                                bottom: Dimensions.height * 0.01
-                            ),
-                            decoration: BoxDecoration(
-                                color: Colora.primaryColor,
-                                borderRadius: BorderRadius.circular(26)
-                            ),
+                            margin: EdgeInsets.only(bottom: Dimensions.height * 0.01),
+                            decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(26)),
                             alignment: Alignment.center,
                             child: const Text(
                               'فاکتور - ثبت نهایی',
-                              style: TextStyle(
-                                  color: Colora.scaffold,
-                                  fontSize: 17
-                              ),
+                              style: TextStyle(color: Colora.scaffold, fontSize: 17),
                             ),
                           ),
 
                           //name
                           Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: Dimensions.height * 0.01
-                            ),
+                            padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                             child: const Text(
                               'گیرنده : محمد رضا محمدی',
-                              style: TextStyle(
-                                  color: Colora.primaryColor,
-                                  fontSize: 16
-                              ),
+                              style: TextStyle(color: Colora.primaryColor, fontSize: 16),
                             ),
                           ),
 
                           //phone
                           Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: Dimensions.height * 0.01
-                            ),
+                            padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                             child: const Text(
                               'شماره موبایل : ۰۹۱۲۳۹۳۱۷۷۴',
-                              style: TextStyle(
-                                  color: Colora.primaryColor,
-                                  fontSize: 16
-                              ),
+                              style: TextStyle(color: Colora.primaryColor, fontSize: 16),
                             ),
                           ),
 
                           //address
                           Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: Dimensions.height * 0.01
-                            ),
+                            padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                             child: const Text(
                               'آدرس : تهران ، احمد آباد',
-                              style: TextStyle(
-                                  color: Colora.primaryColor,
-                                  fontSize: 16
-                              ),
+                              style: TextStyle(color: Colora.primaryColor, fontSize: 16),
                             ),
                           ),
 
                           //invoice
                           Container(
-                            decoration: BoxDecoration(
-                                color: Colora.scaffold_,
-                                borderRadius: BorderRadius.circular(26)
-                            ),
+                            decoration: BoxDecoration(color: Colora.scaffold_, borderRadius: BorderRadius.circular(26)),
                             child: Column(
                               children: [
-
                                 Container(
                                   height: Dimensions.height * 0.06,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: Dimensions.width * 0.03
-                                  ),
-                                  decoration: BoxDecoration(
-                                      color: Colora.primaryColor,
-                                      borderRadius: BorderRadius.circular(26)
-                                  ),
+                                  padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.03),
+                                  decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(26)),
                                   alignment: Alignment.center,
                                   child: const Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
                                       Text(
                                         'نام کالا',
-                                        style: TextStyle(
-                                            color: Colora.scaffold,
-                                            fontSize: 14
-                                        ),
+                                        style: TextStyle(color: Colora.scaffold, fontSize: 14),
                                       ),
                                       VerticalDivider(
                                         color: Colora.scaffold_,
@@ -235,10 +164,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                       ),
                                       Text(
                                         'تعداد',
-                                        style: TextStyle(
-                                            color: Colora.scaffold,
-                                            fontSize: 14
-                                        ),
+                                        style: TextStyle(color: Colora.scaffold, fontSize: 14),
                                       ),
                                       VerticalDivider(
                                         color: Colora.scaffold_,
@@ -248,10 +174,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                       ),
                                       Text(
                                         'قیمت',
-                                        style: TextStyle(
-                                            color: Colora.scaffold,
-                                            fontSize: 14
-                                        ),
+                                        style: TextStyle(color: Colora.scaffold, fontSize: 14),
                                       ),
                                       VerticalDivider(
                                         color: Colora.scaffold_,
@@ -261,10 +184,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                       ),
                                       Text(
                                         'میلغ کل',
-                                        style: TextStyle(
-                                            color: Colora.scaffold,
-                                            fontSize: 14
-                                        ),
+                                        style: TextStyle(color: Colora.scaffold, fontSize: 14),
                                       ),
                                     ],
                                   ),
@@ -278,31 +198,19 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                     children: [
                                       Text(
                                         'تعمیر دریل',
-                                        style: TextStyle(
-                                            color: Colora.primaryColor,
-                                            fontSize: 14
-                                        ),
+                                        style: TextStyle(color: Colora.primaryColor, fontSize: 14),
                                       ),
                                       Text(
                                         '1',
-                                        style: TextStyle(
-                                            color: Colora.primaryColor,
-                                            fontSize: 14
-                                        ),
+                                        style: TextStyle(color: Colora.primaryColor, fontSize: 14),
                                       ),
                                       Text(
                                         '۲۰۰.۰۰۰',
-                                        style: TextStyle(
-                                            color: Colora.primaryColor,
-                                            fontSize: 14
-                                        ),
+                                        style: TextStyle(color: Colora.primaryColor, fontSize: 14),
                                       ),
                                       Text(
                                         '200.000',
-                                        style: TextStyle(
-                                            color: Colora.primaryColor,
-                                            fontSize: 14
-                                        ),
+                                        style: TextStyle(color: Colora.primaryColor, fontSize: 14),
                                       ),
                                     ],
                                   ),
@@ -319,27 +227,17 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: Dimensions.height * 0.01
-                                      ),
+                                      padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                                       child: const Text(
                                         'مبلغ کل       :   ',
-                                        style: TextStyle(
-                                            color: Colora.primaryColor,
-                                            fontSize: 12
-                                        ),
+                                        style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: Dimensions.height * 0.01
-                                      ),
+                                      padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                                       child: const Text(
                                         '۲۰۰.۰۰۰ تومان',
-                                        style: TextStyle(
-                                            color: Colora.primaryColor,
-                                            fontSize: 12
-                                        ),
+                                        style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                                       ),
                                     ),
                                   ],
@@ -350,27 +248,17 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: Dimensions.height * 0.01
-                                      ),
+                                      padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                                       child: const Text(
                                         'مبلغ تخفیف :   ',
-                                        style: TextStyle(
-                                            color: Colora.primaryColor,
-                                            fontSize: 12
-                                        ),
+                                        style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: Dimensions.height * 0.01
-                                      ),
+                                      padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                                       child: const Text(
                                         '۲۰۰.۰۰۰ تومان',
-                                        style: TextStyle(
-                                            color: Colora.primaryColor,
-                                            fontSize: 12
-                                        ),
+                                        style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                                       ),
                                     ),
                                   ],
@@ -381,27 +269,17 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: Dimensions.height * 0.01
-                                      ),
+                                      padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                                       child: const Text(
                                         'هزینه کرایه   :   ',
-                                        style: TextStyle(
-                                            color: Colora.primaryColor,
-                                            fontSize: 12
-                                        ),
+                                        style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: Dimensions.height * 0.01
-                                      ),
+                                      padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                                       child: const Text(
                                         '۲۰۰.۰۰۰ تومان',
-                                        style: TextStyle(
-                                            color: Colora.primaryColor,
-                                            fontSize: 12
-                                        ),
+                                        style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                                       ),
                                     ),
                                   ],
@@ -412,32 +290,21 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: Dimensions.height * 0.01
-                                      ),
+                                      padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                                       child: const Text(
                                         'مبلغ نهایی    :   ',
-                                        style: TextStyle(
-                                            color: Colora.primaryColor,
-                                            fontSize: 12
-                                        ),
+                                        style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: Dimensions.height * 0.01
-                                      ),
+                                      padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                                       child: const Text(
                                         '۲۰۰.۰۰۰ تومان',
-                                        style: TextStyle(
-                                            color: Colora.primaryColor,
-                                            fontSize: 12
-                                        ),
+                                        style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                                       ),
                                     ),
                                   ],
                                 ),
-
                               ],
                             ),
                           ),
@@ -446,16 +313,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           Align(
                             alignment: Alignment.centerRight,
                             child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: Dimensions.height * 0.02
-                              ),
+                              padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.02),
                               child: const Text(
                                 'شیوه پرداخت :',
-                                style: TextStyle(
-                                    color: Colora.primaryColor,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold
-                                ),
+                                style: TextStyle(color: Colora.primaryColor, fontSize: 15, fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -463,13 +324,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           //payment method
                           Container(
                             height: Dimensions.height * 0.06,
-                            decoration: BoxDecoration(
-                                color: Colora.scaffold_,
-                                borderRadius: BorderRadius.circular(26)
-                            ),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: Dimensions.width * 0.05
-                            ),
+                            decoration: BoxDecoration(color: Colora.scaffold_, borderRadius: BorderRadius.circular(26)),
+                            padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.05),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -477,10 +333,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                   padding: const EdgeInsets.only(top: 5.0),
                                   child: Text(
                                     'نقد',
-                                    style: TextStyle(
-                                        color: Colora.primaryColor,
-                                        fontSize: Dimensions.width * 0.03
-                                    ),
+                                    style: TextStyle(color: Colora.primaryColor, fontSize: Dimensions.width * 0.03),
                                   ),
                                 ),
                                 Expanded(
@@ -494,11 +347,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
                                     contentPadding: EdgeInsets.zero,
                                     dense: true,
-                                    fillColor:const WidgetStatePropertyAll(Colora.primaryColor),
+                                    fillColor: MaterialStateProperty.all(Colora.primaryColor),
 
                                     value: 1, // Assign a value of 1 to this option
-                                    groupValue:
-                                    '_selectedValue', // Use _selectedValue to track the selected option
+                                    groupValue: '_selectedValue', // Use _selectedValue to track the selected option
                                     onChanged: (value) {
                                       // setState(() {
                                       //   // _selectedValue = value!; // Update _selectedValue when option 1 is selected
@@ -506,15 +358,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                     },
                                   ),
                                 ),
-
                                 Padding(
                                   padding: const EdgeInsets.only(top: 5.0),
                                   child: Text(
                                     'اینترنتی',
-                                    style: TextStyle(
-                                        color: Colora.primaryColor,
-                                        fontSize: Dimensions.width * 0.03
-                                    ),
+                                    style: TextStyle(color: Colora.primaryColor, fontSize: Dimensions.width * 0.03),
                                   ),
                                 ),
                                 Expanded(
@@ -528,11 +376,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
                                     contentPadding: EdgeInsets.zero,
                                     dense: true,
-                                    fillColor:const WidgetStatePropertyAll(Colora.primaryColor),
+                                    fillColor: MaterialStateProperty.all(Colora.primaryColor),
 
                                     value: 1, // Assign a value of 1 to this option
-                                    groupValue:
-                                    '_selectedValue', // Use _selectedValue to track the selected option
+                                    groupValue: '_selectedValue', // Use _selectedValue to track the selected option
                                     onChanged: (value) {
                                       // setState(() {
                                       //   // _selectedValue = value!; // Update _selectedValue when option 1 is selected
@@ -540,15 +387,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                     },
                                   ),
                                 ),
-
                                 Padding(
                                   padding: const EdgeInsets.only(top: 5.0),
                                   child: Text(
                                     'حواله',
-                                    style: TextStyle(
-                                        color: Colora.primaryColor,
-                                        fontSize: Dimensions.width * 0.03
-                                    ),
+                                    style: TextStyle(color: Colora.primaryColor, fontSize: Dimensions.width * 0.03),
                                   ),
                                 ),
                                 Expanded(
@@ -562,11 +405,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
                                     contentPadding: EdgeInsets.zero,
                                     dense: true,
-                                    fillColor:const WidgetStatePropertyAll(Colora.primaryColor),
+                                    fillColor: MaterialStateProperty.all(Colora.primaryColor),
 
                                     value: 1, // Assign a value of 1 to this option
-                                    groupValue:
-                                    '_selectedValue', // Use _selectedValue to track the selected option
+                                    groupValue: '_selectedValue', // Use _selectedValue to track the selected option
                                     onChanged: (value) {
                                       // setState(() {
                                       //   // _selectedValue = value!; // Update _selectedValue when option 1 is selected
@@ -574,15 +416,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                     },
                                   ),
                                 ),
-
                                 Padding(
                                   padding: const EdgeInsets.only(top: 5.0),
                                   child: Text(
                                     'چک',
-                                    style: TextStyle(
-                                        color: Colora.primaryColor,
-                                        fontSize: Dimensions.width * 0.03
-                                    ),
+                                    style: TextStyle(color: Colora.primaryColor, fontSize: Dimensions.width * 0.03),
                                   ),
                                 ),
                                 Expanded(
@@ -596,11 +434,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
                                     contentPadding: EdgeInsets.zero,
                                     dense: true,
-                                    fillColor:const WidgetStatePropertyAll(Colora.primaryColor),
+                                    fillColor: MaterialStateProperty.all(Colora.primaryColor),
 
                                     value: 1, // Assign a value of 1 to this option
-                                    groupValue:
-                                    '_selectedValue', // Use _selectedValue to track the selected option
+                                    groupValue: '_selectedValue', // Use _selectedValue to track the selected option
                                     onChanged: (value) {
                                       // setState(() {
                                       //   // _selectedValue = value!; // Update _selectedValue when option 1 is selected
@@ -608,7 +445,6 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                     },
                                   ),
                                 ),
-
                               ],
                             ),
                           ),
@@ -620,27 +456,19 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-
                               //cancel
                               Container(
                                 width: Dimensions.width * 0.3,
-                                decoration: BoxDecoration(
-                                    color: Colora.primaryColor,
-                                    borderRadius: BorderRadius.circular(26)
-                                ),
+                                decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(26)),
                                 child: MaterialButton(
-                                  onPressed: (){
-                                    setState((){
+                                  onPressed: () {
+                                    setState(() {
                                       showInvoice = false;
                                     });
                                   },
                                   child: const Text(
                                     'انصراف',
-                                    style: TextStyle(
-                                        color: Colora.scaffold_,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold
-                                    ),
+                                    style: TextStyle(color: Colora.scaffold_, fontSize: 15, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),
@@ -652,96 +480,59 @@ class _ShoppingCartState extends State<ShoppingCart> {
                               //confirm
                               Container(
                                 width: Dimensions.width * 0.3,
-                                decoration: BoxDecoration(
-                                    color: Colora.primaryColor,
-                                    borderRadius: BorderRadius.circular(26)
-                                ),
+                                decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(26)),
                                 child: MaterialButton(
-                                  onPressed: (){
+                                  onPressed: () {
                                     setState(() {
                                       showFinalMessage = true;
                                     });
                                   },
                                   child: const Text(
                                     'ثبت نهایی',
-                                    style: TextStyle(
-                                        color: Colora.scaffold_,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold
-                                    ),
+                                    style: TextStyle(color: Colora.scaffold_, fontSize: 15, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),
-
                             ],
                           )
-
                         ],
                       ),
                     ),
                   ),
                 ),
               ],
-              
-              if(showFinalMessage == true)...[
+
+              if (showFinalMessage == true) ...[
                 Container(
                   width: Dimensions.width,
                   height: Dimensions.height,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Dimensions.width * 0.05,
-                    vertical: Dimensions.height * 0.33
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.05, vertical: Dimensions.height * 0.33),
                   color: Colora.primaryColor.withOpacity(0.7),
                   child: Container(
-                    decoration: BoxDecoration(
-                        color: Colora.scaffold,
-                        borderRadius: BorderRadius.circular(26)
-                    ),
-                    padding: EdgeInsets.symmetric(
-                        vertical: Dimensions.height * 0.02,
-                        horizontal: Dimensions.width * 0.03
-                    ),
+                    decoration: BoxDecoration(color: Colora.scaffold, borderRadius: BorderRadius.circular(26)),
+                    padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.02, horizontal: Dimensions.width * 0.03),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-
                         const Text(
                           'تایید نهایی',
-                          style: TextStyle(
-                            color: Colora.primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22
-                          ),
+                          style: TextStyle(color: Colora.primaryColor, fontWeight: FontWeight.bold, fontSize: 22),
                         ),
-
                         const Divider(
                           color: Colora.primaryColor,
                           thickness: 2,
                         ),
-
                         const Text(
                           'خریدار گرامی ، سفارش شما با موفقیت تایید گردید . شما می‌توانید فرایند سفارش خود را از پیگیری خرید ،‌مشاهده نمائید',
                           textAlign: TextAlign.justify,
-                          style: TextStyle(
-                            height: 1.5,
-                            color: Colora.primaryColor,
-                            fontSize: 20
-                          ),
+                          style: TextStyle(height: 1.5, color: Colora.primaryColor, fontSize: 20),
                         ),
-
                         Container(
-                          margin: EdgeInsets.only(
-                            top: Dimensions.height * 0.02
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Dimensions.width * 0.04
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colora.primaryColor,
-                            borderRadius: BorderRadius.circular(26)
-                          ),
+                          margin: EdgeInsets.only(top: Dimensions.height * 0.02),
+                          padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.04),
+                          decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(26)),
                           child: MaterialButton(
-                            onPressed: (){
+                            onPressed: () {
                               setState(() {
                                 showInvoice = false;
                                 showFinalMessage = false;
@@ -749,40 +540,28 @@ class _ShoppingCartState extends State<ShoppingCart> {
                             },
                             child: Text(
                               'رویت شد',
-                              style: TextStyle(
-                                color: Colora.scaffold,
-                                fontSize: Dimensions.width * 0.05
-                              ),
+                              style: TextStyle(color: Colora.scaffold, fontSize: Dimensions.width * 0.05),
                             ),
                           ),
                         )
-
                       ],
                     ),
                   ),
                 ),
               ]
-
             ],
           ),
-
         ),
       ),
     );
   }
 
-  Widget productCart(index){
+  Widget productCart(index) {
     return Container(
       width: Dimensions.width * 0.9,
       height: Dimensions.height * 0.15,
-      margin: EdgeInsets.symmetric(
-          vertical: Dimensions.height * 0.005,
-          horizontal: Dimensions.width * 0.04
-      ),
-      decoration: BoxDecoration(
-          color: Colora.lightBlue,
-          borderRadius: BorderRadius.circular(8)
-      ),
+      margin: EdgeInsets.symmetric(vertical: Dimensions.height * 0.005, horizontal: Dimensions.width * 0.04),
+      decoration: BoxDecoration(color: Colora.lightBlue, borderRadius: BorderRadius.circular(8)),
       child: Row(
         children: [
           //image
@@ -793,14 +572,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
                 AspectRatio(
                   aspectRatio: 1,
                   child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(8),
-                          bottomRight: Radius.circular(8)
-                      ),
+                      borderRadius: const BorderRadius.only(topRight: Radius.circular(8), bottomRight: Radius.circular(8)),
                       child: Container(
                         color: Colors.redAccent,
-                      )
-                  ),
+                      )),
                 ),
                 Positioned(
                   bottom: 5,
@@ -810,14 +585,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
                     child: InkWell(
                       child: Container(
                         width: Dimensions.width * 0.25,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 2,
-                            horizontal: 5
-                        ),
-                        decoration: BoxDecoration(
-                            color: Colora.primaryColor,
-                            borderRadius: BorderRadius.circular(15)
-                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+                        decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(15)),
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -828,10 +597,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                             ),
                             Text(
                               'حذف کردن',
-                              style: TextStyle(
-                                  color: Colora.scaffold,
-                                  fontSize: 11
-                              ),
+                              style: TextStyle(color: Colora.scaffold, fontSize: 11),
                             )
                           ],
                         ),
@@ -846,26 +612,16 @@ class _ShoppingCartState extends State<ShoppingCart> {
             width: Dimensions.width * 0.6,
             child: Column(
               children: [
-
                 //title
                 Container(
                   width: Dimensions.width * 0.6,
                   height: Dimensions.height * 0.06,
-                  margin: EdgeInsets.symmetric(
-                      horizontal: Dimensions.width * 0.03,
-                      vertical: Dimensions.height * 0.01
-                  ),
-                  decoration: BoxDecoration(
-                      color: Colora.primaryColor,
-                      borderRadius: BorderRadius.circular(8)
-                  ),
+                  margin: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.03, vertical: Dimensions.height * 0.01),
+                  decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(8)),
                   alignment: Alignment.center,
                   child: Text(
                     'محصول شماره ${index + 1}',
-                    style: TextStyle(
-                        color: Colora.scaffold,
-                        fontSize: Dimensions.width * 0.03
-                    ),
+                    style: TextStyle(color: Colora.scaffold, fontSize: Dimensions.width * 0.03),
                   ),
                 ),
 
@@ -880,60 +636,44 @@ class _ShoppingCartState extends State<ShoppingCart> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-
                         Text(
                           '120.000 تومان',
-                          style: TextStyle(
-                              color: Colora.scaffold,
-                              fontSize: Dimensions.width * 0.03
-                          ),
+                          style: TextStyle(color: Colora.scaffold, fontSize: Dimensions.width * 0.03),
                         ),
-
                         Container(
-                          decoration: BoxDecoration(
-                              color: Colora.primaryColor,
-                              borderRadius: BorderRadius.circular(30)
-                          ),
+                          decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(30)),
                           child: const Row(
                             children: [
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
                                 child: InkWell(
                                     child: Icon(
-                                      Icons.add,
-                                      color: Colora.scaffold,
-                                      size: 15,
-                                    )
-                                ),
+                                  Icons.add,
+                                  color: Colora.scaffold,
+                                  size: 15,
+                                )),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
                                 child: Text(
                                   '1',
-                                  style: TextStyle(
-                                      color: Colora.scaffold,
-                                      fontSize: 10
-                                  ),
+                                  style: TextStyle(color: Colora.scaffold, fontSize: 10),
                                 ),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
                                 child: InkWell(
-                                  child: Icon(
-                                    Icons.remove,
-                                    color: Colora.scaffold,
-                                    size: 15,
-                                  )
-                                ),
+                                    child: Icon(
+                                  Icons.remove,
+                                  color: Colora.scaffold,
+                                  size: 15,
+                                )),
                               ),
                             ],
                           ),
                         )
-
                       ],
-                    )
-                ),
-
+                    )),
               ],
             ),
           )
@@ -942,118 +682,73 @@ class _ShoppingCartState extends State<ShoppingCart> {
     );
   }
 
-  Widget cartInvoice(){
+  Widget cartInvoice() {
     return Container(
       width: Dimensions.width,
       height: Dimensions.height,
-      padding: EdgeInsets.symmetric(
-          horizontal: Dimensions.width * 0.05,
-          vertical: Dimensions.height * 0.05
-      ),
+      padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.05, vertical: Dimensions.height * 0.05),
       color: Colora.primaryColor.withOpacity(0.5),
       child: Container(
-        decoration: BoxDecoration(
-            color: Colora.scaffold,
-            borderRadius: BorderRadius.circular(26)
-        ),
-        padding: EdgeInsets.symmetric(
-            vertical: Dimensions.height * 0.02,
-            horizontal: Dimensions.width * 0.03
-        ),
+        decoration: BoxDecoration(color: Colora.scaffold, borderRadius: BorderRadius.circular(26)),
+        padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.02, horizontal: Dimensions.width * 0.03),
         child: SingleChildScrollView(
           child: Column(
             children: [
-
               //header
               Container(
                 height: Dimensions.height * 0.06,
-                margin: EdgeInsets.only(
-                    bottom: Dimensions.height * 0.01
-                ),
-                decoration: BoxDecoration(
-                    color: Colora.primaryColor,
-                    borderRadius: BorderRadius.circular(26)
-                ),
+                margin: EdgeInsets.only(bottom: Dimensions.height * 0.01),
+                decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(26)),
                 alignment: Alignment.center,
                 child: const Text(
                   'فاکتور - ثبت نهایی',
-                  style: TextStyle(
-                      color: Colora.scaffold,
-                      fontSize: 17
-                  ),
+                  style: TextStyle(color: Colora.scaffold, fontSize: 17),
                 ),
               ),
 
               //name
               Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: Dimensions.height * 0.01
-                ),
+                padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                 child: const Text(
                   'گیرنده : محمد رضا محمدی',
-                  style: TextStyle(
-                      color: Colora.primaryColor,
-                      fontSize: 16
-                  ),
+                  style: TextStyle(color: Colora.primaryColor, fontSize: 16),
                 ),
               ),
 
               //phone
               Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: Dimensions.height * 0.01
-                ),
+                padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                 child: const Text(
                   'شماره موبایل : ۰۹۱۲۳۹۳۱۷۷۴',
-                  style: TextStyle(
-                      color: Colora.primaryColor,
-                      fontSize: 16
-                  ),
+                  style: TextStyle(color: Colora.primaryColor, fontSize: 16),
                 ),
               ),
 
               //address
               Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: Dimensions.height * 0.01
-                ),
+                padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                 child: const Text(
                   'آدرس : تهران ، احمد آباد',
-                  style: TextStyle(
-                      color: Colora.primaryColor,
-                      fontSize: 16
-                  ),
+                  style: TextStyle(color: Colora.primaryColor, fontSize: 16),
                 ),
               ),
 
               //invoice
               Container(
-                decoration: BoxDecoration(
-                    color: Colora.scaffold_,
-                    borderRadius: BorderRadius.circular(26)
-                ),
+                decoration: BoxDecoration(color: Colora.scaffold_, borderRadius: BorderRadius.circular(26)),
                 child: Column(
                   children: [
-
                     Container(
                       height: Dimensions.height * 0.06,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: Dimensions.width * 0.03
-                      ),
-                      decoration: BoxDecoration(
-                          color: Colora.primaryColor,
-                          borderRadius: BorderRadius.circular(26)
-                      ),
+                      padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.03),
+                      decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(26)),
                       alignment: Alignment.center,
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
                             'نام کالا',
-                            style: TextStyle(
-                                color: Colora.scaffold,
-                                fontSize: 14
-                            ),
+                            style: TextStyle(color: Colora.scaffold, fontSize: 14),
                           ),
                           VerticalDivider(
                             color: Colora.scaffold_,
@@ -1063,10 +758,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           ),
                           Text(
                             'تعداد',
-                            style: TextStyle(
-                                color: Colora.scaffold,
-                                fontSize: 14
-                            ),
+                            style: TextStyle(color: Colora.scaffold, fontSize: 14),
                           ),
                           VerticalDivider(
                             color: Colora.scaffold_,
@@ -1076,10 +768,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           ),
                           Text(
                             'قیمت',
-                            style: TextStyle(
-                                color: Colora.scaffold,
-                                fontSize: 14
-                            ),
+                            style: TextStyle(color: Colora.scaffold, fontSize: 14),
                           ),
                           VerticalDivider(
                             color: Colora.scaffold_,
@@ -1089,10 +778,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           ),
                           Text(
                             'میلغ کل',
-                            style: TextStyle(
-                                color: Colora.scaffold,
-                                fontSize: 14
-                            ),
+                            style: TextStyle(color: Colora.scaffold, fontSize: 14),
                           ),
                         ],
                       ),
@@ -1106,31 +792,19 @@ class _ShoppingCartState extends State<ShoppingCart> {
                         children: [
                           Text(
                             'تعمیر دریل',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 14
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 14),
                           ),
                           Text(
                             '1',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 14
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 14),
                           ),
                           Text(
                             '۲۰۰.۰۰۰',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 14
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 14),
                           ),
                           Text(
                             '200.000',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 14
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 14),
                           ),
                         ],
                       ),
@@ -1147,27 +821,17 @@ class _ShoppingCartState extends State<ShoppingCart> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height * 0.01
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                           child: const Text(
                             'مبلغ کل       :   ',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 12
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height * 0.01
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                           child: const Text(
                             '۲۰۰.۰۰۰ تومان',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 12
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                           ),
                         ),
                       ],
@@ -1178,27 +842,17 @@ class _ShoppingCartState extends State<ShoppingCart> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height * 0.01
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                           child: const Text(
                             'مبلغ تخفیف :   ',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 12
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height * 0.01
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                           child: const Text(
                             '۲۰۰.۰۰۰ تومان',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 12
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                           ),
                         ),
                       ],
@@ -1209,27 +863,17 @@ class _ShoppingCartState extends State<ShoppingCart> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height * 0.01
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                           child: const Text(
                             'هزینه کرایه   :   ',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 12
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height * 0.01
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                           child: const Text(
                             '۲۰۰.۰۰۰ تومان',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 12
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                           ),
                         ),
                       ],
@@ -1240,32 +884,21 @@ class _ShoppingCartState extends State<ShoppingCart> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height * 0.01
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                           child: const Text(
                             'مبلغ نهایی    :   ',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 12
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height * 0.01
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.01),
                           child: const Text(
                             '۲۰۰.۰۰۰ تومان',
-                            style: TextStyle(
-                                color: Colora.primaryColor,
-                                fontSize: 12
-                            ),
+                            style: TextStyle(color: Colora.primaryColor, fontSize: 12),
                           ),
                         ),
                       ],
                     ),
-
                   ],
                 ),
               ),
@@ -1274,16 +907,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
               Align(
                 alignment: Alignment.centerRight,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: Dimensions.height * 0.02
-                  ),
+                  padding: EdgeInsets.symmetric(vertical: Dimensions.height * 0.02),
                   child: const Text(
                     'شیوه پرداخت :',
-                    style: TextStyle(
-                        color: Colora.primaryColor,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold
-                    ),
+                    style: TextStyle(color: Colora.primaryColor, fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -1291,13 +918,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
               //payment method
               Container(
                 height: Dimensions.height * 0.06,
-                decoration: BoxDecoration(
-                    color: Colora.scaffold_,
-                    borderRadius: BorderRadius.circular(26)
-                ),
-                padding: EdgeInsets.symmetric(
-                    horizontal: Dimensions.width * 0.05
-                ),
+                decoration: BoxDecoration(color: Colora.scaffold_, borderRadius: BorderRadius.circular(26)),
+                padding: EdgeInsets.symmetric(horizontal: Dimensions.width * 0.05),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -1305,10 +927,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                       padding: const EdgeInsets.only(top: 5.0),
                       child: Text(
                         'نقد',
-                        style: TextStyle(
-                            color: Colora.primaryColor,
-                            fontSize: Dimensions.width * 0.03
-                        ),
+                        style: TextStyle(color: Colora.primaryColor, fontSize: Dimensions.width * 0.03),
                       ),
                     ),
                     Expanded(
@@ -1322,11 +941,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
                         contentPadding: EdgeInsets.zero,
                         dense: true,
-                        fillColor:const WidgetStatePropertyAll(Colora.primaryColor),
+                        fillColor: MaterialStateProperty.all(Colora.primaryColor),
 
                         value: 1, // Assign a value of 1 to this option
-                        groupValue:
-                        '_selectedValue', // Use _selectedValue to track the selected option
+                        groupValue: '_selectedValue', // Use _selectedValue to track the selected option
                         onChanged: (value) {
                           // setState(() {
                           //   // _selectedValue = value!; // Update _selectedValue when option 1 is selected
@@ -1334,15 +952,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
                         },
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
                       child: Text(
                         'اینترنتی',
-                        style: TextStyle(
-                            color: Colora.primaryColor,
-                            fontSize: Dimensions.width * 0.03
-                        ),
+                        style: TextStyle(color: Colora.primaryColor, fontSize: Dimensions.width * 0.03),
                       ),
                     ),
                     Expanded(
@@ -1356,11 +970,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
                         contentPadding: EdgeInsets.zero,
                         dense: true,
-                        fillColor:const WidgetStatePropertyAll(Colora.primaryColor),
+                        fillColor: MaterialStateProperty.all(Colora.primaryColor),
 
                         value: 1, // Assign a value of 1 to this option
-                        groupValue:
-                        '_selectedValue', // Use _selectedValue to track the selected option
+                        groupValue: '_selectedValue', // Use _selectedValue to track the selected option
                         onChanged: (value) {
                           // setState(() {
                           //   // _selectedValue = value!; // Update _selectedValue when option 1 is selected
@@ -1368,15 +981,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
                         },
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
                       child: Text(
                         'حواله',
-                        style: TextStyle(
-                            color: Colora.primaryColor,
-                            fontSize: Dimensions.width * 0.03
-                        ),
+                        style: TextStyle(color: Colora.primaryColor, fontSize: Dimensions.width * 0.03),
                       ),
                     ),
                     Expanded(
@@ -1390,11 +999,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
                         contentPadding: EdgeInsets.zero,
                         dense: true,
-                        fillColor:const WidgetStatePropertyAll(Colora.primaryColor),
+                        fillColor: MaterialStateProperty.all(Colora.primaryColor),
 
                         value: 1, // Assign a value of 1 to this option
-                        groupValue:
-                        '_selectedValue', // Use _selectedValue to track the selected option
+                        groupValue: '_selectedValue', // Use _selectedValue to track the selected option
                         onChanged: (value) {
                           // setState(() {
                           //   // _selectedValue = value!; // Update _selectedValue when option 1 is selected
@@ -1402,15 +1010,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
                         },
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
                       child: Text(
                         'چک',
-                        style: TextStyle(
-                            color: Colora.primaryColor,
-                            fontSize: Dimensions.width * 0.03
-                        ),
+                        style: TextStyle(color: Colora.primaryColor, fontSize: Dimensions.width * 0.03),
                       ),
                     ),
                     Expanded(
@@ -1424,11 +1028,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
                         contentPadding: EdgeInsets.zero,
                         dense: true,
-                        fillColor:const WidgetStatePropertyAll(Colora.primaryColor),
+                        fillColor: MaterialStateProperty.all(Colora.primaryColor),
 
                         value: 1, // Assign a value of 1 to this option
-                        groupValue:
-                        '_selectedValue', // Use _selectedValue to track the selected option
+                        groupValue: '_selectedValue', // Use _selectedValue to track the selected option
                         onChanged: (value) {
                           // setState(() {
                           //   // _selectedValue = value!; // Update _selectedValue when option 1 is selected
@@ -1436,7 +1039,6 @@ class _ShoppingCartState extends State<ShoppingCart> {
                         },
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -1445,69 +1047,46 @@ class _ShoppingCartState extends State<ShoppingCart> {
                 height: Dimensions.height * 0.14,
               ),
 
-              StatefulBuilder(
-                  builder: (context, setState) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-
-                        Container(
-                          width: Dimensions.width * 0.3,
-                          decoration: BoxDecoration(
-                              color: Colora.primaryColor,
-                              borderRadius: BorderRadius.circular(26)
-                          ),
-                          child: MaterialButton(
-                            onPressed: (){
-                              setState((){
-                                showInvoice = false;
-                              });
-                            },
-                            child: const Text(
-                              'انصراف',
-                              style: TextStyle(
-                                  color: Colora.scaffold_,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold
-                              ),
-                            ),
-                          ),
+              StatefulBuilder(builder: (context, setState) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      width: Dimensions.width * 0.3,
+                      decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(26)),
+                      child: MaterialButton(
+                        onPressed: () {
+                          setState(() {
+                            showInvoice = false;
+                          });
+                        },
+                        child: const Text(
+                          'انصراف',
+                          style: TextStyle(color: Colora.scaffold_, fontSize: 15, fontWeight: FontWeight.bold),
                         ),
-
-                        SizedBox(
-                          width: Dimensions.width * 0.03,
+                      ),
+                    ),
+                    SizedBox(
+                      width: Dimensions.width * 0.03,
+                    ),
+                    Container(
+                      width: Dimensions.width * 0.3,
+                      decoration: BoxDecoration(color: Colora.primaryColor, borderRadius: BorderRadius.circular(26)),
+                      child: MaterialButton(
+                        onPressed: () {},
+                        child: const Text(
+                          'ثبت نهایی',
+                          style: TextStyle(color: Colora.scaffold_, fontSize: 15, fontWeight: FontWeight.bold),
                         ),
-
-                        Container(
-                          width: Dimensions.width * 0.3,
-                          decoration: BoxDecoration(
-                              color: Colora.primaryColor,
-                              borderRadius: BorderRadius.circular(26)
-                          ),
-                          child: MaterialButton(
-                            onPressed: (){},
-                            child: const Text(
-                              'ثبت نهایی',
-                              style: TextStyle(
-                                  color: Colora.scaffold_,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold
-                              ),
-                            ),
-                          ),
-                        ),
-
-                      ],
-                    );
-                  }
-              )
-
+                      ),
+                    ),
+                  ],
+                );
+              })
             ],
           ),
         ),
       ),
     );
   }
-
 }
-

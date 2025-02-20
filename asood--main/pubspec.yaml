@@ -49,7 +49,7 @@ dependencies:
   path_provider: ^2.0.8
   pin_code_fields: ^7.3.0
   smooth_page_indicator: ^1.1.0
-  location: ^7.0.0
+  location: ^6.0.2
   url_launcher: ^6.0.17
   auto_route: ^7.9.2
 
